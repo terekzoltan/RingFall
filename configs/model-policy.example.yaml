@@ -1,0 +1,8 @@
+# Example model policy. Do not put API keys in this file.
+providers:
+  openrouter:
+    enabled: false
+    api_key_env: OPENROUTER_API_KEY
+    default_model: placeholder-model
+  mock:
+    enabled: true

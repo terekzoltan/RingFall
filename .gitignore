@@ -1,0 +1,53 @@
+# Local/private FAL target-project coordination state
+.fal/
+
+# Local OpenCode/tooling context
+.opencode/
+.swarm/
+kontext/
+
+# Source package/archive; live canon is markdown under docs/
+ringfall-canonical-docs-clean.zip
+
+# Private canonical design/planning corpus; publish only after explicit export review
+docs/**/*Ringfall-*.md
+docs/plans/Combined-Execution-Sequencing-Plan.md
+
+# Local secrets and overrides
+.env
+.env.*
+!.env.example
+configs/local*.yaml
+configs/*secret*
+configs/*private*
+
+# Generated run artifacts
+data/runs/
+data/replays/
+data/traces/
+data/eval/
+data/tmp/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# .NET / C#
+bin/
+obj/
+*.user
+
+# Unity
+client/**/Library/
+client/**/Temp/
+client/**/Obj/
+client/**/Logs/
+client/**/UserSettings/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

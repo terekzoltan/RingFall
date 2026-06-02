@@ -1,0 +1,5 @@
+# Example runtime config. Copy to configs/local.runtime.yaml for local overrides.
+run_mode: dev
+artifact_root: data/runs
+scenario_root: scenarios
+model_policy: mock
