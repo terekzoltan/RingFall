@@ -435,9 +435,9 @@ Prepare practical larger runs and curated evidence-backed demos.
 ### Mandatory outputs
 - ✅ top-level monorepo skeleton exists
 - ✅ canonical docs imported into `docs/design`, `docs/ops`, `docs/plans`, `docs/creative`
-- ⬜ initial README states Ringfall identity, FP1 scope, and architecture stance
+- ✅ initial README states Ringfall identity, FP1 scope, and architecture stance
 - ✅ `.gitignore` excludes generated runs, caches, secrets, local configs
-- ⬜ example config files exist without secrets
+- ✅ example config files exist without secrets
 
 ### Sprint breakdown
 
@@ -481,8 +481,8 @@ Step 2 Meta verification note, 2026-06-13:
 **Owner priority:** Meta + Track B/D
 
 Epics:
-- ⬜ **R0-G** Write initial project README — **Owner: Meta**
-- ⬜ **R0-H** Add `configs/*.example.yaml` files — **Owner: Track D**
+- ✅ **R0-G** Write initial project README — **Owner: Meta**
+- ✅ **R0-H** Add `configs/*.example.yaml` files — **Owner: Track D**
 - ✅ **R0-I** Add `data/.gitkeep` and local override convention — **Owner: Track B**
 
 ### Execution Steps
@@ -503,23 +503,42 @@ Epics:
 Step 2 handoff notes:
 - Treat Step 1 as accepted with warnings, not as a reason to rebuild the skeleton.
 - Canonical Ringfall docs currently remain ignored/local; this is acceptable for Step 2 verification but remains a Meta-owned policy decision before public/export work.
-- Check the untracked root-level `ops/` folder before Wave 0 closeout; either route it into the planned docs/ops surface, ignore it, or remove it only with explicit user approval.
+- Root-level `ops/` runbook was routed into ignored `.swarm/runbooks/`; no tracked `ops/` folder remains.
 - `configs/provider.example.yaml` is still absent and belongs to Wave 0 config completion, not Step 1 acceptance.
 
-Step 2 gate result, 2026-06-13: **PASS WITH WARNINGS**. Step 3 may begin after commit if desired. Carry-forward warnings: root-level `ops/` is still untracked/outside planned top-level layout; `configs/provider.example.yaml` remains Track D/R0-H; README still needs Wave 0 Step 3 update to state Ringfall identity, FP1 scope and architecture stance.
+Step 2 gate result, 2026-06-13: **PASS WITH WARNINGS**. Step 3 may begin after commit if desired. Remaining carry-forward warning after R0-G: `configs/provider.example.yaml` remains Track D/R0-H. Resolved by R0-H on 2026-06-14.
 
-**⬜ Step 3**
+R0-G completion note, 2026-06-14:
+- README now states Ringfall identity, FP1 Aster/Vireo/Black Seam scope, headless/artifact-first architecture stance, core/brain/contracts/client/batch boundaries, guardrails, and current non-goals.
+- No simulation, model provider, config, Unity, or contract implementation was added.
+- R0-H remained open at this point for example config files.
+
+R0-H completion note, 2026-06-14:
+- `configs/model-policy.example.yaml`, `configs/provider.example.yaml`, and `configs/runtime.example.yaml` are present as example-only config files.
+- Example defaults are mock-first: `default_provider: mock`, `openrouter.enabled: false`, and `allow_real_provider_calls: false`.
+- No API keys or real provider credentials are present; provider auth is documented only through `api_key_env: OPENROUTER_API_KEY`.
+- The model policy example reflects the current canon lanes and candidates: `gpt-oss-120b`, DeepSeek V3.2, Nemotron free L1 pulse candidate, and helper-only `gpt-oss-20b`.
+
+**✅ Step 3**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Meta Coordinator session | R0-G | R0-D/F ✅ | README states identity/scope/architecture and non-goals. |
-| Track D session | R0-H | R0-A ✅ | Example configs only; no API keys or real provider wiring. |
+| Meta Coordinator session | R0-G | R0-D/F ✅ | Completed. README states identity/scope/architecture and non-goals. |
+| Track D session | R0-H | R0-A ✅ | Completed. Example configs only; no API keys or real provider wiring. |
 
-**⬜ Step 4**
+**✅ Step 4**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Meta Coordinator session | Wave 0 closeout | R0-A..R0-I ✅ | Confirm Wave 1 can start and shared docs are discoverable. |
+| Meta Coordinator session | Wave 0 closeout | R0-A..R0-I ✅ | Completed. Wave 0 repo skeleton, docs, README, generated-data policy, and example configs are in place. |
+
+Wave 0 closeout note, 2026-06-14:
+- All Wave 0 epics R0-A through R0-I are complete.
+- Repo remains bootstrap-only: no C#/.NET solution, Python brain service, Unity project, JSON Schema implementation, model provider implementation, or simulation logic was introduced.
+- Verification evidence: YAML lint passed for all three config examples; config secrets scan found zero findings; diff whitespace check passed with only CRLF normalization warnings.
+- Wave 1 may start after this closeout commit, subject to Meta coordination and the canonical-doc tracking/export policy remaining explicit.
+
+Wave 0 gate result, 2026-06-14: **PASS**.
 ### Optional parallel side-lanes
 
 No implementation side-lane is recommended in Wave 0.

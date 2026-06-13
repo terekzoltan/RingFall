@@ -1,8 +1,175 @@
-# Example model policy. Do not put API keys in this file.
-providers:
-  openrouter:
-    enabled: false
-    api_key_env: OPENROUTER_API_KEY
-    default_model: placeholder-model
-  mock:
-    enabled: true
+# Ringfall example model policy. Do not put API keys in this file.
+# This file documents the intended lane policy; it is not runtime wiring yet.
+version: 0.1
+provider_strategy: openrouter_only
+
+global:
+  strict_json: true
+  require_parameters: true
+  allow_fallbacks: true
+  default_data_collection: allow
+  local_llm_serving: false
+  rented_gpu_llm: false
+
+run_modes:
+  default: dev_cheap
+  available:
+    - dev_cheap
+    - canonical
+    - quality_heavy
+    - batch_analysis
+
+models:
+  gpt_oss_120b:
+    id: openai/gpt-oss-120b
+    role: workhorse
+  deepseek_v32:
+    id: deepseek/deepseek-v3.2
+    role: quality_high_stakes
+  nemotron_3_super_free:
+    id: nvidia/nemotron-3-super-120b-a12b:free
+    role: free_l1_pulse_candidate
+  gpt_oss_120b_free:
+    id: openai/gpt-oss-120b:free
+    role: free_candidate
+  gpt_oss_20b:
+    id: openai/gpt-oss-20b
+    role: helper_only
+  gpt_oss_20b_free:
+    id: openai/gpt-oss-20b:free
+    role: helper_only_free
+
+lanes:
+  l1_pulse:
+    primary:
+      - nemotron_3_super_free
+      - gpt_oss_120b_free
+    fallback:
+      - gpt_oss_120b
+    helper_only:
+      - gpt_oss_20b
+    temperature: 0.65
+    max_output_tokens: 200
+    reasoning_effort: low
+    retry_policy: one_retry_then_paid_fallback
+
+  l1_scene:
+    primary:
+      - gpt_oss_120b
+    high_stakes:
+      - deepseek_v32
+    helper_only:
+      - gpt_oss_20b
+    temperature: 0.75
+    max_output_tokens: 900
+    reasoning_effort: medium
+    retry_policy: schema_then_fallback
+
+  l2_seat:
+    primary:
+      - gpt_oss_120b
+    high_stakes:
+      - deepseek_v32
+    temperature: 0.45
+    max_output_tokens: 900
+    reasoning_effort: medium
+    retry_policy: schema_then_fallback
+
+  l2_chair:
+    cost_mode:
+      - gpt_oss_120b
+    quality_mode:
+      - deepseek_v32
+    temperature: 0.35
+    max_output_tokens: 1300
+    reasoning_effort: medium_high
+    retry_policy: schema_then_fallback
+
+  l3_seat:
+    primary:
+      - gpt_oss_120b
+    high_stakes:
+      - deepseek_v32
+    temperature: 0.5
+    max_output_tokens: 1200
+    reasoning_effort: medium_high
+    retry_policy: schema_then_fallback
+
+  l3_chair:
+    cost_mode:
+      - gpt_oss_120b
+    quality_mode:
+      - deepseek_v32
+    temperature: 0.3
+    max_output_tokens: 2000
+    reasoning_effort: high_if_available
+    retry_policy: schema_then_fallback
+
+  charter_auditor:
+    primary:
+      - gpt_oss_120b
+    high_stakes:
+      - deepseek_v32
+    temperature: 0.25
+    max_output_tokens: 1100
+    reasoning_effort: medium
+    retry_policy: one_retry_then_fallback
+
+  verifier:
+    primary:
+      - gpt_oss_120b
+    high_stakes:
+      - deepseek_v32
+    helper_only:
+      - gpt_oss_20b
+    temperature: 0.0
+    max_output_tokens: 700
+    reasoning_effort: medium
+    retry_policy: deterministic_first_then_one_retry
+
+  summarizer:
+    primary:
+      - gpt_oss_120b
+    helper_only:
+      - gpt_oss_20b
+    temperature: 0.25
+    max_output_tokens: 1000
+    reasoning_effort: low
+    retry_policy: one_retry_then_fail
+
+removed_candidates:
+  qwen/qwen3-235b-a22b-2507:
+    status: removed
+    reason: Removed by design decision; can return only via explicit future bakeoff.
+  mistralai/mistral-small-3.2-24b-instruct:
+    status: non_primary
+    reason: Not primary against gpt-oss-120b in current planning.
+
+cost_caps:
+  per_request_usd:
+    l1_pulse: 0.002
+    l1_scene: 0.02
+    l2_seat: 0.02
+    l2_chair: 0.04
+    l3_seat: 0.04
+    l3_chair: 0.08
+    verifier: 0.02
+  per_sim_day_usd:
+    dev_cheap: 0.50
+    canonical: 2.00
+    quality_heavy: 5.00
+
+required_cost_event_fields:
+  - request_id
+  - lane
+  - run_mode
+  - model
+  - input_tokens
+  - output_tokens
+  - estimated_cost_usd
+  - latency_ms
+  - retry_count
+  - fallback_count
+  - schema_valid
+  - context_hash
+  - schema_ref

@@ -1,5 +1,8 @@
 # Example runtime config. Copy to configs/local.runtime.yaml for local overrides.
-run_mode: dev
+run_mode: dev_cheap
 artifact_root: data/runs
 scenario_root: scenarios
-model_policy: mock
+model_policy_path: configs/model-policy.example.yaml
+provider_policy_path: configs/provider.example.yaml
+default_provider: mock
+allow_real_provider_calls: false
