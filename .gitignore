@@ -3,6 +3,7 @@
 
 # Local OpenCode/tooling context
 .opencode/
+.opencode-router/
 .swarm/
 kontext/
 
@@ -18,6 +19,7 @@ docs/plans/Combined-Execution-Sequencing-Plan.md
 .env.*
 !.env.example
 configs/local*.yaml
+configs/*.local.yaml
 configs/*secret*
 configs/*private*
 
