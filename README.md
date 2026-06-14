@@ -2,7 +2,7 @@
 
 Ringfall is a replayable, inspectable, LLM-heavy civilization simulation set in a fractured orbital ring. It is built around deterministic simulation boundaries, typed action/tool contracts, memory/belief/truth separation, institutional distortion, council doctrine, OpenRouter-based model orchestration, and a Unity-rendered observer client.
 
-Current phase: Wave 0 bootstrap is closed and Wave 1 Step 1 contract layout/versioning is complete. The next gated step is W1-S2 core packet schema drafting; runtime, provider, Unity, and simulation implementation remain blocked. This repository is not ready for public use. The detailed design canon, world bible, implementation plan, and private coordination notes are local/private until an explicit export review approves public release material.
+Current phase: Wave 0 bootstrap is closed, Wave 1 Step 1 contract layout/versioning is complete, and Wave 1 Step 2 core packet schema drafts are complete. The next gated step is W1-S3 packet usability review plus C1-E institution/council packet schemas; runtime, provider, Unity, and simulation implementation remain blocked. This repository is not ready for public use. The detailed design canon, world bible, implementation plan, and private coordination notes are local/private until an explicit export review approves public release material.
 
 ## First Playable Scope
 
@@ -53,7 +53,7 @@ Architectural guardrails:
 | Path | Purpose |
 |---|---|
 | `docs/` | Public-safe placeholders; private canon is ignored until export review. |
-| `src/` | Future source code plus the Wave 1 contract layout skeleton. |
+| `src/` | Future source code plus Wave 1 contract layout and packet schema drafts. |
 | `client/` | Future client code. Empty in this skeleton. |
 | `configs/` | Example configs only; no local secrets. |
 | `scenarios/` | Future scenario packs. Empty in this skeleton. |
@@ -67,7 +67,7 @@ Architectural guardrails:
 - no simulation implementation yet
 - no C#/.NET solution yet
 - no Python brain service yet
-- no JSON Schema schema bodies yet; W1-S1 added only the contract layout/versioning skeleton
+- no runtime schema tooling yet; W1-S2 added packet schema drafts only
 - no Unity project yet
 - no OpenRouter/model execution yet
 - no real provider credentials or local secrets

@@ -575,7 +575,7 @@ Wave 0 passes when the repo skeleton exists, docs are placed correctly, generate
 
 ### Mandatory outputs
 - ✅ `src/ringfall-contracts/schemas/` exists
-- ⬜ minimum packet schemas exist
+- ✅ minimum packet schemas exist
 - ⬜ minimum trace/artifact schemas exist
 - ⬜ valid/invalid schema examples exist
 - ⬜ schema validation tool exists
@@ -602,9 +602,16 @@ W1-S1 closeout note, 2026-06-14:
 **Owner priority:** Track B + Track C
 
 Epics:
-- ⬜ **C1-C** AvatarPulsePacket / SceneActionPacket — **Owner: Track B/C**
-- ⬜ **C1-D** WorkOrderRequest / ToolActionRequest / ExecutionResult — **Owner: Track B**
+- ✅ **C1-C** AvatarPulsePacket / SceneActionPacket — **Owner: Track B/C**
+- ✅ **C1-D** WorkOrderRequest / ToolActionRequest / ExecutionResult — **Owner: Track B**
 - ⬜ **C1-E** InstitutionBrief/Order and CouncilDoctrinePacket — **Owner: Track B/C**
+
+W1-S2 closeout note, 2026-06-14:
+- Track B added five Draft 2020-12 packet schema drafts under `src/ringfall-contracts/schemas/packets/`: `AvatarPulsePacket`, `SceneActionPacket`, `WorkOrderRequest`, `ToolActionRequest`, and `ExecutionResult`.
+- Step review plus Swarm review found under-constrained action/result/work-order shapes; Track B fixed those before commit with action-type conditionals, work-order target requirements, hidden-effect required fields, and observable summary requirements.
+- No C1-E institution/council schemas, examples, validation tooling, runtime code, configs, scenarios, Unity work, provider/model calls, or simulation logic were added.
+- C1-I/C1-J must later include invalid fixtures for packet constants, action conditionals, work-order targeting, hidden-effect completeness, malformed IDs/refs, invalid enums, and numeric bounds.
+- W1-S3/C1-E is the next gated target: Track C reviews packet usability and Track B adds institution/council packet schemas only after Meta opens that step.
 
 #### Sprint W1-S3 — Trace, memory, cost, eval schemas
 
@@ -632,11 +639,11 @@ Epics:
 |---|---|---|---|
 | Track B session | C1-A, C1-B | Wave 0 ✅ | Complete: contract home and versioning/readme notes created without packet details. |
 
-**⬜ Step 2**
+**✅ Step 2**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Track B session | C1-C, C1-D | C1-A/B ✅ | Define L1/action core packet shapes first. |
+| Track B session | C1-C, C1-D | C1-A/B ✅ | Complete: five core packet schema drafts accepted after review fixes. |
 
 **⬜ Step 3**
 
@@ -2031,39 +2038,46 @@ Ringfall must first produce stable artifacts independently.
 
 ## Current frontier
 
-The project is post-Wave-0 and inside Wave 1 after W1-S1 acceptance. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, and W1-S1 created only the contract layout/versioning skeleton: no C#/.NET solution, Python brain service, Unity project, JSON Schema body implementation, model provider implementation, or simulation logic has started.
+The project is post-Wave-0 and inside Wave 1 after W1-S2 acceptance. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, W1-S1 created the contract layout/versioning skeleton, and W1-S2 added five core packet schema drafts. No C#/.NET solution, Python brain service, Unity project, model provider implementation, examples/validation tooling, scenarios, or simulation logic has started.
 
-The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-01` aligned post-Wave-0 status/frontier docs, and `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary with the Risk Register G1-G10 list. The separate Wave 1 planning brief is present at `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md`; W1-S1 Track B contract layout/versioning is accepted.
+The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-01` aligned post-Wave-0 status/frontier docs, and `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary with the Risk Register G1-G10 list. The separate Wave 1 planning brief is present at `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md`; W1-S1 Track B contract layout/versioning and W1-S2 core packet schema drafts are accepted.
 
 ## Immediate sequence
 
-1. Track B may prepare W1-S2/C1-C,C1-D core packet schema drafting under a new Meta-gated implementation plan.
-2. Do not start examples, validation tooling, C#/.NET, Python brain, Unity, provider/model runtime, scenarios, or simulation logic from W1-S1 acceptance alone.
-3. Track C/D/E/A remain inactive until their prerequisite schema drafts exist and Meta opens the relevant review step.
+1. Prepare W1-S3/C1-E under a new Meta-gated implementation plan: Track C packet usability review plus Track B institution/council packet schema drafting.
+2. Do not start examples, validation tooling, C#/.NET, Python brain, Unity, provider/model runtime, scenarios, or simulation logic from W1-S2 acceptance alone.
+3. Track D/E/A remain inactive until their prerequisite trace/eval/artifact surfaces exist and Meta opens the relevant review step.
 
 ## First actionable step
 
 ```text
-W1-S2-C1-C-C1-D — Track B drafts core L1/action packet schemas after W1-S1 contract layout acceptance.
+W1-S3-C1-E — Track C reviews W1-S2 packet usability; Track B drafts InstitutionBrief/Order and CouncilDoctrinePacket schemas after C1-C/C1-D acceptance.
 ```
 
-Expected Track B planning brief:
+Expected W1-S3 planning brief:
 
 ```text
-Prepare a narrow implementation plan for C1-C/C1-D core packet schemas.
-Do not add examples, validation tools, C#/.NET, Python runtime, provider calls, Unity work, scenarios, or simulation logic.
-Preserve the W1-S1 contract home and versioning rules.
+Prepare a narrow plan for Track C packet usability review and Track B C1-E institution/council packet schemas.
+Do not add examples, validation tools, C#/.NET, Python runtime, provider calls, Unity work, scenarios, trace schemas, eval schemas, or simulation logic.
+Preserve W1-S1 layout and W1-S2 packet schema/versioning rules.
 ```
 
 W1-S1 closeout note, 2026-06-14:
 - `src/ringfall-contracts/README.md`, `src/ringfall-contracts/docs/Contract-Versioning.md`, `src/ringfall-contracts/schemas/README.md`, and six schema-group `.gitkeep` files form the accepted C1-A/C1-B baseline.
 - Step review verified no `*.schema.json`, schema bodies, examples, validation tools, runtime code, configs, scenarios, Unity files, provider/model behavior, or simulation logic.
-- W1-S2/C1-C,C1-D is the next gated planning target.
+- W1-S2/C1-C,C1-D was the next gated planning target after W1-S1 and is now accepted.
+
+W1-S2 closeout note, 2026-06-14:
+- `src/ringfall-contracts/schemas/packets/` now contains exactly five W1-S2 schema drafts: `avatar-pulse-packet.schema.json`, `scene-action-packet.schema.json`, `work-order-request.schema.json`, `tool-action-request.schema.json`, and `execution-result.schema.json`.
+- Review fixes tightened `SceneActionPacket.actions[]`, `WorkOrderRequest` targeting, `ExecutionResult.hidden_effects`, and observable result objects before commit.
+- No examples, validation tooling, runtime code, configs, scenarios, Unity files, provider/model behavior, C1-E schemas, trace schemas, eval schemas, or simulation logic were added.
+- W1-S3/C1-E is the next gated planning target.
 
 Wave 1 planning gate note, 2026-06-14:
 - `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md` is the Meta gate for Wave 1 entry.
 - Track B W1-S1/C1-A/C1-B is implemented and accepted.
-- W1-S2 packet schemas are the next gated step; all later Wave 1 steps remain blocked until W1-S2 is planned, implemented, and accepted.
+- Track B W1-S2/C1-C,C1-D is implemented and accepted.
+- W1-S3/C1-E packet usability review and institution/council schemas are the next gated step; all later Wave 1 steps remain blocked until W1-S3 is planned, implemented, and accepted.
 - Model-policy note before Wave 1 start: Ringfall stays OpenRouter-only; prefer free model lanes where stable, but require `deepseek/deepseek-v4-flash` as the explicit low-cost paid fallback instead of assuming free quota availability.
 
 MetaOps sync closure note, 2026-06-14:

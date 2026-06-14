@@ -4,11 +4,11 @@
 
 **META-GATED for implementation entry:** yes.
 
-Wave 1 Step 1 `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton` is complete and accepted for Track B.
+Wave 1 Step 1 `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton` and Step 2 `W1-S2-C1-C-C1-D-core-packet-schemas` are complete and accepted for Track B.
 
-This brief now serves as W1-S1 closeout evidence and the handoff guardrail for preparing W1-S2/C1-C,C1-D under a separate Meta-gated implementation plan.
+This brief now serves as W1-S1/W1-S2 closeout evidence and the handoff guardrail for preparing W1-S3/C1-E under a separate Meta-gated implementation plan.
 
-It does not approve packet schemas, trace schemas, examples, validation tooling, C#/.NET, Python brain, Unity, model calls, provider behavior, scenario content, or simulation logic.
+It does not approve C1-E or later schemas, trace schemas, examples, validation tooling, C#/.NET, Python brain, Unity, model calls, provider behavior, scenario content, or simulation logic.
 
 ## Purpose
 
@@ -55,8 +55,8 @@ Wave 1 preserves these architecture rules:
 ## Wave 1 Step Sequence
 
 1. `W1-S1 / C1-A,C1-B` — Track B creates contract layout and versioning/readme notes. **Complete.**
-2. `W1-S2 / C1-C,C1-D` — Track B drafts core L1/action packet schemas. **Next gated planning target.**
-3. `W1-S3 / C1-E` — Track C reviews packet usability; Track B adds institution/council packet shapes.
+2. `W1-S2 / C1-C,C1-D` — Track B drafts core L1/action packet schemas. **Complete.**
+3. `W1-S3 / C1-E` — Track C reviews packet usability; Track B adds institution/council packet shapes. **Next gated planning target.**
 4. `W1-S4 / C1-F,C1-G` — Track B drafts run/cognition/action/state/memory trace schemas.
 5. `W1-S5 / C1-H` — Track D/E review cost-event and eval-summary surfaces.
 6. `W1-S6 / C1-I,C1-J` — Track E adds valid/invalid examples and schema validation tooling.
@@ -152,3 +152,41 @@ Closeout evidence, 2026-06-14:
 Meta accepts `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton` as complete for Track B under the exact scope above.
 
 Any W1-S2/C1-C,C1-D expansion requires a new Meta review before implementation.
+
+## W1-S2 Closeout
+
+Track B implemented only `W1-S2-C1-C-C1-D-core-packet-schemas`.
+
+### In Scope
+
+- `src/ringfall-contracts/README.md`
+- `src/ringfall-contracts/docs/Contract-Versioning.md`
+- `src/ringfall-contracts/schemas/README.md`
+- `src/ringfall-contracts/schemas/packets/avatar-pulse-packet.schema.json`
+- `src/ringfall-contracts/schemas/packets/scene-action-packet.schema.json`
+- `src/ringfall-contracts/schemas/packets/work-order-request.schema.json`
+- `src/ringfall-contracts/schemas/packets/tool-action-request.schema.json`
+- `src/ringfall-contracts/schemas/packets/execution-result.schema.json`
+
+### W1-S2 Acceptance Criteria
+
+- ✅ Exactly five packet schema drafts exist under `src/ringfall-contracts/schemas/packets/`.
+- ✅ All W1-S2 schemas use JSON Schema Draft 2020-12.
+- ✅ All W1-S2 schemas carry `schema_version.const = "0.1"` and `packet_type.const`.
+- ✅ `SceneActionPacket.actions[]` has action-type conditional requirements.
+- ✅ `WorkOrderRequest` requires either `target_crew_id` or `target_crew_pool_id`.
+- ✅ `ExecutionResult.hidden_effects` is internal-only evidence and hidden-effect entries require core fields.
+- ✅ No C1-E institution/council schemas, examples, validation tooling, runtime code, configs, scenarios, provider/model calls, Unity, or simulation logic were added.
+
+### W1-S2 Review Evidence
+
+- Step review verdict: GREEN after Swarm findings were fixed.
+- Swarm review findings fixed before commit: incomplete scene actions, empty hidden effects, missing work-order target, and empty observable result objects.
+- Verification covered exact schema inventory, JSON parse/structure checks, no forbidden mutation fields, no C1-E identifiers, out-of-scope diff, and secrets scan.
+- Future C1-I/C1-J validation work must include invalid fixtures for action conditionals, work-order targeting, hidden-effect completeness, packet constants, malformed IDs/refs, invalid enums, and numeric bounds.
+
+## Next Meta Gate Decision
+
+Meta accepts `W1-S2-C1-C-C1-D-core-packet-schemas` as complete for Track B.
+
+Any W1-S3/C1-E expansion requires a new Meta review before implementation.
