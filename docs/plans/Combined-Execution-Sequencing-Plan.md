@@ -574,7 +574,7 @@ Wave 0 passes when the repo skeleton exists, docs are placed correctly, generate
 **Secondary support:** Track C/D/A review against schemas
 
 ### Mandatory outputs
-- ⬜ `src/ringfall-contracts/schemas/` exists
+- ✅ `src/ringfall-contracts/schemas/` exists
 - ⬜ minimum packet schemas exist
 - ⬜ minimum trace/artifact schemas exist
 - ⬜ valid/invalid schema examples exist
@@ -588,8 +588,14 @@ Wave 0 passes when the repo skeleton exists, docs are placed correctly, generate
 **Owner priority:** Track B
 
 Epics:
-- ⬜ **C1-A** Create schema folder structure — **Owner: Track B**
-- ⬜ **C1-B** Create versioning/readme notes — **Owner: Track B**
+- ✅ **C1-A** Create schema folder structure — **Owner: Track B**
+- ✅ **C1-B** Create versioning/readme notes — **Owner: Track B**
+
+W1-S1 closeout note, 2026-06-14:
+- Track B created the approved `src/ringfall-contracts/` layout, schema group folders, and versioning/readme notes only.
+- No `*.schema.json` files, schema bodies, examples, validation tools, runtime code, configs, scenarios, Unity work, provider/model calls, or simulation logic were added.
+- Step review verdict: GREEN. C1-A/C1-B are accepted as the Wave 1 contract layout baseline.
+- C1-C/C1-D remain the next schema definition step; Track C/D/E/A are not activated until their prerequisite schema drafts exist.
 
 #### Sprint W1-S2 — Core packet schemas
 
@@ -620,11 +626,11 @@ Epics:
 
 ### Execution Steps
 
-**⬜ Step 1**
+**✅ Step 1**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Track B session | C1-A, C1-B | Wave 0 ✅ | Create the contract home before any packet details. |
+| Track B session | C1-A, C1-B | Wave 0 ✅ | Complete: contract home and versioning/readme notes created without packet details. |
 
 **⬜ Step 2**
 
@@ -2025,34 +2031,39 @@ Ringfall must first produce stable artifacts independently.
 
 ## Current frontier
 
-The project is post-Wave-0 and pre-Wave-1. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, and the repo remains bootstrap-only: no C#/.NET solution, Python brain service, Unity project, JSON Schema implementation, model provider implementation, or simulation logic has started.
+The project is post-Wave-0 and inside Wave 1 after W1-S1 acceptance. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, and W1-S1 created only the contract layout/versioning skeleton: no C#/.NET solution, Python brain service, Unity project, JSON Schema body implementation, model provider implementation, or simulation logic has started.
 
-The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-01` aligned post-Wave-0 status/frontier docs, and `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary with the Risk Register G1-G10 list. The separate Wave 1 planning brief is now present at `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md` and Meta-gates only Track B `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton`.
+The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-01` aligned post-Wave-0 status/frontier docs, and `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary with the Risk Register G1-G10 list. The separate Wave 1 planning brief is present at `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md`; W1-S1 Track B contract layout/versioning is accepted.
 
 ## Immediate sequence
 
-1. Track B may implement `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton` within the narrow scope in `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md`.
-2. Review Track B W1-S1 after implementation.
-3. Do not start W1-S2 packet schemas until W1-S1 is accepted by Meta.
+1. Track B may prepare W1-S2/C1-C,C1-D core packet schema drafting under a new Meta-gated implementation plan.
+2. Do not start examples, validation tooling, C#/.NET, Python brain, Unity, provider/model runtime, scenarios, or simulation logic from W1-S1 acceptance alone.
+3. Track C/D/E/A remain inactive until their prerequisite schema drafts exist and Meta opens the relevant review step.
 
 ## First actionable step
 
 ```text
-W1-S1-C1-A-C1-B — Track B creates the contract home and versioning notes without creating schema bodies or runtime implementation.
+W1-S2-C1-C-C1-D — Track B drafts core L1/action packet schemas after W1-S1 contract layout acceptance.
 ```
 
-Expected Track B implementation brief:
+Expected Track B planning brief:
 
 ```text
-Create src/ringfall-contracts/ layout and versioning/readme notes only.
-Do not create *.schema.json files, examples, tools, code, model calls, Unity work, or simulation logic.
-Follow docs/plans/Ringfall-Wave1-Planning-Brief-v01.md exactly.
+Prepare a narrow implementation plan for C1-C/C1-D core packet schemas.
+Do not add examples, validation tools, C#/.NET, Python runtime, provider calls, Unity work, scenarios, or simulation logic.
+Preserve the W1-S1 contract home and versioning rules.
 ```
+
+W1-S1 closeout note, 2026-06-14:
+- `src/ringfall-contracts/README.md`, `src/ringfall-contracts/docs/Contract-Versioning.md`, `src/ringfall-contracts/schemas/README.md`, and six schema-group `.gitkeep` files form the accepted C1-A/C1-B baseline.
+- Step review verified no `*.schema.json`, schema bodies, examples, validation tools, runtime code, configs, scenarios, Unity files, provider/model behavior, or simulation logic.
+- W1-S2/C1-C,C1-D is the next gated planning target.
 
 Wave 1 planning gate note, 2026-06-14:
 - `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md` is the Meta gate for Wave 1 entry.
-- Only Track B W1-S1/C1-A/C1-B is greenlit.
-- W1-S2 packet schemas and all later Wave 1 steps remain blocked until W1-S1 is implemented and accepted.
+- Track B W1-S1/C1-A/C1-B is implemented and accepted.
+- W1-S2 packet schemas are the next gated step; all later Wave 1 steps remain blocked until W1-S2 is planned, implemented, and accepted.
 - Model-policy note before Wave 1 start: Ringfall stays OpenRouter-only; prefer free model lanes where stable, but require `deepseek/deepseek-v4-flash` as the explicit low-cost paid fallback instead of assuming free quota availability.
 
 MetaOps sync closure note, 2026-06-14:

@@ -4,7 +4,9 @@
 
 **META-GATED for implementation entry:** yes.
 
-This brief gates only Wave 1 Step 1: `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton` for Track B.
+Wave 1 Step 1 `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton` is complete and accepted for Track B.
+
+This brief now serves as W1-S1 closeout evidence and the handoff guardrail for preparing W1-S2/C1-C,C1-D under a separate Meta-gated implementation plan.
 
 It does not approve packet schemas, trace schemas, examples, validation tooling, C#/.NET, Python brain, Unity, model calls, provider behavior, scenario content, or simulation logic.
 
@@ -52,17 +54,17 @@ Wave 1 preserves these architecture rules:
 
 ## Wave 1 Step Sequence
 
-1. `W1-S1 / C1-A,C1-B` — Track B creates contract layout and versioning/readme notes.
-2. `W1-S2 / C1-C,C1-D` — Track B drafts core L1/action packet schemas.
+1. `W1-S1 / C1-A,C1-B` — Track B creates contract layout and versioning/readme notes. **Complete.**
+2. `W1-S2 / C1-C,C1-D` — Track B drafts core L1/action packet schemas. **Next gated planning target.**
 3. `W1-S3 / C1-E` — Track C reviews packet usability; Track B adds institution/council packet shapes.
 4. `W1-S4 / C1-F,C1-G` — Track B drafts run/cognition/action/state/memory trace schemas.
 5. `W1-S5 / C1-H` — Track D/E review cost-event and eval-summary surfaces.
 6. `W1-S6 / C1-I,C1-J` — Track E adds valid/invalid examples and schema validation tooling.
 7. `W1-S7 / C1-K` — Meta runs cross-track contract handoff gate.
 
-## Immediate Greenlight
+## W1-S1 Greenlight And Closeout
 
-Track B may implement only `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton`.
+Track B implemented only `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton`.
 
 ### In Scope
 
@@ -90,15 +92,15 @@ Track B may implement only `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton`
 
 ## W1-S1 Acceptance Criteria
 
-- `src/ringfall-contracts/` exists as the canonical contract home.
-- Schema group folders exist and are tracked: `state`, `packets`, `traces`, `memory`, `eval`, `config`.
-- Contract README states that W1-S1 is layout/versioning only.
-- Contract README states JSON Schema is canonical for external artifacts.
-- Schema README lists group purposes without defining real schemas.
-- Versioning doc states initial schema version is `0.1`.
-- Versioning doc states future schemas must carry `schema_version`.
-- No `*.schema.json` files are created in W1-S1.
-- No executable code, validation tool, examples, configs, scenarios, model calls, Unity, or simulation logic are added.
+- ✅ `src/ringfall-contracts/` exists as the canonical contract home.
+- ✅ Schema group folders exist and are tracked: `state`, `packets`, `traces`, `memory`, `eval`, `config`.
+- ✅ Contract README states that W1-S1 is layout/versioning only.
+- ✅ Contract README states JSON Schema is canonical for external artifacts.
+- ✅ Schema README lists group purposes without defining real schemas.
+- ✅ Versioning doc states initial schema version is `0.1`.
+- ✅ Versioning doc states future schemas must carry `schema_version`.
+- ✅ No `*.schema.json` files are created in W1-S1.
+- ✅ No executable code, validation tool, examples, configs, scenarios, model calls, Unity, or simulation logic are added.
 
 ## Hold Conditions
 
@@ -133,15 +135,20 @@ No build or runtime test is expected for W1-S1 because it is docs/layout only.
 
 ## Required Handoff After W1-S1
 
-Track B closeout must state:
+Track B closeout states:
 
 - C1-A/C1-B created layout/versioning only.
 - No schema bodies were added.
 - C1-C/C1-D remain the next schema definition step.
 - Track C/D/E/A are not activated until their prerequisite schema drafts exist.
 
+Closeout evidence, 2026-06-14:
+- Approved inventory: `src/ringfall-contracts/README.md`, `src/ringfall-contracts/docs/Contract-Versioning.md`, `src/ringfall-contracts/schemas/README.md`, and `.gitkeep` files under `state`, `packets`, `traces`, `memory`, `eval`, and `config`.
+- Step review verdict: GREEN.
+- Verification covered file inventory, no `*.schema.json`, out-of-scope diff, content checks, and secrets scan.
+
 ## Meta Gate Decision
 
-Meta gates `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton` as GREEN for Track B implementation under the exact scope above.
+Meta accepts `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton` as complete for Track B under the exact scope above.
 
-Any expansion beyond the in-scope list requires a new Meta review before implementation.
+Any W1-S2/C1-C,C1-D expansion requires a new Meta review before implementation.
