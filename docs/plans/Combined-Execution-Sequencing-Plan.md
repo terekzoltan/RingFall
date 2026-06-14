@@ -604,14 +604,22 @@ W1-S1 closeout note, 2026-06-14:
 Epics:
 - ✅ **C1-C** AvatarPulsePacket / SceneActionPacket — **Owner: Track B/C**
 - ✅ **C1-D** WorkOrderRequest / ToolActionRequest / ExecutionResult — **Owner: Track B**
-- ⬜ **C1-E** InstitutionBrief/Order and CouncilDoctrinePacket — **Owner: Track B/C**
+- ✅ **C1-E** InstitutionBrief/Order and CouncilDoctrinePacket — **Owner: Track B/C**
 
 W1-S2 closeout note, 2026-06-14:
 - Track B added five Draft 2020-12 packet schema drafts under `src/ringfall-contracts/schemas/packets/`: `AvatarPulsePacket`, `SceneActionPacket`, `WorkOrderRequest`, `ToolActionRequest`, and `ExecutionResult`.
 - Step review plus Swarm review found under-constrained action/result/work-order shapes; Track B fixed those before commit with action-type conditionals, work-order target requirements, hidden-effect required fields, and observable summary requirements.
 - No C1-E institution/council schemas, examples, validation tooling, runtime code, configs, scenarios, Unity work, provider/model calls, or simulation logic were added.
 - C1-I/C1-J must later include invalid fixtures for packet constants, action conditionals, work-order targeting, hidden-effect completeness, malformed IDs/refs, invalid enums, and numeric bounds.
-- W1-S3/C1-E is the next gated target: Track C reviews packet usability and Track B adds institution/council packet schemas only after Meta opens that step.
+- W1-S3/C1-E was the next gated target after W1-S2 and is now accepted.
+
+W1-S3 closeout note, 2026-06-14:
+- Track C added `docs/plans/W1-S3-C1-E-Track-C-Packet-Usability-Review.md` as the packet-usability review and handoff artifact.
+- Track B added three Draft 2020-12 packet schema drafts under `src/ringfall-contracts/schemas/packets/`: `InstitutionBrief`, `InstitutionOrder`, and `CouncilDoctrinePacket`.
+- Step review plus Swarm review found a withholding traceability gap in `InstitutionBrief`; Track B fixed it before commit with a conditional `withholding_record_refs` requirement when `withheld_items_count >= 1`.
+- Semantic validation debt for recommended-order traceability, macro-order policy-level constraints, and emergency-measure bounded duration/sunset constraints is routed to C1-I/C1-J invalid fixtures.
+- No examples, validation tooling, runtime code, configs, scenarios, Unity work, provider/model calls, trace schemas, memory schemas, eval schemas, or simulation logic were added.
+- W1-S4/C1-F,C1-G is the next gated target for run/cognition/action/state/memory trace schema drafting.
 
 #### Sprint W1-S3 — Trace, memory, cost, eval schemas
 
@@ -645,12 +653,12 @@ Epics:
 |---|---|---|---|
 | Track B session | C1-C, C1-D | C1-A/B ✅ | Complete: five core packet schema drafts accepted after review fixes. |
 
-**⬜ Step 3**
+**✅ Step 3**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Track C session | review L1/action packet draft | Step 2 packet draft accepted by Track B | Check role/prompt usability; do not fork schema. |
-| Track B session | C1-E | C1-C/D ✅ | Add institution/council packet shapes after L1/action core exists. |
+| Track C session | review L1/action packet draft | Step 2 packet draft accepted by Track B | Complete: packet usability review/handoff artifact added. |
+| Track B session | C1-E | C1-C/D ✅ | Complete: institution/council packet schema drafts accepted after review fix. |
 
 **⬜ Step 4**
 
@@ -2038,28 +2046,28 @@ Ringfall must first produce stable artifacts independently.
 
 ## Current frontier
 
-The project is post-Wave-0 and inside Wave 1 after W1-S2 acceptance. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, W1-S1 created the contract layout/versioning skeleton, and W1-S2 added five core packet schema drafts. No C#/.NET solution, Python brain service, Unity project, model provider implementation, examples/validation tooling, scenarios, or simulation logic has started.
+The project is post-Wave-0 and inside Wave 1 after W1-S3 acceptance. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, W1-S1 created the contract layout/versioning skeleton, W1-S2 added five core packet schema drafts, and W1-S3 added Track C packet-usability review plus three institution/council packet schema drafts. No C#/.NET solution, Python brain service, Unity project, model provider implementation, examples/validation tooling, scenarios, or simulation logic has started.
 
-The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-01` aligned post-Wave-0 status/frontier docs, and `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary with the Risk Register G1-G10 list. The separate Wave 1 planning brief is present at `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md`; W1-S1 Track B contract layout/versioning and W1-S2 core packet schema drafts are accepted.
+The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-01` aligned post-Wave-0 status/frontier docs, and `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary with the Risk Register G1-G10 list. The separate Wave 1 planning brief is present at `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md`; W1-S1 Track B contract layout/versioning, W1-S2 core packet schema drafts, and W1-S3 C1-E packet-usability/schema work are accepted.
 
 ## Immediate sequence
 
-1. Prepare W1-S3/C1-E under a new Meta-gated implementation plan: Track C packet usability review plus Track B institution/council packet schema drafting.
-2. Do not start examples, validation tooling, C#/.NET, Python brain, Unity, provider/model runtime, scenarios, or simulation logic from W1-S2 acceptance alone.
+1. Prepare W1-S4/C1-F,C1-G under a new Meta-gated implementation plan: run/cognition/action/state/memory trace schema drafting.
+2. Do not start examples, validation tooling, C#/.NET, Python brain, Unity, provider/model runtime, scenarios, or simulation logic from W1-S3 acceptance alone.
 3. Track D/E/A remain inactive until their prerequisite trace/eval/artifact surfaces exist and Meta opens the relevant review step.
 
 ## First actionable step
 
 ```text
-W1-S3-C1-E — Track C reviews W1-S2 packet usability; Track B drafts InstitutionBrief/Order and CouncilDoctrinePacket schemas after C1-C/C1-D acceptance.
+W1-S4-C1-F-C1-G — Track B drafts run/cognition/action/state/memory trace schemas after C1-E acceptance.
 ```
 
-Expected W1-S3 planning brief:
+Expected W1-S4 planning brief:
 
 ```text
-Prepare a narrow plan for Track C packet usability review and Track B C1-E institution/council packet schemas.
-Do not add examples, validation tools, C#/.NET, Python runtime, provider calls, Unity work, scenarios, trace schemas, eval schemas, or simulation logic.
-Preserve W1-S1 layout and W1-S2 packet schema/versioning rules.
+Prepare a narrow plan for C1-F/C1-G trace and memory/state schema drafts.
+Do not add examples, validation tools, C#/.NET, Python runtime, provider calls, Unity work, scenarios, eval schemas, cost schemas, or simulation logic.
+Preserve W1-S1 layout and W1-S2/W1-S3 packet schema/versioning rules.
 ```
 
 W1-S1 closeout note, 2026-06-14:
@@ -2071,13 +2079,21 @@ W1-S2 closeout note, 2026-06-14:
 - `src/ringfall-contracts/schemas/packets/` now contains exactly five W1-S2 schema drafts: `avatar-pulse-packet.schema.json`, `scene-action-packet.schema.json`, `work-order-request.schema.json`, `tool-action-request.schema.json`, and `execution-result.schema.json`.
 - Review fixes tightened `SceneActionPacket.actions[]`, `WorkOrderRequest` targeting, `ExecutionResult.hidden_effects`, and observable result objects before commit.
 - No examples, validation tooling, runtime code, configs, scenarios, Unity files, provider/model behavior, C1-E schemas, trace schemas, eval schemas, or simulation logic were added.
-- W1-S3/C1-E is the next gated planning target.
+- W1-S3/C1-E was the next gated planning target after W1-S2 and is now accepted.
+
+W1-S3 closeout note, 2026-06-14:
+- `docs/plans/W1-S3-C1-E-Track-C-Packet-Usability-Review.md` records Track C packet-usability findings and Track B/Meta handoff guidance.
+- `src/ringfall-contracts/schemas/packets/` now contains exactly eight packet schema drafts, including C1-E `institution-brief.schema.json`, `institution-order.schema.json`, and `council-doctrine-packet.schema.json`.
+- Review fixes enforced withholding traceability when `withheld_items_count >= 1` and routed remaining semantic validation debt to future C1-I/C1-J invalid fixtures.
+- No examples, validation tooling, runtime code, configs, scenarios, Unity files, provider/model behavior, trace schemas, memory schemas, eval schemas, cost schemas, or simulation logic were added.
+- W1-S4/C1-F,C1-G is the next gated planning target.
 
 Wave 1 planning gate note, 2026-06-14:
 - `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md` is the Meta gate for Wave 1 entry.
 - Track B W1-S1/C1-A/C1-B is implemented and accepted.
 - Track B W1-S2/C1-C,C1-D is implemented and accepted.
-- W1-S3/C1-E packet usability review and institution/council schemas are the next gated step; all later Wave 1 steps remain blocked until W1-S3 is planned, implemented, and accepted.
+- W1-S3/C1-E packet usability review and institution/council schemas are implemented and accepted.
+- W1-S4/C1-F,C1-G trace and memory/state schemas are the next gated step; all later Wave 1 steps remain blocked until W1-S4 is planned, implemented, and accepted.
 - Model-policy note before Wave 1 start: Ringfall stays OpenRouter-only; prefer free model lanes where stable, but require `deepseek/deepseek-v4-flash` as the explicit low-cost paid fallback instead of assuming free quota availability.
 
 MetaOps sync closure note, 2026-06-14:

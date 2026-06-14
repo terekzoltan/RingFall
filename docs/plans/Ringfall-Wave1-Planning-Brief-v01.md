@@ -4,11 +4,11 @@
 
 **META-GATED for implementation entry:** yes.
 
-Wave 1 Step 1 `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton` and Step 2 `W1-S2-C1-C-C1-D-core-packet-schemas` are complete and accepted for Track B.
+Wave 1 Step 1 `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton`, Step 2 `W1-S2-C1-C-C1-D-core-packet-schemas`, and Step 3 `W1-S3-C1-E` are complete and accepted.
 
-This brief now serves as W1-S1/W1-S2 closeout evidence and the handoff guardrail for preparing W1-S3/C1-E under a separate Meta-gated implementation plan.
+This brief now serves as W1-S1/W1-S2/W1-S3 closeout evidence and the handoff guardrail for preparing W1-S4/C1-F,C1-G under a separate Meta-gated implementation plan.
 
-It does not approve C1-E or later schemas, trace schemas, examples, validation tooling, C#/.NET, Python brain, Unity, model calls, provider behavior, scenario content, or simulation logic.
+It does not approve C1-F/C1-G or later schemas, examples, validation tooling, C#/.NET, Python brain, Unity, model calls, provider behavior, scenario content, or simulation logic.
 
 ## Purpose
 
@@ -56,8 +56,8 @@ Wave 1 preserves these architecture rules:
 
 1. `W1-S1 / C1-A,C1-B` — Track B creates contract layout and versioning/readme notes. **Complete.**
 2. `W1-S2 / C1-C,C1-D` — Track B drafts core L1/action packet schemas. **Complete.**
-3. `W1-S3 / C1-E` — Track C reviews packet usability; Track B adds institution/council packet shapes. **Next gated planning target.**
-4. `W1-S4 / C1-F,C1-G` — Track B drafts run/cognition/action/state/memory trace schemas.
+3. `W1-S3 / C1-E` — Track C reviews packet usability; Track B adds institution/council packet shapes. **Complete.**
+4. `W1-S4 / C1-F,C1-G` — Track B drafts run/cognition/action/state/memory trace schemas. **Next gated planning target.**
 5. `W1-S5 / C1-H` — Track D/E review cost-event and eval-summary surfaces.
 6. `W1-S6 / C1-I,C1-J` — Track E adds valid/invalid examples and schema validation tooling.
 7. `W1-S7 / C1-K` — Meta runs cross-track contract handoff gate.
@@ -190,3 +190,39 @@ Track B implemented only `W1-S2-C1-C-C1-D-core-packet-schemas`.
 Meta accepts `W1-S2-C1-C-C1-D-core-packet-schemas` as complete for Track B.
 
 Any W1-S3/C1-E expansion requires a new Meta review before implementation.
+
+## W1-S3 Closeout
+
+Track C implemented only the packet-usability review/handoff artifact, and Track B implemented only the C1-E institution/council packet schema drafts.
+
+### In Scope
+
+- `docs/plans/W1-S3-C1-E-Track-C-Packet-Usability-Review.md`
+- `src/ringfall-contracts/README.md`
+- `src/ringfall-contracts/docs/Contract-Versioning.md`
+- `src/ringfall-contracts/schemas/README.md`
+- `src/ringfall-contracts/schemas/packets/institution-brief.schema.json`
+- `src/ringfall-contracts/schemas/packets/institution-order.schema.json`
+- `src/ringfall-contracts/schemas/packets/council-doctrine-packet.schema.json`
+
+### W1-S3 Acceptance Criteria
+
+- ✅ Track C review artifact exists and preserves schema ownership boundaries.
+- ✅ Exactly eight packet schema drafts exist under `src/ringfall-contracts/schemas/packets/` after C1-E.
+- ✅ C1-E schemas use JSON Schema Draft 2020-12 and `schema_version.const = "0.1"`.
+- ✅ `InstitutionBrief` enforces withholding traceability when `withheld_items_count >= 1`.
+- ✅ `InstitutionOrder` and `CouncilDoctrinePacket` preserve authority boundaries without direct world-state mutation fields.
+- ✅ No examples, validation tooling, runtime code, configs, scenarios, provider/model calls, Unity, trace schemas, memory schemas, eval schemas, cost schemas, or simulation logic were added.
+
+### W1-S3 Review Evidence
+
+- Step review verdict: GREEN after Swarm findings were fixed or routed.
+- Swarm review finding fixed before commit: `InstitutionBrief` positive withheld counts require `withholding_record_refs`.
+- Semantic validation debt for recommended-order traceability, macro-order policy-level constraints, and emergency-measure bounded duration/sunset constraints is routed to future C1-I/C1-J invalid fixture work.
+- Verification covered exact schema inventory, JSON parse/structure checks, no forbidden mutation fields, no forbidden adjacent packet names, out-of-scope diff, and secrets scan.
+
+## Next Meta Gate Decision
+
+Meta accepts `W1-S3-C1-E` as complete for Track C and Track B.
+
+Any W1-S4/C1-F,C1-G expansion requires a new Meta review before implementation.
