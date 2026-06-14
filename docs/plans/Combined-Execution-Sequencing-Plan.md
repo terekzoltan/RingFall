@@ -2024,33 +2024,30 @@ Ringfall must first produce stable artifacts independently.
 
 ## Current frontier
 
-The project is pre-implementation.  
-The correct next action is **Wave 0**, not Wave 2, not Unity, not OpenRouter, not LLM scene prompts.
+The project is post-Wave-0 and pre-Wave-1. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, and the repo remains bootstrap-only: no C#/.NET solution, Python brain service, Unity project, JSON Schema implementation, model provider implementation, or simulation logic has started.
+
+The current target-side work is a MetaOps source-of-truth sync lane, not Wave 1 implementation. The correct next action is **RF-STATUS-SYNC-01**, followed by **RF-GUARDRAIL-SYNC-01**, before any separate Wave 1 planning brief.
 
 ## Immediate sequence
 
-1. Meta Coordinator `WAVE START`
-2. Verify canonical docs are present and placed correctly
-3. Start Wave 0 Step 1
-4. Create repo/docs skeleton
-5. Close Wave 0
-6. Start Wave 1 contracts
+1. Complete `RF-STATUS-SYNC-01` in `track-metaops`.
+2. Complete `RF-GUARDRAIL-SYNC-01` in `track-metaops`.
+3. Prepare a separate Wave 1 planning brief only after both MetaOps sync tasks close.
+4. Start Wave 1 contracts only after Meta explicitly gates the Wave 1 plan.
 
 ## First actionable step
 
 ```text
-Wave 0 / Step 1 — Meta creates repo/control surface and Track B creates safe skeleton conventions.
+RF-STATUS-SYNC-01 — Track MetaOps aligns post-Wave-0 status across local FAL state, Combined Plan, and Meta Handoff without starting Wave 1 implementation.
 ```
 
-Expected first implementation brief:
+Expected MetaOps implementation brief:
 
 ```text
-Create the Ringfall repo skeleton exactly as described in Architecture and Repo Plan.
-Copy canonical docs into the correct folders.
-Add .gitignore for data/runs, caches, secrets, local configs.
-Do not implement simulation logic.
-Do not call models.
-Do not create Unity gameplay.
+Align the current frontier as post-Wave-0 / pre-Wave-1.
+Preserve Wave 0 PASS closeout evidence.
+Record RF-STATUS-SYNC-01 -> RF-GUARDRAIL-SYNC-01 -> separate Wave 1 planning brief as the immediate sequence.
+Do not implement simulation logic, schemas, model calls, Unity work, or Wave 1 contracts.
 ```
 
 ---
