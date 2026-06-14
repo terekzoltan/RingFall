@@ -2050,7 +2050,7 @@ Do not implement simulation logic, schemas, model calls, Unity work, or Wave 1 c
 
 MetaOps sync closure note, 2026-06-14:
 - `RF-STATUS-SYNC-01` closed the stale post-Wave-0 frontier drift across the Combined Plan, Meta Handoff, and local FAL active context.
-- `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary and automatic hold trigger wording with `docs/ops/Ringfall-Risk-Register-and-Design-Guardrails-v01.md`.
+- `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary, Risk Register detailed G1-G10 sections, and automatic hold trigger wording with `docs/ops/Ringfall-Risk-Register-and-Design-Guardrails-v01.md`.
 - The guardrail sync touched ignored/private canon policy files only; this Combined Plan note is the tracked handoff record.
 - Wave 1 implementation remains blocked until a separate Wave 1 plan is written and gated by Meta.
 
