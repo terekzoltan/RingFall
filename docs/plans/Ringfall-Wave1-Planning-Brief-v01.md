@@ -38,6 +38,7 @@ Wave 1 preserves these architecture rules:
 - LLM/model outputs that affect execution must become strict typed packets.
 - Contracts must not allow direct LLM world-state mutation.
 - Artifact evidence must support replay/eval.
+- Later model routing must remain OpenRouter-only, free-first where reliable, with `deepseek/deepseek-v4-flash` as the required low-cost paid fallback.
 - FAL compatibility remains artifact-level; Ringfall must not depend on FAL runtime.
 
 ## Track Ownership
@@ -125,6 +126,7 @@ Also verify:
 - `src/ringfall-contracts/**` contains only approved layout/docs files.
 - `src/**/*.schema.json` returns no files.
 - `src/ringfall-core/**`, `client/**`, `tools/**`, `tests/**`, `configs/**`, and `scenarios/**` have no unintended changes.
+- Model-policy references, if mentioned, preserve free-first plus `deepseek/deepseek-v4-flash` fallback and do not introduce runtime behavior.
 - No secrets are present in added docs.
 
 No build or runtime test is expected for W1-S1 because it is docs/layout only.

@@ -20,12 +20,9 @@ run_modes:
     - batch_analysis
 
 models:
-  gpt_oss_120b:
-    id: openai/gpt-oss-120b
-    role: workhorse
-  deepseek_v32:
-    id: deepseek/deepseek-v3.2
-    role: quality_high_stakes
+  deepseek_v4_flash:
+    id: deepseek/deepseek-v4-flash
+    role: low_cost_paid_fallback
   nemotron_3_super_free:
     id: nvidia/nemotron-3-super-120b-a12b:free
     role: free_l1_pulse_candidate
@@ -45,7 +42,7 @@ lanes:
       - nemotron_3_super_free
       - gpt_oss_120b_free
     fallback:
-      - gpt_oss_120b
+      - deepseek_v4_flash
     helper_only:
       - gpt_oss_20b
     temperature: 0.65
@@ -55,9 +52,9 @@ lanes:
 
   l1_scene:
     primary:
-      - gpt_oss_120b
-    high_stakes:
-      - deepseek_v32
+      - gpt_oss_120b_free
+    fallback:
+      - deepseek_v4_flash
     helper_only:
       - gpt_oss_20b
     temperature: 0.75
@@ -67,9 +64,9 @@ lanes:
 
   l2_seat:
     primary:
-      - gpt_oss_120b
-    high_stakes:
-      - deepseek_v32
+      - gpt_oss_120b_free
+    fallback:
+      - deepseek_v4_flash
     temperature: 0.45
     max_output_tokens: 900
     reasoning_effort: medium
@@ -77,9 +74,9 @@ lanes:
 
   l2_chair:
     cost_mode:
-      - gpt_oss_120b
+      - gpt_oss_120b_free
     quality_mode:
-      - deepseek_v32
+      - deepseek_v4_flash
     temperature: 0.35
     max_output_tokens: 1300
     reasoning_effort: medium_high
@@ -87,9 +84,9 @@ lanes:
 
   l3_seat:
     primary:
-      - gpt_oss_120b
-    high_stakes:
-      - deepseek_v32
+      - gpt_oss_120b_free
+    fallback:
+      - deepseek_v4_flash
     temperature: 0.5
     max_output_tokens: 1200
     reasoning_effort: medium_high
@@ -97,9 +94,9 @@ lanes:
 
   l3_chair:
     cost_mode:
-      - gpt_oss_120b
+      - gpt_oss_120b_free
     quality_mode:
-      - deepseek_v32
+      - deepseek_v4_flash
     temperature: 0.3
     max_output_tokens: 2000
     reasoning_effort: high_if_available
@@ -107,9 +104,9 @@ lanes:
 
   charter_auditor:
     primary:
-      - gpt_oss_120b
-    high_stakes:
-      - deepseek_v32
+      - gpt_oss_120b_free
+    fallback:
+      - deepseek_v4_flash
     temperature: 0.25
     max_output_tokens: 1100
     reasoning_effort: medium
@@ -117,9 +114,9 @@ lanes:
 
   verifier:
     primary:
-      - gpt_oss_120b
-    high_stakes:
-      - deepseek_v32
+      - gpt_oss_120b_free
+    fallback:
+      - deepseek_v4_flash
     helper_only:
       - gpt_oss_20b
     temperature: 0.0
@@ -129,7 +126,9 @@ lanes:
 
   summarizer:
     primary:
-      - gpt_oss_120b
+      - gpt_oss_120b_free
+    fallback:
+      - deepseek_v4_flash
     helper_only:
       - gpt_oss_20b
     temperature: 0.25
@@ -138,6 +137,9 @@ lanes:
     retry_policy: one_retry_then_fail
 
 removed_candidates:
+  openai/gpt-oss-120b:
+    status: non_primary
+    reason: Replaced as paid fallback backbone by deepseek/deepseek-v4-flash; may return only via explicit future bakeoff.
   qwen/qwen3-235b-a22b-2507:
     status: removed
     reason: Removed by design decision; can return only via explicit future bakeoff.

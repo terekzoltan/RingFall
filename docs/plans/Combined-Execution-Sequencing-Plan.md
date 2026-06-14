@@ -517,7 +517,7 @@ R0-H completion note, 2026-06-14:
 - `configs/model-policy.example.yaml`, `configs/provider.example.yaml`, and `configs/runtime.example.yaml` are present as example-only config files.
 - Example defaults are mock-first: `default_provider: mock`, `openrouter.enabled: false`, and `allow_real_provider_calls: false`.
 - No API keys or real provider credentials are present; provider auth is documented only through `api_key_env: OPENROUTER_API_KEY`.
-- The model policy example reflects the current canon lanes and candidates: `gpt-oss-120b`, DeepSeek V3.2, Nemotron free L1 pulse candidate, and helper-only `gpt-oss-20b`.
+- The model policy example reflects the current lane decision: use free OpenRouter models first where reliable, require `deepseek/deepseek-v4-flash` as the low-cost paid fallback, and keep helper-only small models out of authoritative decisions unless explicitly gated.
 
 **✅ Step 3**
 
@@ -695,6 +695,7 @@ Wave 1 passes when minimum schemas and examples validate, and downstream tracks 
 - packet schema allows direct world mutation
 - trace/cost/memory source refs absent
 - schema examples fail
+- cost/model fields contradict the free-first plus `deepseek/deepseek-v4-flash` fallback policy
 - Track C/D/E/A reject handoff as unusable
 
 ---
@@ -2052,6 +2053,7 @@ Wave 1 planning gate note, 2026-06-14:
 - `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md` is the Meta gate for Wave 1 entry.
 - Only Track B W1-S1/C1-A/C1-B is greenlit.
 - W1-S2 packet schemas and all later Wave 1 steps remain blocked until W1-S1 is implemented and accepted.
+- Model-policy note before Wave 1 start: Ringfall stays OpenRouter-only; prefer free model lanes where stable, but require `deepseek/deepseek-v4-flash` as the explicit low-cost paid fallback instead of assuming free quota availability.
 
 MetaOps sync closure note, 2026-06-14:
 - `RF-STATUS-SYNC-01` closed the stale post-Wave-0 frontier drift across the Combined Plan, Meta Handoff, and local FAL active context.
