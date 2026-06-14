@@ -2026,29 +2026,33 @@ Ringfall must first produce stable artifacts independently.
 
 The project is post-Wave-0 and pre-Wave-1. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, and the repo remains bootstrap-only: no C#/.NET solution, Python brain service, Unity project, JSON Schema implementation, model provider implementation, or simulation logic has started.
 
-The current target-side work is a MetaOps source-of-truth sync lane, not Wave 1 implementation. The correct next action is **RF-STATUS-SYNC-01**, followed by **RF-GUARDRAIL-SYNC-01**, before any separate Wave 1 planning brief.
+The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-01` aligned post-Wave-0 status/frontier docs, and `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary with the Risk Register G1-G10 list. The correct next action is a separate **Wave 1 planning brief**, not Wave 1 implementation.
 
 ## Immediate sequence
 
-1. Complete `RF-STATUS-SYNC-01` in `track-metaops`.
-2. Complete `RF-GUARDRAIL-SYNC-01` in `track-metaops`.
-3. Prepare a separate Wave 1 planning brief only after both MetaOps sync tasks close.
-4. Start Wave 1 contracts only after Meta explicitly gates the Wave 1 plan.
+1. Prepare a separate Wave 1 planning brief in Meta.
+2. Review/gate the Wave 1 plan before implementation.
+3. Start Wave 1 contracts only after Meta explicitly gates that Wave 1 plan.
 
 ## First actionable step
 
 ```text
-RF-STATUS-SYNC-01 — Track MetaOps aligns post-Wave-0 status across local FAL state, Combined Plan, and Meta Handoff without starting Wave 1 implementation.
+Wave 1 planning brief — Meta prepares the contracts/artifact-spine plan after Wave 0 closeout and MetaOps source-of-truth sync, without starting implementation.
 ```
 
-Expected MetaOps implementation brief:
+Expected planning brief:
 
 ```text
-Align the current frontier as post-Wave-0 / pre-Wave-1.
-Preserve Wave 0 PASS closeout evidence.
-Record RF-STATUS-SYNC-01 -> RF-GUARDRAIL-SYNC-01 -> separate Wave 1 planning brief as the immediate sequence.
-Do not implement simulation logic, schemas, model calls, Unity work, or Wave 1 contracts.
+Plan Wave 1 contracts and artifact spine against the existing canon.
+Preserve Wave 0 PASS closeout evidence and MetaOps sync decisions.
+Do not implement simulation logic, schemas, model calls, Unity work, or Wave 1 contracts during planning.
 ```
+
+MetaOps sync closure note, 2026-06-14:
+- `RF-STATUS-SYNC-01` closed the stale post-Wave-0 frontier drift across the Combined Plan, Meta Handoff, and local FAL active context.
+- `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary and automatic hold trigger wording with `docs/ops/Ringfall-Risk-Register-and-Design-Guardrails-v01.md`.
+- The guardrail sync touched ignored/private canon policy files only; this Combined Plan note is the tracked handoff record.
+- Wave 1 implementation remains blocked until a separate Wave 1 plan is written and gated by Meta.
 
 ---
 
