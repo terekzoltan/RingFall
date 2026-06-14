@@ -2026,27 +2026,32 @@ Ringfall must first produce stable artifacts independently.
 
 The project is post-Wave-0 and pre-Wave-1. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, and the repo remains bootstrap-only: no C#/.NET solution, Python brain service, Unity project, JSON Schema implementation, model provider implementation, or simulation logic has started.
 
-The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-01` aligned post-Wave-0 status/frontier docs, and `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary with the Risk Register G1-G10 list. The correct next action is a separate **Wave 1 planning brief**, not Wave 1 implementation.
+The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-01` aligned post-Wave-0 status/frontier docs, and `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary with the Risk Register G1-G10 list. The separate Wave 1 planning brief is now present at `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md` and Meta-gates only Track B `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton`.
 
 ## Immediate sequence
 
-1. Prepare a separate Wave 1 planning brief in Meta.
-2. Review/gate the Wave 1 plan before implementation.
-3. Start Wave 1 contracts only after Meta explicitly gates that Wave 1 plan.
+1. Track B may implement `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton` within the narrow scope in `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md`.
+2. Review Track B W1-S1 after implementation.
+3. Do not start W1-S2 packet schemas until W1-S1 is accepted by Meta.
 
 ## First actionable step
 
 ```text
-Wave 1 planning brief — Meta prepares the contracts/artifact-spine plan after Wave 0 closeout and MetaOps source-of-truth sync, without starting implementation.
+W1-S1-C1-A-C1-B — Track B creates the contract home and versioning notes without creating schema bodies or runtime implementation.
 ```
 
-Expected planning brief:
+Expected Track B implementation brief:
 
 ```text
-Plan Wave 1 contracts and artifact spine against the existing canon.
-Preserve Wave 0 PASS closeout evidence and MetaOps sync decisions.
-Do not implement simulation logic, schemas, model calls, Unity work, or Wave 1 contracts during planning.
+Create src/ringfall-contracts/ layout and versioning/readme notes only.
+Do not create *.schema.json files, examples, tools, code, model calls, Unity work, or simulation logic.
+Follow docs/plans/Ringfall-Wave1-Planning-Brief-v01.md exactly.
 ```
+
+Wave 1 planning gate note, 2026-06-14:
+- `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md` is the Meta gate for Wave 1 entry.
+- Only Track B W1-S1/C1-A/C1-B is greenlit.
+- W1-S2 packet schemas and all later Wave 1 steps remain blocked until W1-S1 is implemented and accepted.
 
 MetaOps sync closure note, 2026-06-14:
 - `RF-STATUS-SYNC-01` closed the stale post-Wave-0 frontier drift across the Combined Plan, Meta Handoff, and local FAL active context.
