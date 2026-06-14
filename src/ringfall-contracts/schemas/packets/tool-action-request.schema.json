@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ringfall://schemas/packets/tool-action-request.schema.json",
+  "title": "ToolActionRequest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "packet_id",
+    "packet_type",
+    "schema_version",
+    "issuer_id",
+    "issuer_layer",
+    "issued_at_tick",
+    "source_context_id",
+    "tool_id",
+    "action",
+    "mode"
+  ],
+  "properties": {
+    "packet_id": { "type": "string", "minLength": 1 },
+    "packet_type": { "const": "ToolActionRequest" },
+    "schema_version": { "const": "0.1" },
+    "issuer_id": { "type": "string", "minLength": 1 },
+    "issuer_layer": {
+      "description": "Origin layer label only; this does not grant runtime authority.",
+      "enum": ["L1", "L2", "L3", "sim", "system"]
+    },
+    "issued_at_tick": { "type": "integer", "minimum": 0 },
+    "issued_at_turn": { "type": "string", "minLength": 1 },
+    "source_context_id": { "type": "string", "minLength": 1 },
+    "rationale": { "type": "string" },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "evidence_refs": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "visibility_intent": { "enum": ["private", "internal", "institutional", "public"] },
+    "urgency": { "enum": ["low", "normal", "medium", "high", "critical"] },
+    "tool_id": { "type": "string", "minLength": 1 },
+    "action": { "type": "string", "minLength": 1 },
+    "arguments": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "mode": { "enum": ["dry_run", "execute"] },
+    "requires_dry_run": { "type": "boolean" }
+  }
+}

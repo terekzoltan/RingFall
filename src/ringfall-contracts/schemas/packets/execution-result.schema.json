@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ringfall://schemas/packets/execution-result.schema.json",
+  "title": "ExecutionResult",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "packet_id",
+    "packet_type",
+    "schema_version",
+    "source_packet_id",
+    "execution_status"
+  ],
+  "properties": {
+    "packet_id": { "type": "string", "minLength": 1 },
+    "packet_type": { "const": "ExecutionResult" },
+    "schema_version": { "const": "0.1" },
+    "source_packet_id": { "type": "string", "minLength": 1 },
+    "execution_status": { "enum": ["success", "partial_success", "rejected", "deferred", "failed"] },
+    "true_effect_refs": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "issuer_observable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary"],
+      "properties": {
+        "summary": { "type": "string" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "risk_flags": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "institution_observable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary"],
+      "properties": {
+        "summary": { "type": "string" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "risk_flags": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "public_observable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary"],
+      "properties": {
+        "summary": { "type": "string" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "risk_flags": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "hidden_effects": {
+      "description": "Internal execution evidence only; not actor-visible, not public-visible, and not issuer-facing observable output.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["system", "field", "target", "delta"],
+        "properties": {
+          "system": { "type": "string", "minLength": 1 },
+          "field": { "type": "string", "minLength": 1 },
+          "target": { "type": "string", "minLength": 1 },
+          "delta": { "type": ["number", "integer", "string", "boolean", "null"] }
+        }
+      }
+    },
+    "events_created": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+  }
+}

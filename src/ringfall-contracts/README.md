@@ -2,12 +2,12 @@
 
 `src/ringfall-contracts/` is the canonical home for Ringfall external artifact contracts.
 
-W1-S1 creates layout and versioning notes only. It does not define packet fields, artifact shapes, schema bodies, examples, validation tooling, runtime behavior, provider behavior, Unity behavior, or simulation logic.
+W1-S1 created layout and versioning notes only. W1-S2 introduces the first core packet schema drafts under `schemas/packets/`.
 
-JSON Schema is canonical for future external artifact validation. W1-S1 adds no schema definitions; those arrive through later gated Wave 1 steps.
+JSON Schema is canonical for external artifact validation. W1-S2 packet schemas use JSON Schema Draft 2020-12 and `schema_version` `0.1`.
 
-Future execution-impacting model outputs must become strict typed packets before they can affect the simulation. Contracts must not allow direct LLM world-state mutation.
+Future execution-impacting model outputs must become strict typed packets before they can affect the simulation. Contracts must not allow direct LLM world-state mutation or authoritative truth edits.
 
 ## Next Steps Remain Blocked
 
-C1-C/C1-D packet schema work requires a separate Meta gate. Track C/D/E/A are not activated by this layout step.
+C1-E and later schema work remain blocked until W1-S2 is accepted by Meta. Examples, validation tooling, C#/.NET runtime code, Python runtime code, provider/model behavior, Unity work, scenarios, generated artifacts, and simulation logic remain out of scope.
