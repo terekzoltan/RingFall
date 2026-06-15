@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ringfall://schemas/memory/claim-record.schema.json",
+  "title": "ClaimRecord",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "record_type",
+    "schema_version",
+    "claim_id",
+    "claim_type",
+    "natural_language",
+    "owner_scope",
+    "source_refs",
+    "confidence",
+    "visibility",
+    "created_at_turn",
+    "status"
+  ],
+  "properties": {
+    "record_type": { "const": "ClaimRecord" },
+    "schema_version": { "const": "0.1" },
+    "claim_id": { "type": "string", "minLength": 1 },
+    "claim_type": {
+      "enum": [
+        "fact",
+        "observation",
+        "belief",
+        "rumor",
+        "inference",
+        "official_line",
+        "withheld_item",
+        "secret",
+        "doctrine",
+        "forecast",
+        "memory_summary"
+      ]
+    },
+    "subject": { "type": "string", "minLength": 1 },
+    "predicate": { "type": "string", "minLength": 1 },
+    "object": { "type": "string", "minLength": 1 },
+    "natural_language": { "type": "string", "minLength": 1 },
+    "owner_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "id"],
+      "properties": {
+        "type": { "enum": ["actor", "group", "institution", "council", "system"] },
+        "id": { "type": "string", "minLength": 1 }
+      }
+    },
+    "source_refs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/source_ref" } },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "evidence_quality": { "enum": ["authoritative", "strong", "mixed_moderate", "weak", "rumor_only", "contradicted", "unknown"] },
+    "sensitivity": { "enum": ["public", "internal", "private", "sensitive", "restricted", "forbidden"] },
+    "visibility": { "enum": ["world_truth", "private_actor", "shared_small_group", "institution_internal", "council_internal", "public", "dev_only"] },
+    "created_at_turn": { "type": "string", "minLength": 1 },
+    "last_updated_turn": { "type": "string", "minLength": 1 },
+    "decay_policy": { "enum": ["none", "slow", "medium", "fast"] },
+    "contradicts": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "supports": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "status": { "enum": ["active", "stale", "superseded", "contradicted", "confirmed", "retracted", "archived"] }
+  },
+  "$defs": {
+    "source_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref_id", "ref_type"],
+      "properties": {
+        "ref_id": { "type": "string", "minLength": 1 },
+        "ref_type": { "type": "string", "minLength": 1 },
+        "artifact_uri": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

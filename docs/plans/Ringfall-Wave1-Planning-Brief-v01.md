@@ -4,11 +4,11 @@
 
 **META-GATED for implementation entry:** yes.
 
-Wave 1 Step 1 `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton`, Step 2 `W1-S2-C1-C-C1-D-core-packet-schemas`, and Step 3 `W1-S3-C1-E` are complete and accepted.
+Wave 1 Step 1 `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton`, Step 2 `W1-S2-C1-C-C1-D-core-packet-schemas`, Step 3 `W1-S3-C1-E`, and Step 4 `W1-S4-C1-F-C1-G` are complete and accepted.
 
-This brief now serves as W1-S1/W1-S2/W1-S3 closeout evidence and the handoff guardrail for preparing W1-S4/C1-F,C1-G under a separate Meta-gated implementation plan.
+This brief now serves as W1-S1/W1-S2/W1-S3/W1-S4 closeout evidence and the handoff guardrail for preparing W1-S5/C1-H under a separate Meta-gated implementation plan.
 
-It does not approve C1-F/C1-G or later schemas, examples, validation tooling, C#/.NET, Python brain, Unity, model calls, provider behavior, scenario content, or simulation logic.
+It does not approve C1-H or later schemas, examples, validation tooling, C#/.NET, Python brain, Unity, model calls, provider behavior, scenario content, or simulation logic.
 
 ## Purpose
 
@@ -57,8 +57,8 @@ Wave 1 preserves these architecture rules:
 1. `W1-S1 / C1-A,C1-B` — Track B creates contract layout and versioning/readme notes. **Complete.**
 2. `W1-S2 / C1-C,C1-D` — Track B drafts core L1/action packet schemas. **Complete.**
 3. `W1-S3 / C1-E` — Track C reviews packet usability; Track B adds institution/council packet shapes. **Complete.**
-4. `W1-S4 / C1-F,C1-G` — Track B drafts run/cognition/action/state/memory trace schemas. **Next gated planning target.**
-5. `W1-S5 / C1-H` — Track D/E review cost-event and eval-summary surfaces.
+4. `W1-S4 / C1-F,C1-G` — Track B drafts run/cognition/action/state/memory trace schemas. **Complete.**
+5. `W1-S5 / C1-H` — Track D/E review cost-event and eval-summary surfaces. **Next gated planning target.**
 6. `W1-S6 / C1-I,C1-J` — Track E adds valid/invalid examples and schema validation tooling.
 7. `W1-S7 / C1-K` — Meta runs cross-track contract handoff gate.
 
@@ -226,3 +226,43 @@ Track C implemented only the packet-usability review/handoff artifact, and Track
 Meta accepts `W1-S3-C1-E` as complete for Track C and Track B.
 
 Any W1-S4/C1-F,C1-G expansion requires a new Meta review before implementation.
+
+## W1-S4 Closeout
+
+Track B implemented only `W1-S4-C1-F-C1-G` trace, state, and memory schema drafts.
+
+### In Scope
+
+- `src/ringfall-contracts/README.md`
+- `src/ringfall-contracts/docs/Contract-Versioning.md`
+- `src/ringfall-contracts/schemas/README.md`
+- `src/ringfall-contracts/schemas/traces/run-manifest.schema.json`
+- `src/ringfall-contracts/schemas/traces/cognition-trace.schema.json`
+- `src/ringfall-contracts/schemas/traces/action-trace.schema.json`
+- `src/ringfall-contracts/schemas/state/state-diff.schema.json`
+- `src/ringfall-contracts/schemas/memory/claim-record.schema.json`
+- `src/ringfall-contracts/schemas/memory/memory-update.schema.json`
+
+### W1-S4 Acceptance Criteria
+
+- ✅ Exactly three trace schema drafts exist under `src/ringfall-contracts/schemas/traces/`.
+- ✅ Exactly one state schema draft exists under `src/ringfall-contracts/schemas/state/`.
+- ✅ Exactly two memory schema drafts exist under `src/ringfall-contracts/schemas/memory/`.
+- ✅ The repository contains exactly fourteen schema drafts after W1-S4: eight packet, three trace, one state, and two memory schemas.
+- ✅ All W1-S4 schemas use JSON Schema Draft 2020-12 and `schema_version.const = "0.1"`.
+- ✅ `RunManifest`, `CognitionTrace`, `ActionTrace`, `StateDiff`, `ClaimRecord`, and `MemoryUpdate` preserve artifact evidence boundaries without provider/runtime behavior.
+- ✅ `ClaimRecord.claim_type` matches the canonical memory taxonomy and does not include non-canon `order_context`.
+- ✅ No examples, validation tooling, runtime code, configs, scenarios, provider/model calls, Unity, cost schemas, eval schemas, or simulation logic were added.
+
+### W1-S4 Review Evidence
+
+- Initial step review verdict: RED because `ClaimRecord.claim_type` drifted from the canonical memory taxonomy.
+- Review-fix verdict: GREEN after Track B aligned `claim_type` with `fact`, `observation`, `belief`, `rumor`, `inference`, `official_line`, `withheld_item`, `secret`, `doctrine`, `forecast`, and `memory_summary`.
+- Semantic validation debt for invalid/quarantined memory updates, field-specific trace ref integrity, action validation/execution-status consistency, state path/visibility consistency, and run track uniqueness/role constraints is routed to future C1-I/C1-J invalid fixture and validation-tooling work.
+- Verification covered exact schema inventory, JSON parse/structure checks, W1-S4 targeted regression checks, no forbidden mutation/provider/C1-H fields, out-of-scope diff, whitespace check, and secrets scan.
+
+## Next Meta Gate Decision
+
+Meta accepts `W1-S4-C1-F-C1-G` as complete for Track B.
+
+Any W1-S5/C1-H expansion requires a new Meta review before implementation.

@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ringfall://schemas/memory/memory-update.schema.json",
+  "title": "MemoryUpdate",
+  "type": "object",
+  "additionalProperties": false,
+  "anyOf": [
+    { "required": ["created_claims"] },
+    { "required": ["updated_claims"] },
+    { "required": ["relationship_updates"] },
+    { "required": ["identity_drift_updates"] }
+  ],
+  "required": [
+    "memory_type",
+    "schema_version",
+    "memory_update_id",
+    "target_scope",
+    "source_refs",
+    "validation"
+  ],
+  "properties": {
+    "memory_type": { "const": "MemoryUpdate" },
+    "schema_version": { "const": "0.1" },
+    "memory_update_id": { "type": "string", "minLength": 1 },
+    "target_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "id"],
+      "properties": {
+        "type": { "enum": ["actor", "group", "institution", "council", "system"] },
+        "id": { "type": "string", "minLength": 1 }
+      }
+    },
+    "source_refs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/source_ref" } },
+    "created_claims": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "updated_claims": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "relationship_updates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["relationship_id", "summary"],
+        "properties": {
+          "relationship_id": { "type": "string", "minLength": 1 },
+          "summary": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "identity_drift_updates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["target_id", "summary"],
+        "properties": {
+          "target_id": { "type": "string", "minLength": 1 },
+          "summary": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "visibility": { "enum": ["world_truth", "private_actor", "shared_small_group", "institution_internal", "council_internal", "public", "dev_only"] },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_refs_valid", "hidden_leak_detected", "rumor_fact_contamination_detected"],
+      "properties": {
+        "source_refs_valid": { "type": "boolean" },
+        "hidden_leak_detected": { "type": "boolean" },
+        "rumor_fact_contamination_detected": { "type": "boolean" },
+        "validation_notes": { "type": "string" }
+      }
+    }
+  },
+  "$defs": {
+    "source_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref_id", "ref_type"],
+      "properties": {
+        "ref_id": { "type": "string", "minLength": 1 },
+        "ref_type": { "type": "string", "minLength": 1 },
+        "artifact_uri": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

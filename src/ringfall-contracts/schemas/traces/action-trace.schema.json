@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ringfall://schemas/traces/action-trace.schema.json",
+  "title": "ActionTrace",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "trace_type",
+    "schema_version",
+    "action_trace_id",
+    "source_packet_id",
+    "issuer_id",
+    "issuer_layer",
+    "action_class",
+    "validation",
+    "execution_status"
+  ],
+  "properties": {
+    "trace_type": { "const": "ActionTrace" },
+    "schema_version": { "const": "0.1" },
+    "action_trace_id": { "type": "string", "minLength": 1 },
+    "source_packet_id": { "type": "string", "minLength": 1 },
+    "issuer_id": { "type": "string", "minLength": 1 },
+    "issuer_layer": {
+      "description": "Origin layer label only; this does not grant runtime authority.",
+      "enum": ["L1", "L2", "L3", "sim", "system"]
+    },
+    "action_class": { "type": "string", "minLength": 1 },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "authority", "context", "visibility"],
+      "properties": {
+        "schema": { "$ref": "#/$defs/validation_result" },
+        "authority": { "$ref": "#/$defs/validation_result" },
+        "context": { "$ref": "#/$defs/validation_result" },
+        "visibility": { "$ref": "#/$defs/validation_result" }
+      }
+    },
+    "execution_status": { "enum": ["success", "partial_success", "rejected", "deferred", "failed"] },
+    "state_diff_refs": { "type": "array", "items": { "$ref": "#/$defs/source_ref" } },
+    "visibility_ref": { "$ref": "#/$defs/source_ref" },
+    "memory_update_refs": { "type": "array", "items": { "$ref": "#/$defs/source_ref" } },
+    "events_created": { "type": "array", "items": { "$ref": "#/$defs/source_ref" } },
+    "eval_flags": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+  },
+  "$defs": {
+    "source_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref_id", "ref_type"],
+      "properties": {
+        "ref_id": { "type": "string", "minLength": 1 },
+        "ref_type": { "type": "string", "minLength": 1 },
+        "artifact_uri": { "type": "string", "minLength": 1 }
+      }
+    },
+    "validation_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": { "enum": ["pass", "warn", "fail", "not_applicable"] },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}

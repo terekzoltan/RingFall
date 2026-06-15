@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ringfall://schemas/traces/cognition-trace.schema.json",
+  "title": "CognitionTrace",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "trace_type",
+    "schema_version",
+    "cognition_id",
+    "turn_ref",
+    "tick",
+    "lane",
+    "target_id",
+    "context_ref",
+    "prompt_ref",
+    "raw_output_ref",
+    "parsed_packet_ref",
+    "schema_valid"
+  ],
+  "properties": {
+    "trace_type": { "const": "CognitionTrace" },
+    "schema_version": { "const": "0.1" },
+    "cognition_id": { "type": "string", "minLength": 1 },
+    "turn_ref": { "type": "string", "minLength": 1 },
+    "tick": { "type": "integer", "minimum": 0 },
+    "lane": { "type": "string", "minLength": 1 },
+    "target_id": { "type": "string", "minLength": 1 },
+    "context_ref": { "$ref": "#/$defs/source_ref" },
+    "prompt_ref": { "$ref": "#/$defs/source_ref" },
+    "raw_output_ref": { "$ref": "#/$defs/source_ref" },
+    "parsed_packet_ref": { "$ref": "#/$defs/source_ref" },
+    "schema_valid": { "type": "boolean" },
+    "model_evidence": {
+      "description": "Recorded model-call evidence only; this is not a provider routing contract.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model_id", "provider", "run_mode"],
+      "properties": {
+        "model_id": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "minLength": 1 },
+        "run_mode": { "enum": ["dev", "replay", "canonical_candidate", "canonical"] },
+        "temperature": { "type": "number", "minimum": 0 },
+        "max_output_tokens": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "retry_count": { "type": "integer", "minimum": 0 },
+    "fallback_used": { "type": "boolean" },
+    "cost_event_ref": { "$ref": "#/$defs/source_ref" },
+    "eval_flags": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+  },
+  "$defs": {
+    "source_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref_id", "ref_type"],
+      "properties": {
+        "ref_id": { "type": "string", "minLength": 1 },
+        "ref_type": { "type": "string", "minLength": 1 },
+        "artifact_uri": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}
