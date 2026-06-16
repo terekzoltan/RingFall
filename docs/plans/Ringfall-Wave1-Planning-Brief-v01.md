@@ -4,11 +4,11 @@
 
 **META-GATED for implementation entry:** yes.
 
-Wave 1 Step 1 `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton`, Step 2 `W1-S2-C1-C-C1-D-core-packet-schemas`, Step 3 `W1-S3-C1-E`, and Step 4 `W1-S4-C1-F-C1-G` are complete and accepted.
+Wave 1 Step 1 `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton`, Step 2 `W1-S2-C1-C-C1-D-core-packet-schemas`, Step 3 `W1-S3-C1-E`, Step 4 `W1-S4-C1-F-C1-G`, and Step 5 `W1-S5-C1-H` are complete and accepted.
 
-This brief now serves as W1-S1/W1-S2/W1-S3/W1-S4 closeout evidence and the handoff guardrail for preparing W1-S5/C1-H under a separate Meta-gated implementation plan.
+This brief now serves as W1-S1/W1-S2/W1-S3/W1-S4/W1-S5 closeout evidence and the handoff guardrail for preparing W1-S6/C1-I,C1-J under a separate Meta-gated implementation plan.
 
-It does not approve C1-H or later schemas, examples, validation tooling, C#/.NET, Python brain, Unity, model calls, provider behavior, scenario content, or simulation logic.
+It does not approve C1-I/C1-J examples or validation tooling, C#/.NET, Python brain, Unity, model calls, provider behavior, scenario content, or simulation logic.
 
 ## Purpose
 
@@ -58,8 +58,8 @@ Wave 1 preserves these architecture rules:
 2. `W1-S2 / C1-C,C1-D` — Track B drafts core L1/action packet schemas. **Complete.**
 3. `W1-S3 / C1-E` — Track C reviews packet usability; Track B adds institution/council packet shapes. **Complete.**
 4. `W1-S4 / C1-F,C1-G` — Track B drafts run/cognition/action/state/memory trace schemas. **Complete.**
-5. `W1-S5 / C1-H` — Track D/E review cost-event and eval-summary surfaces. **Next gated planning target.**
-6. `W1-S6 / C1-I,C1-J` — Track E adds valid/invalid examples and schema validation tooling.
+5. `W1-S5 / C1-H` — Track D/E review cost-event and eval-summary surfaces. **Complete.**
+6. `W1-S6 / C1-I,C1-J` — Track E adds valid/invalid examples and schema validation tooling. **Next gated planning target.**
 7. `W1-S7 / C1-K` — Meta runs cross-track contract handoff gate.
 
 ## W1-S1 Greenlight And Closeout
@@ -266,3 +266,37 @@ Track B implemented only `W1-S4-C1-F-C1-G` trace, state, and memory schema draft
 Meta accepts `W1-S4-C1-F-C1-G` as complete for Track B.
 
 Any W1-S5/C1-H expansion requires a new Meta review before implementation.
+
+## W1-S5 Closeout
+
+Track D implemented only the C1-H CostEvent schema side, and Track E implemented only the C1-H EvalSummary schema side plus shared schema README reconciliation.
+
+### In Scope
+
+- `src/ringfall-contracts/schemas/README.md`
+- `src/ringfall-contracts/schemas/traces/cost-event.schema.json`
+- `src/ringfall-contracts/schemas/eval/eval-summary.schema.json`
+
+### W1-S5 Acceptance Criteria
+
+- ✅ Exactly one CostEvent schema draft exists under `src/ringfall-contracts/schemas/traces/`.
+- ✅ Exactly one EvalSummary schema draft exists under `src/ringfall-contracts/schemas/eval/`.
+- ✅ The repository contains exactly sixteen schema drafts after W1-S5.
+- ✅ C1-H schemas use JSON Schema Draft 2020-12 and `schema_version.const = "0.1"`.
+- ✅ CostEvent records cost/model/provider evidence without runtime provider routing or OpenRouter behavior.
+- ✅ EvalSummary records replay/eval summary evidence without EvalEvent, eval-runner behavior, examples, or validation tooling.
+- ✅ Shared schema README documents both split-lane C1-H schemas and routes semantic validation debt to C1-I/C1-J.
+- ✅ No examples, validation tooling, runtime code, configs, scenarios, provider/model calls, Unity, runtime cost collection, eval runner code, or simulation logic were added.
+
+### W1-S5 Review Evidence
+
+- Initial step review verdict: RED because shared `src/ringfall-contracts/schemas/README.md` documented only the Track E EvalSummary lane while both C1-H split-lane schemas were present.
+- Review-fix verdict: GREEN after Track E reconciled the shared README to document Track D CostEvent and Track E EvalSummary together.
+- Semantic validation debt for CostEvent fallback/cost consistency, EvalSummary gate/count consistency, source-ref vocabulary integrity, and held-run gate reasons is routed to future C1-I/C1-J invalid fixture and validation-tooling work.
+- Verification covered exact 16-schema inventory, JSON parse checks, CostEvent/EvalSummary targeted assertions, no forbidden mutation/provider/runtime fields, out-of-scope diff, whitespace check, and secrets scan.
+
+## Next Meta Gate Decision
+
+Meta accepts `W1-S5-C1-H` as complete for Track D and Track E.
+
+Any W1-S6/C1-I,C1-J expansion requires a new Meta review before implementation.

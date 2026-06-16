@@ -2,7 +2,7 @@
 
 Ringfall is a replayable, inspectable, LLM-heavy civilization simulation set in a fractured orbital ring. It is built around deterministic simulation boundaries, typed action/tool contracts, memory/belief/truth separation, institutional distortion, council doctrine, OpenRouter-based model orchestration, and a Unity-rendered observer client.
 
-Current phase: Wave 0 bootstrap is closed, and Wave 1 Steps 1-4 are complete through C1-F/C1-G trace, memory, and state-diff schema drafts. The next gated step is W1-S5/C1-H cost-event and eval-summary surface review; runtime, provider, Unity, examples/tooling, and simulation implementation remain blocked. This repository is not ready for public use. The detailed design canon, world bible, implementation plan, and private coordination notes are local/private until an explicit export review approves public release material.
+Current phase: Wave 0 bootstrap is closed, and Wave 1 Steps 1-5 are complete through C1-H cost-event and eval-summary schema drafts. The next gated step is W1-S6/C1-I,C1-J examples and schema validation tooling; runtime, provider, Unity, and simulation implementation remain blocked. This repository is not ready for public use. The detailed design canon, world bible, implementation plan, and private coordination notes are local/private until an explicit export review approves public release material.
 
 ## First Playable Scope
 
@@ -53,7 +53,7 @@ Architectural guardrails:
 | Path | Purpose |
 |---|---|
 | `docs/` | Public-safe placeholders; private canon is ignored until export review. |
-| `src/` | Future source code plus Wave 1 contract layout and packet/trace/state/memory schema drafts. |
+| `src/` | Future source code plus Wave 1 contract layout and packet/trace/state/memory/cost/eval schema drafts. |
 | `client/` | Future client code. Empty in this skeleton. |
 | `configs/` | Example configs only; no local secrets. |
 | `scenarios/` | Future scenario packs. Empty in this skeleton. |
@@ -67,7 +67,7 @@ Architectural guardrails:
 - no simulation implementation yet
 - no C#/.NET solution yet
 - no Python brain service yet
-- no runtime schema tooling yet; W1-S4 added contract schema drafts only
+- no runtime schema tooling yet; W1-S5 added contract schema drafts only
 - no Unity project yet
 - no OpenRouter/model execution yet
 - no real provider credentials or local secrets

@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ringfall://schemas/eval/eval-summary.schema.json",
+  "title": "EvalSummary",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "summary_type",
+    "schema_version",
+    "eval_summary_id",
+    "run_id",
+    "run_mode",
+    "eval_suite_version",
+    "summary",
+    "by_level",
+    "gate"
+  ],
+  "properties": {
+    "summary_type": { "const": "EvalSummary" },
+    "schema_version": { "const": "0.1" },
+    "eval_summary_id": { "type": "string", "minLength": 1 },
+    "run_id": { "type": "string", "minLength": 1 },
+    "run_mode": { "enum": ["dev", "replay", "canonical_candidate", "canonical"] },
+    "eval_suite_version": { "type": "string", "minLength": 1 },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total", "pass", "warn", "fail", "blocked"],
+      "properties": {
+        "total": { "type": "integer", "minimum": 0 },
+        "pass": { "type": "integer", "minimum": 0 },
+        "warn": { "type": "integer", "minimum": 0 },
+        "fail": { "type": "integer", "minimum": 0 },
+        "blocked": { "type": "boolean" }
+      }
+    },
+    "by_level": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["level", "pass", "warn", "fail", "blocked", "not_applicable"],
+        "properties": {
+          "level": { "enum": ["E0", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9"] },
+          "pass": { "type": "integer", "minimum": 0 },
+          "warn": { "type": "integer", "minimum": 0 },
+          "fail": { "type": "integer", "minimum": 0 },
+          "blocked": { "type": "boolean" },
+          "not_applicable": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "gate": { "enum": ["pass", "pass_with_warnings", "hold", "invalid_run"] },
+    "artifact_refs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/source_ref" } },
+    "cost_summary_ref": { "$ref": "#/$defs/source_ref" },
+    "replay_manifest_ref": { "$ref": "#/$defs/source_ref" },
+    "gate_reasons": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "hard_gate_failures": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["level", "code", "severity", "message"],
+        "properties": {
+          "level": { "enum": ["E0", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9"] },
+          "code": { "type": "string", "minLength": 1 },
+          "severity": { "enum": ["low", "medium", "high", "critical"] },
+          "message": { "type": "string", "minLength": 1 },
+          "evidence_refs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/source_ref" } }
+        }
+      }
+    },
+    "finding_refs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/source_ref" } },
+    "notes": { "type": "string" }
+  },
+  "$defs": {
+    "source_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref_id", "ref_type"],
+      "properties": {
+        "ref_id": { "type": "string", "minLength": 1 },
+        "ref_type": { "type": "string", "minLength": 1 },
+        "artifact_uri": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}
