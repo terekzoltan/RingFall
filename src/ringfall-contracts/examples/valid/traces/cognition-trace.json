@@ -1,0 +1,30 @@
+{
+  "trace_type": "CognitionTrace",
+  "schema_version": "0.1",
+  "cognition_id": "cog-001",
+  "turn_ref": "turn-001",
+  "tick": 8,
+  "lane": "l1_pulse",
+  "target_id": "actor-aster-001",
+  "context_ref": {
+    "ref_id": "ctx-aster-001",
+    "ref_type": "context",
+    "artifact_uri": "fixtures://contexts/ctx-aster-001.json"
+  },
+  "prompt_ref": {
+    "ref_id": "prompt-001",
+    "ref_type": "prompt",
+    "artifact_uri": "fixtures://prompts/prompt-001.txt"
+  },
+  "raw_output_ref": {
+    "ref_id": "raw-output-001",
+    "ref_type": "raw_output",
+    "artifact_uri": "fixtures://outputs/raw-output-001.json"
+  },
+  "parsed_packet_ref": {
+    "ref_id": "pkt-avatar-pulse-001",
+    "ref_type": "packet",
+    "artifact_uri": "fixtures://packets/avatar-pulse-packet.json"
+  },
+  "schema_valid": true
+}

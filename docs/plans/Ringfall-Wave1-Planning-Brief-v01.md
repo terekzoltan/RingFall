@@ -4,11 +4,11 @@
 
 **META-GATED for implementation entry:** yes.
 
-Wave 1 Step 1 `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton`, Step 2 `W1-S2-C1-C-C1-D-core-packet-schemas`, Step 3 `W1-S3-C1-E`, Step 4 `W1-S4-C1-F-C1-G`, and Step 5 `W1-S5-C1-H` are complete and accepted.
+Wave 1 Step 1 `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton`, Step 2 `W1-S2-C1-C-C1-D-core-packet-schemas`, Step 3 `W1-S3-C1-E`, Step 4 `W1-S4-C1-F-C1-G`, Step 5 `W1-S5-C1-H`, and Step 6 `W1-S6-C1-I-C1-J` are complete and accepted.
 
-This brief now serves as W1-S1/W1-S2/W1-S3/W1-S4/W1-S5 closeout evidence and the handoff guardrail for preparing W1-S6/C1-I,C1-J under a separate Meta-gated implementation plan.
+This brief now serves as W1-S1/W1-S2/W1-S3/W1-S4/W1-S5/W1-S6 closeout evidence and the handoff guardrail for preparing W1-S7/C1-K under a separate Meta-gated cross-track review.
 
-It does not approve C1-I/C1-J examples or validation tooling, C#/.NET, Python brain, Unity, model calls, provider behavior, scenario content, or simulation logic.
+It does not approve runtime code, C#/.NET, Python brain, Unity, model calls, provider behavior, scenario content, or simulation logic.
 
 ## Purpose
 
@@ -59,8 +59,8 @@ Wave 1 preserves these architecture rules:
 3. `W1-S3 / C1-E` — Track C reviews packet usability; Track B adds institution/council packet shapes. **Complete.**
 4. `W1-S4 / C1-F,C1-G` — Track B drafts run/cognition/action/state/memory trace schemas. **Complete.**
 5. `W1-S5 / C1-H` — Track D/E review cost-event and eval-summary surfaces. **Complete.**
-6. `W1-S6 / C1-I,C1-J` — Track E adds valid/invalid examples and schema validation tooling. **Next gated planning target.**
-7. `W1-S7 / C1-K` — Meta runs cross-track contract handoff gate.
+6. `W1-S6 / C1-I,C1-J` — Track E adds valid/invalid examples and schema validation tooling. **Complete.**
+7. `W1-S7 / C1-K` — Meta runs cross-track contract handoff gate. **Next gated planning target.**
 
 ## W1-S1 Greenlight And Closeout
 
@@ -299,4 +299,42 @@ Track D implemented only the C1-H CostEvent schema side, and Track E implemented
 
 Meta accepts `W1-S5-C1-H` as complete for Track D and Track E.
 
-Any W1-S6/C1-I,C1-J expansion requires a new Meta review before implementation.
+Any W1-S6/C1-I,C1-J expansion required a new Meta review before implementation and is now accepted under the exact W1-S6 scope.
+
+## W1-S6 Closeout
+
+Track E implemented only `W1-S6-C1-I-C1-J` valid/invalid examples and dev-only schema validation tooling.
+
+### In Scope
+
+- `requirements-dev.txt`
+- `tools/schema_check.py`
+- `src/ringfall-contracts/README.md`
+- `src/ringfall-contracts/schemas/README.md`
+- `src/ringfall-contracts/examples/README.md`
+- `src/ringfall-contracts/examples/manifest.json`
+- `src/ringfall-contracts/examples/valid/**`
+- `src/ringfall-contracts/examples/invalid/**`
+
+### W1-S6 Acceptance Criteria
+
+- ✅ Exactly one valid fixture exists for each of the sixteen current schema drafts.
+- ✅ Invalid fixtures cover routed W1 schema and fixture-local semantic validation debt without runtime/provider/model behavior.
+- ✅ `tools/schema_check.py` validates Draft 2020-12 schemas, manifest consistency, valid fixtures, invalid fixtures, and semantic reason isolation.
+- ✅ `requirements-dev.txt` provides the dev-only `jsonschema` dependency surface for the checker.
+- ✅ Shared contract docs distinguish W1-S6 static fixture/tool coverage from deferred runtime/artifact-context validation debt.
+- ✅ No `*.schema.json` bodies were edited.
+- ✅ No runtime code, provider/model behavior, Unity work, scenarios, generated artifacts, eval runner code, runtime cost collection, or simulation logic were added.
+
+### W1-S6 Review Evidence
+
+- Initial step review verdict: YELLOW because one CostEvent invalid fixture triggered both `cost_fallback_reason_required` and `cost_free_zero_consistency`.
+- Review-fix verdict: GREEN after Track E added `free_model_used: true` to `fallback-missing-reason.json` and hardened `tools/schema_check.py` to fail semantic invalid fixtures on missing or extra semantic reason codes.
+- Verification covered `python tools/schema_check.py`, `--valid-only`, `--invalid-only`, semantic overlap proof with `overlap_count=0`, manifest counts, no schema body diffs, whitespace check, forbidden-scope check, and secrets scan.
+- Residual packet/state/memory and CostEvent provider/model evidence semantics are routed to Track B and Track D review at W1-S7/C1-K before final Wave 1 closeout.
+
+## Next Meta Gate Decision
+
+Meta accepts `W1-S6-C1-I-C1-J` as complete for Track E within the exact contract-example and dev-tooling scope above.
+
+Any W1-S7/C1-K expansion requires a new Meta review before implementation.

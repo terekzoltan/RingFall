@@ -1,0 +1,18 @@
+{
+  "packet_id": "pkt-scene-action-invalid-001",
+  "packet_type": "SceneActionPacket",
+  "schema_version": "0.1",
+  "issuer_id": "actor-aster-001",
+  "issuer_layer": "L1",
+  "issued_at_tick": 2,
+  "source_context_id": "ctx-aster-002",
+  "scene_id": "scene-heat-alarm-001",
+  "actor_id": "actor-aster-001",
+  "scene_goal": "Inspect the warning panel.",
+  "actions": [
+    {
+      "type": "use_tool",
+      "tool_id": "sensor_panel"
+    }
+  ]
+}

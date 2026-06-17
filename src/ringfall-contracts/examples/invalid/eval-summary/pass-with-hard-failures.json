@@ -1,0 +1,34 @@
+{
+  "summary_type": "EvalSummary",
+  "schema_version": "0.1",
+  "eval_summary_id": "eval-summary-invalid-003",
+  "run_id": "run-dev-001",
+  "run_mode": "dev",
+  "eval_suite_version": "0.1-fixture",
+  "summary": {
+    "total": 1,
+    "pass": 1,
+    "warn": 0,
+    "fail": 0,
+    "blocked": false
+  },
+  "by_level": [
+    {
+      "level": "E0",
+      "pass": 1,
+      "warn": 0,
+      "fail": 0,
+      "blocked": false,
+      "not_applicable": 0
+    }
+  ],
+  "gate": "pass",
+  "hard_gate_failures": [
+    {
+      "level": "E0",
+      "code": "hidden_leak",
+      "severity": "critical",
+      "message": "Fixture hard gate failure."
+    }
+  ]
+}

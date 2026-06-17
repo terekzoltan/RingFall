@@ -1,0 +1,10 @@
+{
+  "packet_id": "pkt-avatar-pulse-001",
+  "packet_type": "AvatarPulsePacket",
+  "schema_version": "0.1",
+  "issuer_id": "actor-aster-001",
+  "issuer_layer": "L1",
+  "issued_at_tick": 1,
+  "source_context_id": "ctx-aster-001",
+  "actor_id": "actor-aster-001"
+}

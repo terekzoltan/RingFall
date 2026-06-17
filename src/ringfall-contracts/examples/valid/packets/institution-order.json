@@ -1,0 +1,15 @@
+{
+  "packet_id": "pkt-institution-order-001",
+  "packet_type": "InstitutionOrder",
+  "schema_version": "0.1",
+  "issuer_id": "seat-ops-chair-001",
+  "issuer_layer": "L2",
+  "issued_at_tick": 6,
+  "source_context_id": "ctx-ops-002",
+  "institution_id": "inst-aster-ops",
+  "issuer_seat_id": "seat-ops-chair-001",
+  "order_type": "dispatch_inspection",
+  "target_scope": "aster-r2-pump-bay",
+  "visibility": "institutional",
+  "expected_effect": "Maintenance confirms the warning source."
+}

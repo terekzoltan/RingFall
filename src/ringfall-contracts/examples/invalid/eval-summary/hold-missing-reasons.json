@@ -1,0 +1,26 @@
+{
+  "summary_type": "EvalSummary",
+  "schema_version": "0.1",
+  "eval_summary_id": "eval-summary-invalid-002",
+  "run_id": "run-dev-001",
+  "run_mode": "dev",
+  "eval_suite_version": "0.1-fixture",
+  "summary": {
+    "total": 1,
+    "pass": 0,
+    "warn": 0,
+    "fail": 1,
+    "blocked": true
+  },
+  "by_level": [
+    {
+      "level": "E0",
+      "pass": 0,
+      "warn": 0,
+      "fail": 1,
+      "blocked": true,
+      "not_applicable": 0
+    }
+  ],
+  "gate": "hold"
+}

@@ -1,0 +1,16 @@
+{
+  "trace_type": "ActionTrace",
+  "schema_version": "0.1",
+  "action_trace_id": "action-trace-001",
+  "source_packet_id": "pkt-work-order-001",
+  "issuer_id": "actor-aster-001",
+  "issuer_layer": "L1",
+  "action_class": "work_order",
+  "validation": {
+    "schema": { "status": "pass" },
+    "authority": { "status": "pass" },
+    "context": { "status": "pass" },
+    "visibility": { "status": "pass" }
+  },
+  "execution_status": "success"
+}

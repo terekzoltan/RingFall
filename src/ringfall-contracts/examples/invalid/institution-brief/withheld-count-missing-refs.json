@@ -1,0 +1,24 @@
+{
+  "packet_id": "pkt-institution-brief-invalid-001",
+  "packet_type": "InstitutionBrief",
+  "schema_version": "0.1",
+  "issuer_id": "seat-ops-001",
+  "issuer_layer": "L2",
+  "issued_at_tick": 5,
+  "source_context_id": "ctx-ops-001",
+  "institution_id": "inst-aster-ops",
+  "cycle_id": "cycle-001",
+  "summary": "Aster utility alarms require inspection.",
+  "evidence": ["trace-action-001"],
+  "uncertainties": ["alarm source not yet confirmed"],
+  "risk_flags": ["heat_risk"],
+  "withheld_items_count": 1,
+  "recommended_orders": [
+    {
+      "type": "inspect",
+      "target": "aster-r2-pump-bay"
+    }
+  ],
+  "escalation_needed": false,
+  "confidence": 0.72
+}

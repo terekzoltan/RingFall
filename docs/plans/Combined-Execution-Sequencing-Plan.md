@@ -576,9 +576,9 @@ Wave 0 passes when the repo skeleton exists, docs are placed correctly, generate
 ### Mandatory outputs
 - ✅ `src/ringfall-contracts/schemas/` exists
 - ✅ minimum packet schemas exist
-- ⬜ minimum trace/artifact schemas exist
-- ⬜ valid/invalid schema examples exist
-- ⬜ schema validation tool exists
+- ✅ minimum trace/artifact schemas exist
+- ✅ valid/invalid schema examples exist
+- ✅ schema validation tool exists
 - ⬜ contract review notes from C/D/E/A are recorded
 
 ### Sprint breakdown
@@ -636,6 +636,14 @@ W1-S5 closeout note, 2026-06-15:
 - No examples, validation tooling, runtime code, configs, scenarios, Unity work, provider/model calls, runtime cost collection, eval runner code, or simulation logic were added.
 - W1-S6/C1-I,C1-J is the next gated target for valid/invalid examples and schema validation tooling.
 
+W1-S6 closeout note, 2026-06-17:
+- Track E added manifest-backed valid/invalid contract fixtures under `src/ringfall-contracts/examples/`, with exactly one valid fixture per current schema and targeted invalid fixtures for routed W1 validation debt.
+- Track E added `tools/schema_check.py` plus `requirements-dev.txt` for dev-only Draft 2020-12 schema and fixture validation.
+- Step review found a CostEvent semantic overlap in `fallback-missing-reason.json`; Track E fixed the fixture and hardened `tools/schema_check.py` so semantic invalid fixtures fail on missing or extra semantic reason codes.
+- Shared contract docs now distinguish W1-S6 static fixture/tool coverage from deferred runtime/artifact-context validation debt and route residual semantic review to W1-S7/C1-K plus later runtime/artifact validation gates.
+- No schema body edits, runtime code, provider/model behavior, Unity work, scenarios, generated artifacts, eval runner code, runtime cost collection, or simulation logic were added.
+- W1-S7/C1-K is the next gated target for cross-track contract handoff review.
+
 #### Sprint W1-S3 — Trace, memory, cost, eval schemas
 
 **Owner priority:** Track B + Track E + Track D
@@ -650,8 +658,8 @@ Epics:
 **Owner priority:** Track E + Track B
 
 Epics:
-- ⬜ **C1-I** Valid/invalid examples — **Owner: Track E/B**
-- ⬜ **C1-J** `tools/schema_check.py` — **Owner: Track E**
+- ✅ **C1-I** Valid/invalid examples — **Owner: Track E/B**
+- ✅ **C1-J** `tools/schema_check.py` — **Owner: Track E**
 - ⬜ **C1-K** Cross-track contract review — **Owner: Meta + all tracks**
 
 ### Execution Steps
@@ -688,11 +696,11 @@ Epics:
 | Track D session | C1-H cost-event side | C1-F/G draft accepted | Complete: CostEvent schema accepted after shared README reconciliation. |
 | Track E session | C1-H eval-summary side | C1-F/G draft accepted | Complete: EvalSummary schema accepted after shared README reconciliation. |
 
-**⬜ Step 6**
+**✅ Step 6**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Track E session | C1-I, C1-J | schemas exist and C1-H reviewed ✅ | Create fixtures and validation tool. |
+| Track E session | C1-I, C1-J | schemas exist and C1-H reviewed ✅ | Complete: fixtures and validation tool accepted after semantic-isolation review fix. |
 
 **⬜ Step 7**
 
@@ -2116,7 +2124,7 @@ W1-S5 closeout note, 2026-06-15:
 - Review fixes reconciled the shared schema README so both split-lane C1-H schemas are documented together.
 - Remaining semantic validation debt for CostEvent, EvalSummary, and source-ref vocabulary checks is routed to future C1-I/C1-J fixture/tooling work.
 - No examples, validation tooling, runtime code, configs, scenarios, Unity files, provider/model behavior, eval runner code, runtime cost collection, or simulation logic were added.
-- W1-S6/C1-I,C1-J is the next gated planning target.
+- W1-S6/C1-I,C1-J was the next gated planning target after W1-S5 and is now accepted.
 
 Wave 1 planning gate note, 2026-06-14:
 - `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md` is the Meta gate for Wave 1 entry.
@@ -2125,7 +2133,7 @@ Wave 1 planning gate note, 2026-06-14:
 - W1-S3/C1-E packet usability review and institution/council schemas are implemented and accepted.
 - W1-S4/C1-F,C1-G trace and memory/state schemas are implemented and accepted.
 - W1-S5/C1-H cost-event and eval-summary surface review is implemented and accepted.
-- W1-S6/C1-I,C1-J valid/invalid examples and schema validation tooling is the next gated step; all later Wave 1 steps remain blocked until W1-S6 is planned, implemented, and accepted.
+- W1-S6/C1-I,C1-J valid/invalid examples and schema validation tooling is implemented and accepted; W1-S7/C1-K cross-track contract handoff review is the next gated step.
 - Model-policy note before Wave 1 start: Ringfall stays OpenRouter-only; prefer free model lanes where stable, but require `deepseek/deepseek-v4-flash` as the explicit low-cost paid fallback instead of assuming free quota availability.
 
 MetaOps sync closure note, 2026-06-14:

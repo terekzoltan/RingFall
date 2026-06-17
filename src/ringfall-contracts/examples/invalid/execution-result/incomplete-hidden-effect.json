@@ -1,0 +1,14 @@
+{
+  "packet_id": "pkt-execution-result-invalid-001",
+  "packet_type": "ExecutionResult",
+  "schema_version": "0.1",
+  "source_packet_id": "pkt-work-order-001",
+  "execution_status": "success",
+  "hidden_effects": [
+    {
+      "system": "thermal",
+      "field": "alarm_acknowledged",
+      "target": "aster-r2-pump-bay"
+    }
+  ]
+}

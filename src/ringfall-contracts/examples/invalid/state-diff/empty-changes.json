@@ -1,0 +1,9 @@
+{
+  "diff_type": "StateDiff",
+  "schema_version": "0.1",
+  "diff_id": "state-diff-invalid-001",
+  "tick": 9,
+  "source_action_trace_id": "action-trace-001",
+  "changes": [],
+  "deterministic_seed": 42
+}

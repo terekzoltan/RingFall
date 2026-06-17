@@ -1,0 +1,22 @@
+{
+  "memory_type": "MemoryUpdate",
+  "schema_version": "0.1",
+  "memory_update_id": "memory-update-invalid-002",
+  "target_scope": {
+    "type": "actor",
+    "id": "actor-aster-001"
+  },
+  "source_refs": [
+    {
+      "ref_id": "claim-001",
+      "ref_type": "claim_record",
+      "artifact_uri": "fixtures://memory/claim-record.json"
+    }
+  ],
+  "created_claims": ["claim-001"],
+  "validation": {
+    "source_refs_valid": true,
+    "hidden_leak_detected": false,
+    "rumor_fact_contamination_detected": true
+  }
+}

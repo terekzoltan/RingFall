@@ -1,0 +1,10 @@
+{
+  "packet_id": "pkt-execution-result-001",
+  "packet_type": "ExecutionResult",
+  "schema_version": "0.1",
+  "source_packet_id": "pkt-work-order-001",
+  "execution_status": "success",
+  "issuer_observable": {
+    "summary": "The crew accepted the inspection order."
+  }
+}

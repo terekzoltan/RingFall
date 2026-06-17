@@ -1,0 +1,33 @@
+{
+  "summary_type": "EvalSummary",
+  "schema_version": "0.1",
+  "eval_summary_id": "eval-summary-001",
+  "run_id": "run-dev-001",
+  "run_mode": "dev",
+  "eval_suite_version": "0.1-fixture",
+  "summary": {
+    "total": 1,
+    "pass": 1,
+    "warn": 0,
+    "fail": 0,
+    "blocked": false
+  },
+  "by_level": [
+    {
+      "level": "E0",
+      "pass": 1,
+      "warn": 0,
+      "fail": 0,
+      "blocked": false,
+      "not_applicable": 0
+    }
+  ],
+  "gate": "pass",
+  "artifact_refs": [
+    {
+      "ref_id": "run-dev-001",
+      "ref_type": "run_manifest",
+      "artifact_uri": "fixtures://traces/run-manifest.json"
+    }
+  ]
+}

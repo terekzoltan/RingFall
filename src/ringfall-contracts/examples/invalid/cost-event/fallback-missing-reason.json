@@ -1,0 +1,23 @@
+{
+  "event_type": "CostEvent",
+  "schema_version": "0.1",
+  "cost_event_id": "cost-event-invalid-003",
+  "cognition_id": "cog-001",
+  "run_id": "run-dev-001",
+  "turn_ref": "turn-001",
+  "tick": 8,
+  "lane": "l1_pulse",
+  "run_mode": "dev",
+  "provider": "fixture_provider",
+  "model_id": "fixture/model",
+  "input_tokens": 120,
+  "output_tokens": 32,
+  "estimated_cost_usd": 0,
+  "cost_estimate_status": "free_or_mock_zero",
+  "latency_ms": 25,
+  "retry_count": 0,
+  "fallback_count": 1,
+  "schema_valid": true,
+  "free_model_used": true,
+  "fallback_used": true
+}

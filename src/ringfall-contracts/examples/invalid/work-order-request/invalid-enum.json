@@ -1,0 +1,13 @@
+{
+  "packet_id": "pkt-work-order-invalid-001",
+  "packet_type": "WorkOrderRequest",
+  "schema_version": "0.1",
+  "issuer_id": "actor-aster-001",
+  "issuer_layer": "L1",
+  "issued_at_tick": 3,
+  "source_context_id": "ctx-aster-003",
+  "target_crew_id": "crew-maint-001",
+  "target_location": "aster-r2-pump-bay",
+  "task_type": "inspect_alarm",
+  "priority": "urgent"
+}

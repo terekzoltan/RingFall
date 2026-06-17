@@ -1,0 +1,12 @@
+{
+  "packet_id": "pkt-tool-action-invalid-001",
+  "packet_type": "ToolActionRequest",
+  "schema_version": "0.2",
+  "issuer_id": "actor-aster-001",
+  "issuer_layer": "L1",
+  "issued_at_tick": 4,
+  "source_context_id": "ctx-aster-004",
+  "tool_id": "sensor_panel",
+  "action": "read_status",
+  "mode": "dry_run"
+}

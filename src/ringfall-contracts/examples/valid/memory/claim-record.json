@@ -1,0 +1,22 @@
+{
+  "record_type": "ClaimRecord",
+  "schema_version": "0.1",
+  "claim_id": "claim-001",
+  "claim_type": "observation",
+  "natural_language": "The local panel reported a heat alarm.",
+  "owner_scope": {
+    "type": "actor",
+    "id": "actor-aster-001"
+  },
+  "source_refs": [
+    {
+      "ref_id": "action-trace-001",
+      "ref_type": "action_trace",
+      "artifact_uri": "fixtures://traces/action-trace.json"
+    }
+  ],
+  "confidence": 0.8,
+  "visibility": "private_actor",
+  "created_at_turn": "turn-001",
+  "status": "active"
+}

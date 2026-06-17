@@ -1,0 +1,22 @@
+{
+  "packet_id": "pkt-council-doctrine-invalid-001",
+  "packet_type": "CouncilDoctrinePacket",
+  "schema_version": "0.1",
+  "issuer_id": "seat-council-chair-001",
+  "issuer_layer": "L3",
+  "issued_at_tick": 7,
+  "source_context_id": "ctx-council-001",
+  "council_cycle_id": "council-cycle-001",
+  "decision_mode": "normal_deliberation",
+  "doctrine_shift": {
+    "survival_priority": -0.1
+  },
+  "macro_orders": [
+    {
+      "type": "increase_inspection_cadence",
+      "duration": "one_cycle"
+    }
+  ],
+  "charter_conditions": ["bounded_inspection_authority"],
+  "audit_visibility": "council_and_dev_replay"
+}
