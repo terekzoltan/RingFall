@@ -4,9 +4,9 @@
 
 **META-GATED for implementation entry:** yes.
 
-Wave 1 Step 1 `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton`, Step 2 `W1-S2-C1-C-C1-D-core-packet-schemas`, Step 3 `W1-S3-C1-E`, Step 4 `W1-S4-C1-F-C1-G`, Step 5 `W1-S5-C1-H`, and Step 6 `W1-S6-C1-I-C1-J` are complete and accepted.
+Wave 1 Step 1 `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton`, Step 2 `W1-S2-C1-C-C1-D-core-packet-schemas`, Step 3 `W1-S3-C1-E`, Step 4 `W1-S4-C1-F-C1-G`, Step 5 `W1-S5-C1-H`, Step 6 `W1-S6-C1-I-C1-J`, and Step 7 `W1-S7-C1-K` are complete and accepted.
 
-This brief now serves as W1-S1/W1-S2/W1-S3/W1-S4/W1-S5/W1-S6 closeout evidence and the handoff guardrail for preparing W1-S7/C1-K under a separate Meta-gated cross-track review.
+This brief now serves as W1-S1/W1-S2/W1-S3/W1-S4/W1-S5/W1-S6/W1-S7 closeout evidence and the handoff guardrail for preparing Wave 2 under a separate Meta-gated implementation plan.
 
 It does not approve runtime code, C#/.NET, Python brain, Unity, model calls, provider behavior, scenario content, or simulation logic.
 
@@ -60,7 +60,7 @@ Wave 1 preserves these architecture rules:
 4. `W1-S4 / C1-F,C1-G` — Track B drafts run/cognition/action/state/memory trace schemas. **Complete.**
 5. `W1-S5 / C1-H` — Track D/E review cost-event and eval-summary surfaces. **Complete.**
 6. `W1-S6 / C1-I,C1-J` — Track E adds valid/invalid examples and schema validation tooling. **Complete.**
-7. `W1-S7 / C1-K` — Meta runs cross-track contract handoff gate. **Next gated planning target.**
+7. `W1-S7 / C1-K` — Meta runs cross-track contract handoff gate. **Complete.**
 
 ## W1-S1 Greenlight And Closeout
 
@@ -337,4 +337,39 @@ Track E implemented only `W1-S6-C1-I-C1-J` valid/invalid examples and dev-only s
 
 Meta accepts `W1-S6-C1-I-C1-J` as complete for Track E within the exact contract-example and dev-tooling scope above.
 
-Any W1-S7/C1-K expansion requires a new Meta review before implementation.
+Any W1-S7/C1-K expansion required a new Meta review before implementation and is now accepted under the exact C1-K review/handoff scope.
+
+## W1-S7 Closeout
+
+Meta implemented only the `W1-S7-C1-K` cross-track contract handoff review and Wave 1 gate publication.
+
+### In Scope
+
+- `docs/plans/W1-S7-C1-K-Contract-Handoff-Review-Packet.md`
+- `README.md`
+- `docs/plans/Combined-Execution-Sequencing-Plan.md`
+- `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md`
+
+### W1-S7 Acceptance Criteria
+
+- ✅ Required Track B review completed with no blocker and one routed low-risk `ref_type` checker-scope concern.
+- ✅ Required Track D review approved CostEvent static evidence and provider/model wording.
+- ✅ Required Track E review approved validation evidence, manifest coverage, semantic isolation, and EvalSummary coverage.
+- ✅ Optional Track C review approved role/prompt usability with routed future positive-memory-example concerns.
+- ✅ Optional Track A review approved artifact readability with routed future bundle-loader graph concerns.
+- ✅ `python tools/schema_check.py` passed against 16 schemas and 41 fixture entries.
+- ✅ No accepted finding lacks an owner and future gate.
+- ✅ No runtime code, provider/model behavior, Unity work, scenarios, generated artifacts, eval runner code, runtime cost collection, or simulation logic were added.
+
+### W1-S7 Review Evidence
+
+- Track B verdict: CONCERNS / LOW; C1-K may proceed with routed concerns.
+- Track D verdict: APPROVE / LOW; C1-K may proceed.
+- Track E verdict: APPROVE / LOW; C1-K may proceed.
+- Track C optional verdict: APPROVE / LOW; C1-K may proceed with routed concerns.
+- Track A optional verdict: APPROVE / LOW; C1-K may proceed with routed concerns.
+- Accepted routed concerns: Track B `ref_type` checker scope, Track C positive memory example breadth, Track A full observer-loader artifact graph, Track D real provider request consistency, and Track E EvalEvent/eval-runner runtime behavior.
+
+## Next Meta Gate Decision
+
+Meta accepts `W1-S7-C1-K` and Wave 1 contract handoff as complete. Wave 2 deterministic core/headless shell planning may begin under a new Meta-gated implementation plan.

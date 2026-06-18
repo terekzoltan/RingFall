@@ -579,7 +579,7 @@ Wave 0 passes when the repo skeleton exists, docs are placed correctly, generate
 - ✅ minimum trace/artifact schemas exist
 - ✅ valid/invalid schema examples exist
 - ✅ schema validation tool exists
-- ⬜ contract review notes from C/D/E/A are recorded
+- ✅ contract review notes from C/D/E/A are recorded
 
 ### Sprint breakdown
 
@@ -634,7 +634,7 @@ W1-S5 closeout note, 2026-06-15:
 - Step review plus Swarm review found a shared README inventory drift after split-lane implementation; Track E reconciled `src/ringfall-contracts/schemas/README.md` to document both C1-H lanes before commit.
 - Semantic validation debt for CostEvent fallback/cost consistency, EvalSummary gate/count consistency, source-ref vocabulary integrity, and held-run gate reasons is routed to C1-I/C1-J fixture and validation-tooling work.
 - No examples, validation tooling, runtime code, configs, scenarios, Unity work, provider/model calls, runtime cost collection, eval runner code, or simulation logic were added.
-- W1-S6/C1-I,C1-J is the next gated target for valid/invalid examples and schema validation tooling.
+- W1-S6/C1-I,C1-J was the next gated target after W1-S5 and is now accepted.
 
 W1-S6 closeout note, 2026-06-17:
 - Track E added manifest-backed valid/invalid contract fixtures under `src/ringfall-contracts/examples/`, with exactly one valid fixture per current schema and targeted invalid fixtures for routed W1 validation debt.
@@ -643,6 +643,13 @@ W1-S6 closeout note, 2026-06-17:
 - Shared contract docs now distinguish W1-S6 static fixture/tool coverage from deferred runtime/artifact-context validation debt and route residual semantic review to W1-S7/C1-K plus later runtime/artifact validation gates.
 - No schema body edits, runtime code, provider/model behavior, Unity work, scenarios, generated artifacts, eval runner code, runtime cost collection, or simulation logic were added.
 - W1-S7/C1-K is the next gated target for cross-track contract handoff review.
+
+W1-S7 closeout note, 2026-06-18:
+- Meta published `docs/plans/W1-S7-C1-K-Contract-Handoff-Review-Packet.md` as the shared C1-K review packet and final handoff synthesis.
+- Required parallel reviews completed: Track B returned low-risk routed concerns, Track D approved, and Track E approved.
+- Optional parallel reviews completed: Track C approved with routed memory-example breadth concerns, and Track A approved with routed future loader-bundle concerns.
+- All accepted C1-K concerns are routed to named owners and future gates; no Track returned a blocking finding.
+- Wave 1 contract handoff is accepted for Wave 2/3 planning without adding runtime code, provider/model behavior, Unity work, scenarios, generated artifacts, eval runner code, runtime cost collection, or simulation logic.
 
 #### Sprint W1-S3 — Trace, memory, cost, eval schemas
 
@@ -660,7 +667,7 @@ Epics:
 Epics:
 - ✅ **C1-I** Valid/invalid examples — **Owner: Track E/B**
 - ✅ **C1-J** `tools/schema_check.py` — **Owner: Track E**
-- ⬜ **C1-K** Cross-track contract review — **Owner: Meta + all tracks**
+- ✅ **C1-K** Cross-track contract review — **Owner: Meta + all tracks**
 
 ### Execution Steps
 
@@ -702,11 +709,11 @@ Epics:
 |---|---|---|---|
 | Track E session | C1-I, C1-J | schemas exist and C1-H reviewed ✅ | Complete: fixtures and validation tool accepted after semantic-isolation review fix. |
 
-**⬜ Step 7**
+**✅ Step 7**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Meta Coordinator session | C1-K + Wave 1 gate | schema check passes | Publish contract handoff status for Wave 2/3. |
+| Meta Coordinator session | C1-K + Wave 1 gate | schema check passes | Complete: contract handoff accepted for Wave 2/3 planning with routed concerns. |
 ### Optional parallel side-lanes
 
 These may run after the relevant schema draft exists.
