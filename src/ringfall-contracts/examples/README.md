@@ -13,13 +13,15 @@ The fixture manifest is `manifest.json`. It records each fixture path, target sc
 
 Invalid fixtures are intentionally small and focused. Each invalid fixture should exercise one reason code.
 
-Current W1-S6 static fixtures cover the routed generic schema categories, including type/schema-version constants, required fields, action conditionals, work-order targeting, hidden-effect completeness, invalid enums, numeric bounds, empty arrays where forbidden, malformed IDs/refs, and source-ref vocabulary integrity.
+Current W1-S6 static fixtures cover the routed generic schema categories, including type/schema-version constants, required fields, action conditionals, work-order targeting, hidden-effect completeness, invalid enums, numeric bounds, empty arrays where forbidden, malformed IDs/refs, and scoped source-ref vocabulary integrity.
 
 ## Validation Scope
 
 The schema checker is dev-only contract tooling. It does not implement a runtime validation pipeline, provider/model routing, eval runner behavior, world simulation behavior, scenario generation, or canonical artifact production.
 
 Static semantic checks are limited to W1-S2 through W1-S5 routed validation debt that can be inspected inside example JSON files.
+
+`source_ref_vocabulary` validates `ref_type` only inside known reference structures such as `source_refs`, `system_refs`, `artifact_refs`, and explicit `*_ref` fields that use source-reference objects. It does not define a global `ref_type` namespace for arbitrary fixture objects. Bundle-level reference existence and cross-artifact consistency remain deferred to runtime/artifact bundle validation.
 
 ## Deferred Debt
 
@@ -35,3 +37,7 @@ Deferred runtime/artifact-context debts are routed to the W1-S7/C1-K contract ha
 - missing trace refs across a real artifact bundle;
 - complete hidden-leak detection against prompt/context artifacts;
 - complete rumor/fact contamination detection against claim graph state.
+- positive memory examples for rumor, belief, official_line, and withheld_item, routed to the first role/memory implementation or Wave 2/3 prompt-memory fixture expansion gate with Track C ownership and Track B/E support if schemas, examples, or tooling are touched;
+- a connected manifest-to-trace-to-state/eval artifact bundle graph, routed to the first artifact bundle validation or Track A loader-planning gate with Track A ownership and Track B/E support if contract validation is touched;
+- real CostEvent provider/model evidence reconciliation against provider request/response records, routed to the first Track D provider/runtime implementation or runtime artifact bundle validation gate;
+- EvalEvent and eval-runner behavior decisions, routed to later Track E eval/replay schema and runtime artifact validation gates.

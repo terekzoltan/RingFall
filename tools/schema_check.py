@@ -39,6 +39,37 @@ ALLOWED_REF_TYPES = {
     "state_diff",
 }
 
+REFERENCE_FIELD_NAMES = {
+    "artifact_ref",
+    "artifact_refs",
+    "cognition_trace_ref",
+    "context_ref",
+    "cost_event_ref",
+    "cost_summary_ref",
+    "evidence_ref",
+    "evidence_refs",
+    "events_created",
+    "finding_ref",
+    "finding_refs",
+    "memory_update_ref",
+    "memory_update_refs",
+    "parsed_packet_ref",
+    "prompt_ref",
+    "raw_output_ref",
+    "replay_manifest_ref",
+    "request_ref",
+    "schema_ref",
+    "source_ref",
+    "source_refs",
+    "state_diff_ref",
+    "state_diff_refs",
+    "system_ref",
+    "system_refs",
+    "trace_ref",
+    "trace_refs",
+    "visibility_ref",
+}
+
 
 class CheckError(Exception):
     pass
@@ -85,17 +116,27 @@ def manifest_path(value: str) -> Path:
     return path
 
 
-def collect_ref_type_errors(value: Any, where: str = "$", errors: list[str] | None = None) -> list[str]:
+def collect_ref_type_errors(
+    value: Any,
+    where: str = "$",
+    errors: list[str] | None = None,
+    in_reference_field: bool = False,
+) -> list[str]:
     if errors is None:
         errors = []
     if isinstance(value, dict):
-        if "ref_type" in value and value["ref_type"] not in ALLOWED_REF_TYPES:
+        if in_reference_field and "ref_type" in value and value["ref_type"] not in ALLOWED_REF_TYPES:
             errors.append(f"{where}.ref_type={value['ref_type']!r}")
         for key, nested in value.items():
-            collect_ref_type_errors(nested, f"{where}.{key}", errors)
+            collect_ref_type_errors(
+                nested,
+                f"{where}.{key}",
+                errors,
+                in_reference_field or key in REFERENCE_FIELD_NAMES,
+            )
     elif isinstance(value, list):
         for index, nested in enumerate(value):
-            collect_ref_type_errors(nested, f"{where}[{index}]", errors)
+            collect_ref_type_errors(nested, f"{where}[{index}]", errors, in_reference_field)
     return errors
 
 

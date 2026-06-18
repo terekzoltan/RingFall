@@ -651,6 +651,11 @@ W1-S7 closeout note, 2026-06-18:
 - All accepted C1-K concerns are routed to named owners and future gates; no Track returned a blocking finding.
 - Wave 1 contract handoff is accepted for Wave 2/3 planning without adding runtime code, provider/model behavior, Unity work, scenarios, generated artifacts, eval runner code, runtime cost collection, or simulation logic.
 
+Post-W1 pre-Wave-2 cleanup note:
+- Track B resolved the C1-K `ref_type` checker-scope concern by scoping `tools/schema_check.py` source-ref vocabulary validation to known reference structures instead of arbitrary objects with `ref_type`.
+- Wave 1 remains closed and accepted; this cleanup hardens handoff quality before Wave 2 and does not approve runtime/provider/model/Unity/scenario/eval-runner/simulation work.
+- Remaining C1-K routes stay active: Track C positive memory examples, Track A connected artifact bundle graph, Track D real CostEvent provider evidence reconciliation, and Track E EvalEvent/eval-runner decision.
+
 #### Sprint W1-S3 — Trace, memory, cost, eval schemas
 
 **Owner priority:** Track B + Track E + Track D
@@ -841,11 +846,13 @@ These can run after Wave 1 contract gate, while Track B builds the deterministic
   - prereq: artifact schemas exist
   - output: validator/test plan against sample bundles
   - may use fixtures only
+  - must carry the Track A C1-K route forward if it touches bundle examples: before serious loader work, a connected sample bundle should demonstrate manifest -> cognition/action -> state/eval relationships
 
 - **OSL-W2-C — Track A Unity artifact-loader skeleton planning**
   - prereq: manifest/event schema stable enough
   - output: view-model and loader assumptions
   - no Unity sim truth, no gameplay
+  - must carry the Track A C1-K route forward: connected artifact bundle graph assumptions need Track B/E review if they affect contracts or validation
 
 These side-lanes are useful because they touch separate paths. They must return merge briefs before being absorbed into Wave 3/10 work.
 
@@ -858,6 +865,7 @@ Wave 2 passes when a no-LLM Aster seed run is deterministic and writes valid man
 - state cannot serialize
 - determinism not controlled
 - no artifact output
+- artifact bundle validation ignores the routed C1-K loader-graph concern without marking it in-scope, not-yet-in-scope, or already resolved
 
 ---
 
@@ -958,6 +966,10 @@ Epics:
   - prereq: cognition trace schema exists
   - output: deterministic checks for schema/cost trace presence
 
+Wave 3 carry-forward routes:
+- Track D owns the C1-K CostEvent provider/model evidence route. At the first provider/runtime implementation or runtime artifact bundle validation gate, CostEvent must be reconcilable with real provider request/response evidence before canonical provider evidence.
+- Track C owns the C1-K positive memory example route if Wave 3 expands prompt-memory fixtures. Positive examples for rumor, belief, official_line, and withheld_item must be added or explicitly judged not yet in scope, with Track B/E review if schemas, examples, or tooling are touched.
+
 Do not start full L1 scene semantics before B3-F draft and strict JSON path are reviewed.
 
 ### Wave gate
@@ -970,6 +982,7 @@ Wave 3 passes when mock cognition creates a schema-valid L1 pulse and a cognitio
 - no cost trace
 - strict JSON not enforced
 - real API key committed
+- real/manual provider evidence cannot be reconciled to CostEvent records once provider calls are enabled
 
 ---
 
@@ -1108,6 +1121,7 @@ Wave 4 passes when Aster Heat Alarm runs end-to-end with L1 cognition, tool/crew
 - ⬜ ClaimRecord/MemoryUpdate storage
 - ⬜ A1 belief update
 - ⬜ public rumor minimal
+- ⬜ positive memory examples or explicit not-yet-in-scope decision for rumor, belief, official_line, and withheld_item
 - ⬜ visibility partition validation
 - ⬜ hidden truth leak eval
 - ⬜ rumor/fact contamination eval
@@ -1197,6 +1211,11 @@ Epics:
   - prereq: ClaimRecord/MemoryUpdate shape accepted
   - output: example RelationshipEdge/IdentityDrift cases
   - not part of canonical behavior until reviewed
+  - must also classify the C1-K Track C positive-memory-example concern for rumor, belief, official_line, and withheld_item as in-scope, not-yet-in-scope, or already resolved
+
+Wave 5 carry-forward routes:
+- Track C owns the C1-K positive memory example route if it was not closed in Wave 3. Positive examples for rumor, belief, official_line, and withheld_item must be added or explicitly judged not yet in scope before memory semantics are treated as complete.
+- Track E owns the C1-K EvalEvent/eval-runner decision. Later eval/replay schema and runtime artifact validation gates must decide whether EvalEvent is required before implementing eval-runner or replay evidence expansion.
 
 Memory/replay work is subtle. Do not run side-lanes that alter claim semantics without Meta and Track E review.
 
@@ -1209,6 +1228,7 @@ Wave 5 passes when Aster artifact replay works and memory/visibility hard gates 
 - memory update lacks source refs
 - hidden truth leak
 - artifact replay cannot reproduce downstream effects
+- role/memory implementation proceeds without resolving or explicitly deferring the C1-K positive memory example concern
 
 ---
 
@@ -1610,6 +1630,7 @@ Wave 8 passes when all five FP1 demos run headlessly with artifact bundles and n
 ### Mandatory outputs
 - ⬜ canonical/dev cheap mode separation
 - ⬜ hard gate eval suite
+- ⬜ EvalEvent/eval-runner expansion decision before runtime eval evidence broadens beyond EvalSummary
 - ⬜ artifact replay for Aster/Vireo/Black Seam
 - ⬜ cost summary by lane/model
 - ⬜ manual findings-first review package
@@ -1704,6 +1725,7 @@ Wave 9 passes when core FP1 demos are canonical-evaluable, replayable, cost-acco
 - unreplayable canonical run
 - cost unbounded
 - dev cheap mislabeled as canonical
+- eval/replay hardening expands runtime evidence while leaving the C1-K EvalEvent/eval-runner decision unclassified
 
 ---
 

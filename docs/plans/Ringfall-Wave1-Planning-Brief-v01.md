@@ -8,7 +8,7 @@ Wave 1 Step 1 `W1-S1-C1-A-C1-B-contract-layout-and-schema-skeleton`, Step 2 `W1-
 
 This brief now serves as W1-S1/W1-S2/W1-S3/W1-S4/W1-S5/W1-S6/W1-S7 closeout evidence and the handoff guardrail for preparing Wave 2 under a separate Meta-gated implementation plan.
 
-It does not approve runtime code, C#/.NET, Python brain, Unity, model calls, provider behavior, scenario content, or simulation logic.
+It does not approve runtime code, C#/.NET, Python brain, Unity, model calls, provider behavior, scenario content, or simulation logic. Post-closeout pre-Wave-2 cleanup may harden handoff docs and dev-only contract tooling without reopening Wave 1.
 
 ## Purpose
 
@@ -352,7 +352,7 @@ Meta implemented only the `W1-S7-C1-K` cross-track contract handoff review and W
 
 ### W1-S7 Acceptance Criteria
 
-- ✅ Required Track B review completed with no blocker and one routed low-risk `ref_type` checker-scope concern.
+- ✅ Required Track B review completed with no blocker; the low-risk `ref_type` checker-scope concern was resolved by post-closeout pre-Wave-2 cleanup.
 - ✅ Required Track D review approved CostEvent static evidence and provider/model wording.
 - ✅ Required Track E review approved validation evidence, manifest coverage, semantic isolation, and EvalSummary coverage.
 - ✅ Optional Track C review approved role/prompt usability with routed future positive-memory-example concerns.
@@ -369,7 +369,11 @@ Meta implemented only the `W1-S7-C1-K` cross-track contract handoff review and W
 - Track C optional verdict: APPROVE / LOW; C1-K may proceed with routed concerns.
 - Track A optional verdict: APPROVE / LOW; C1-K may proceed with routed concerns.
 - Accepted routed concerns: Track B `ref_type` checker scope, Track C positive memory example breadth, Track A full observer-loader artifact graph, Track D real provider request consistency, and Track E EvalEvent/eval-runner runtime behavior.
+- Post-closeout pre-Wave-2 cleanup resolved the Track B `ref_type` checker-scope concern by scoping `source_ref_vocabulary` to known reference structures rather than arbitrary objects with `ref_type`. Broader bundle-level reference existence and cross-artifact consistency remain deferred to the first runtime/artifact bundle validation gate.
+- Remaining active routes: Track C owns positive memory examples for rumor, belief, official_line, and withheld_item at the first role/memory implementation or Wave 2/3 prompt-memory fixture expansion gate, with Track B/E support if schemas/examples/tooling are touched; Track A owns a connected artifact bundle graph at the first artifact bundle validation or loader-planning gate, with Track B/E support if bundle validation touches contracts; Track D owns CostEvent reconciliation against real provider request/response evidence at the first provider/runtime implementation or runtime artifact bundle validation gate; Track E owns the EvalEvent/eval-runner decision at later eval/replay schema and runtime artifact validation gates.
 
 ## Next Meta Gate Decision
 
 Meta accepts `W1-S7-C1-K` and Wave 1 contract handoff as complete. Wave 2 deterministic core/headless shell planning may begin under a new Meta-gated implementation plan.
+
+Wave 1 remains closed after the post-closeout pre-Wave-2 cleanup. No runtime work is approved by this cleanup.

@@ -4,6 +4,7 @@
 **Owner:** Meta Coordinator
 **Status:** complete / accepted after required and optional Track fan-in
 **Baseline commit:** `fba9293 contracts: add Wave 1 examples validation tooling`
+**Post-closeout cleanup:** Track B ref_type checker-scope concern resolved before Wave 2; Wave 1 remains accepted.
 
 ## Purpose
 
@@ -247,12 +248,11 @@ Optional lanes:
 
 ### Track B: `ref_type` checker scope
 
-`tools/schema_check.py` currently applies `source_ref_vocabulary` recursively to any object containing `ref_type`. This is acceptable for W1 static fixtures, but it could accidentally define a global `ref_type` namespace beyond explicit schemas.
+`tools/schema_check.py` now scopes `source_ref_vocabulary` to known reference structures and explicit source-reference object fields. It no longer rejects arbitrary objects only because they contain a property named `ref_type`, so it does not define a global `ref_type` namespace beyond explicit schemas.
 
-- Status: not a C1-K blocker.
+- Status: resolved by post-closeout pre-W2 cleanup; not a C1-K blocker and Wave 1 remains accepted.
 - Owner: Track B for contract/tooling scope, with Track E if implemented in validation tooling.
-- Route: first runtime/artifact bundle validation gate or next Track B schema/tooling pass.
-- Future resolution: scope the check to known source-ref/system-ref structures or promote the vocabulary into explicit schema/docs.
+- Remaining route: broader bundle-level reference existence and cross-artifact consistency stay deferred to the first runtime/artifact bundle validation gate.
 
 ### Track C: positive memory example breadth
 
@@ -261,14 +261,16 @@ Valid memory coverage currently shows an observation claim, while rumor, belief,
 - Status: not a C1-K blocker.
 - Owner: Track C, with Track B/E if fixture/schema/tooling changes are required.
 - Route: Wave 2/3 prompt/memory fixture expansion or first role/memory implementation gate.
+- Acceptance expectation: positive examples for rumor, belief, official_line, and withheld_item are added or explicitly judged not yet in scope.
 
 ### Track A: full observer-loader artifact graph
 
 Valid run/trace/state/eval examples are readable but intentionally minimal; they do not yet demonstrate a complete observer-loader bundle graph from manifest to cognition/action/state/eval.
 
 - Status: not a C1-K blocker.
-- Owner: Track A.
-- Route: first runtime/artifact bundle validation gate or Track A loader-planning fixture work once richer artifact bundles exist.
+- Owner: Track A, with Track B/E if bundle validation touches contracts.
+- Route: first artifact bundle validation or Track A loader-planning gate once richer artifact bundles exist.
+- Acceptance expectation: a connected sample bundle demonstrates manifest -> cognition/action -> state/eval relationships before serious loader work.
 
 ### Track D: real provider request consistency
 
@@ -276,7 +278,8 @@ CostEvent provider/model consistency against real provider request records is in
 
 - Status: not a C1-K blocker.
 - Owner: Track D.
-- Route: first runtime/artifact bundle validation gate before canonical evidence.
+- Route: first provider/runtime implementation or runtime artifact bundle validation gate before canonical evidence.
+- Acceptance expectation: CostEvent can be reconciled with real provider request/response evidence before canonical provider evidence.
 
 ### Track E: EvalEvent and eval-runner runtime behavior
 
@@ -285,7 +288,8 @@ EvalEvent and runtime replay/eval behavior remain intentionally outside W1 C1-K 
 - Status: not a C1-K blocker.
 - Owner: Track E.
 - Route: later eval/replay schema and runtime artifact validation gates.
+- Acceptance expectation: decide whether EvalEvent is required before implementing eval-runner/replay evidence expansion.
 
 ## Final Handoff Status
 
-Wave 1 contract handoff is accepted for Wave 2/3 planning with the routed concerns above. The accepted surface includes schemas, examples, dev-only validation tooling, and cross-track review evidence. It does not include runtime code, provider/model execution, Unity work, scenarios, generated artifacts, eval-runner behavior, runtime cost collection, or simulation logic.
+Wave 1 contract handoff remains accepted for Wave 2/3 planning with the routed concerns above. This cleanup hardens handoff quality before Wave 2 and does not approve runtime code, provider/model execution, Unity work, scenarios, generated artifacts, eval-runner behavior, runtime cost collection, or simulation logic.
