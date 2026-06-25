@@ -376,6 +376,10 @@ Create the control surface and source-of-truth layout.
 
 Define the language all tracks speak.
 
+### Wave 1.5 — Contract CI readiness
+
+Protect the accepted Wave 1 contract/schema spine with a narrow CI gate before runtime implementation grows.
+
 ### Wave 2 — Deterministic core
 
 Prove the world exists without LLMs.
@@ -756,6 +760,78 @@ Wave 1 passes when minimum schemas and examples validate, and downstream tracks 
 
 ---
 
+## Wave 1.5 — Contract CI readiness
+
+**Wave goal:** Add the first official Ringfall CI spine around the accepted Wave 1 contract/schema validator, without opening runtime, provider, Unity, scenario, or simulation implementation.
+
+**Primary value:** Make the contract layer mechanically protected before Wave 2 deterministic core work starts, so later runtime implementation does not inherit a fragile or manually-only schema gate.
+
+**Primary owner(s):** Meta Coordinator + Track E
+
+**Secondary support:** Track B for contract/tooling compatibility; Track D/A/C review only if CI scope touches their future surfaces.
+
+### Mandatory outputs
+- ⬜ CI readiness contract for the current Ringfall skeleton
+- ⬜ GitHub Actions contract CI that runs `python tools/schema_check.py`
+- ⬜ hygiene/leak boundary statement for CI artifacts and ignored private/local state
+- ⬜ future runtime CI slot map for C# core, Python brain, Unity client, and scenario replay
+- ⬜ coverage policy kept report-only/later until runtime modules and test corpus exist
+
+### Sprint breakdown
+
+#### Sprint W1.5-S1 — Contract CI scope and workflow
+
+**Owner priority:** Meta + Track E
+
+Epics:
+- ⬜ **CI15-A** CI readiness contract — **Owner: Meta/Track E**
+- ⬜ **CI15-B** GitHub Actions contract CI — **Owner: Track E**
+- ⬜ **CI15-C** CI hygiene/leak guard — **Owner: Track E/Meta**
+
+#### Sprint W1.5-S2 — Future CI policy slots
+
+**Owner priority:** Meta + Track E
+
+Epics:
+- ⬜ **CI15-D** Future runtime CI slot map — **Owner: Meta**
+- ⬜ **CI15-E** Coverage policy later/report-only — **Owner: Track E**
+
+### Execution Steps
+
+**⬜ Step 1 — Scope lock and local verify contract**
+
+| Session | Epic(s) | Prereq | Notes |
+|---|---|---|---|
+| Meta Coordinator session | CI15-A | Wave 1 ✅ | Define Ringfall's official local verify command as `python -m pip install -r requirements-dev.txt` then `python tools/schema_check.py`. State explicitly that this is contract CI, not runtime CI. |
+
+**⬜ Step 2 — First CI implementation**
+
+| Session | Epic(s) | Prereq | Notes |
+|---|---|---|---|
+| Track E session | CI15-B, CI15-C | CI15-A ✅ | Add `.github/workflows/contract-ci.yml` or equivalent reviewed workflow. It must run schema checker on push/PR and must not use secrets, provider calls, Unity, C# runtime, OpenCode sessions, or private artifact upload. |
+
+**⬜ Step 3 — Future slots and closeout**
+
+| Session | Epic(s) | Prereq | Notes |
+|---|---|---|---|
+| Meta Coordinator session | CI15-D | CI15-B/C ✅ | Record future CI lanes: `core-dotnet-ci`, `brain-python-ci`, `unity-client-ci`, and `scenario-replay-ci`, but keep them blocked until those runtime surfaces exist. |
+| Track E session | CI15-E | CI15-B/C ✅ | Record that coverage is report-only/later and must not become a hard threshold before stable runtime modules and test corpus exist. |
+| Meta Coordinator session | Wave 1.5 gate | CI15-D/E ✅ | Decide whether Wave 2 planning may proceed with contract CI in place or with explicit CI-debt rationale. |
+
+### Wave gate
+
+Wave 1.5 passes when Ringfall has a narrow contract CI workflow protecting `tools/schema_check.py`, private/local state boundaries are preserved, future runtime CI lanes are documented, and no runtime/provider/Unity/simulation scope has opened.
+
+### Hold conditions
+- CI requires secrets or provider/model credentials
+- CI runs OpenCode sessions
+- CI uploads private/local FAL, `.opencode`, `.swarm`, `data/runs`, or design-canon artifacts
+- CI tries to build non-existent C#/.NET, Python brain, Unity, provider, scenario, or simulation surfaces
+- coverage is introduced as a broad hard gate before runtime modules exist
+- green CI is represented as domain/FAL approval instead of mechanical evidence
+
+---
+
 ## Wave 2 — Deterministic core and first headless state
 
 **Wave goal:** Build the first C#/.NET headless deterministic simulation core that can load a scenario, tick, write event logs, and emit state diffs without LLMs.
@@ -807,7 +883,7 @@ Epics:
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Track B session | K2-A, K2-B | Wave 1 ✅ | Create buildable C# core/headless shell; no brain/provider/Unity refs. |
+| Track B session | K2-A, K2-B | Wave 1 ✅ + Wave 1.5 ✅ or explicit Meta CI-debt exception | Create buildable C# core/headless shell; no brain/provider/Unity refs. |
 
 **⬜ Step 2**
 
@@ -1956,6 +2032,7 @@ Wave 11 passes when a curated sanitized FP1 run can be packaged, validated, load
 |---|---:|---|---|---|
 | Wave 0 | 3 | Meta/B | repo skeleton | docs + README + configs |
 | Wave 1 | 4 | B/E | schemas | schema smoke + examples |
+| Wave 1.5 | 2 | Meta/E | schema checker | contract CI + CI policy slots |
 | Wave 2 | 3 | B | C# solution | deterministic no-LLM run |
 | Wave 3 | 3 | D/C | model policy/mock | cognition trace |
 | Wave 4 | 3 | B/C/D/E | Aster context | L1 action/tool/crew vertical |
@@ -2098,28 +2175,30 @@ Ringfall must first produce stable artifacts independently.
 
 ## Current frontier
 
-The project is post-Wave-0 and inside Wave 1 after W1-S5 acceptance. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, W1-S1 created the contract layout/versioning skeleton, W1-S2 added five core packet schema drafts, W1-S3 added Track C packet-usability review plus three institution/council packet schema drafts, W1-S4 added six trace/state/memory schema drafts, and W1-S5 added CostEvent and EvalSummary schema drafts. No C#/.NET solution, Python brain service, Unity project, model provider implementation, examples/validation tooling, scenarios, or simulation logic has started.
+The project is post-Wave-1 and pre-Wave-2 runtime implementation. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, and Wave 1 contract/artifact spine is accepted through W1-S7/C1-K. The accepted Wave 1 surface now includes schema drafts, valid/invalid examples, `tools/schema_check.py`, and cross-track contract handoff review. No C#/.NET solution, Python brain service, Unity project, model provider implementation, scenarios, or simulation logic has started. The next mainline frontier is Wave 1.5 contract CI readiness before Wave 2 deterministic core work.
 
-The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-01` aligned post-Wave-0 status/frontier docs, and `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary with the Risk Register G1-G10 list. The separate Wave 1 planning brief is present at `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md`; W1-S1 Track B contract layout/versioning, W1-S2 core packet schema drafts, W1-S3 C1-E packet-usability/schema work, W1-S4 C1-F/C1-G trace/state/memory schema work, and W1-S5 C1-H cost/eval schema work are accepted.
+The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-01` aligned post-Wave-0 status/frontier docs, and `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary with the Risk Register G1-G10 list. The separate Wave 1 planning brief is present at `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md`; W1-S1 through W1-S7 are accepted, and `docs/plans/W1-S7-C1-K-Contract-Handoff-Review-Packet.md` is the shared Wave 1 handoff/gate artifact for the transition into Wave 1.5 and later Wave 2 planning.
 
 ## Immediate sequence
 
-1. Prepare W1-S6/C1-I,C1-J under a new Meta-gated implementation plan: valid/invalid examples and schema validation tooling.
-2. Do not start C#/.NET, Python brain, Unity, provider/model runtime, scenarios, or simulation logic from W1-S5 acceptance alone.
-3. Track A/D/C remain inactive until Meta opens their relevant review or consumer steps; Track E/B participation is limited to C1-I/C1-J fixture/tooling scope until later gates open.
+1. Open Wave 1.5 `CI15-A` under a new Meta-gated implementation plan: define RingFall's official contract-CI scope and local verify contract.
+2. After `CI15-A`, Track E may implement `CI15-B`/`CI15-C`: the first GitHub Actions contract CI plus hygiene/leak guard.
+3. After `CI15-B/C`, Meta + Track E close `CI15-D/E`: future runtime CI slot map and report-only/later coverage policy.
+4. Do not start C#/.NET, Python brain, Unity, provider/model runtime, scenarios, or simulation logic from Wave 1 acceptance alone; Wave 2 waits for Wave 1.5 acceptance or an explicit Meta CI-debt exception.
 
 ## First actionable step
 
 ```text
-W1-S6-C1-I-C1-J — Track E/B add valid/invalid examples and schema validation tooling after C1-H acceptance.
+Wave 1.5 / CI15-A — Meta defines the RingFall contract-CI readiness contract and the official local verify command.
 ```
 
-Expected W1-S6 planning brief:
+Expected Wave 1.5 planning brief:
 
 ```text
-Prepare a narrow plan for C1-I/C1-J valid/invalid examples and schema validation tooling.
-Do not add C#/.NET, Python runtime, provider calls, Unity work, scenarios, runtime cost collection, eval runner logic, or simulation logic.
-Preserve W1-S1 layout and W1-S2 through W1-S5 schema/versioning rules.
+Prepare a narrow plan for Wave 1.5 contract CI readiness.
+Define the official local verify command around `python tools/schema_check.py`, the first GitHub Actions contract CI lane, CI hygiene/leak boundaries, future runtime CI slots, and report-only/later coverage policy.
+Do not add C#/.NET runtime, Python brain runtime, provider calls, Unity work, scenarios, runtime cost collection, eval runner logic, or simulation logic.
+Preserve the accepted Wave 1 contract semantics and treat green CI as mechanical evidence only, not domain approval.
 ```
 
 W1-S1 closeout note, 2026-06-14:
@@ -2169,7 +2248,7 @@ MetaOps sync closure note, 2026-06-14:
 - `RF-STATUS-SYNC-01` closed the stale post-Wave-0 frontier drift across the Combined Plan, Meta Handoff, and local FAL active context.
 - `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary, Risk Register detailed G1-G10 sections, and automatic hold trigger wording with `docs/ops/Ringfall-Risk-Register-and-Design-Guardrails-v01.md`.
 - The guardrail sync touched ignored/private canon policy files only; this Combined Plan note is the tracked handoff record.
-- Wave 1 implementation remains blocked until a separate Wave 1 plan is written and gated by Meta.
+- Wave 2 runtime implementation remains blocked until Wave 1.5 contract CI readiness is accepted or Meta explicitly records a CI-debt exception.
 
 ---
 
