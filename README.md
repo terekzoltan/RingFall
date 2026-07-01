@@ -2,7 +2,7 @@
 
 Ringfall is a replayable, inspectable, LLM-heavy civilization simulation set in a fractured orbital ring. It is built around deterministic simulation boundaries, typed action/tool contracts, memory/belief/truth separation, institutional distortion, council doctrine, OpenRouter-based model orchestration, and a Unity-rendered observer client.
 
-Current phase: Wave 0 bootstrap and Wave 1 contract handoff are closed through W1-S7/C1-K. The next gated planning target is Wave 2 deterministic core/headless shell work; runtime, provider, Unity, and simulation implementation remain blocked until their own reviewed gates open. This repository is not ready for public use. The detailed design canon, world bible, implementation plan, and private coordination notes are local/private until an explicit export review approves public release material.
+Current phase: Wave 0 bootstrap and Wave 1 contract handoff are closed through W1-S7/C1-K. Wave 1.5 contract CI readiness is active: CI15-A has accepted the local contract-CI verify contract, and CI15-B/CI15-C GitHub Actions contract CI plus hygiene/leak guard are the next gated target. Wave 2 deterministic core/headless shell work remains blocked until Wave 1.5 acceptance or an explicit Meta CI-debt exception. This repository is not ready for public use. The detailed design canon, world bible, implementation plan, and private coordination notes are local/private until an explicit export review approves public release material.
 
 ## First Playable Scope
 

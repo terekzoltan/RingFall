@@ -779,7 +779,7 @@ Wave 1 passes when minimum schemas and examples validate, and downstream tracks 
 **Secondary support:** Track B for contract/tooling compatibility; Track D/A/C review only if CI scope touches their future surfaces.
 
 ### Mandatory outputs
-- ⬜ CI readiness contract for the current Ringfall skeleton
+- ✅ CI readiness contract for the current Ringfall skeleton (`docs/plans/Wave-1.5-CI15-A-CI-Readiness-Contract.md`)
 - ⬜ GitHub Actions contract CI that runs `python tools/schema_check.py`
 - ⬜ hygiene/leak boundary statement for CI artifacts and ignored private/local state
 - ⬜ future runtime CI slot map for C# core, Python brain, Unity client, and scenario replay
@@ -793,7 +793,7 @@ Wave 1 passes when minimum schemas and examples validate, and downstream tracks 
 **Owner priority:** Meta + Track E
 
 Epics:
-- ⬜ **CI15-A** CI readiness contract — **Owner: Meta/Track E**
+- ✅ **CI15-A** CI readiness contract — **Owner: Meta/Track E**
 - ⬜ **CI15-B** GitHub Actions contract CI — **Owner: Track E**
 - ⬜ **CI15-C** CI hygiene/leak guard — **Owner: Track E/Meta**
 
@@ -808,11 +808,18 @@ Epics:
 
 ### Execution Steps
 
-**⬜ Step 1 — Scope lock and local verify contract**
+**✅ Step 1 — Scope lock and local verify contract**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Meta Coordinator session | CI15-A | Wave 1 ✅ | Define Ringfall's official local verify command as `python -m pip install -r requirements-dev.txt` then `python tools/schema_check.py`. State explicitly that this is contract CI, not runtime CI. |
+| Meta Coordinator session | CI15-A | Wave 1 ✅ | Completed in `docs/plans/Wave-1.5-CI15-A-CI-Readiness-Contract.md`. Official local verify command is `python -m pip install -r requirements-dev.txt` then `python tools/schema_check.py`. This is contract CI, not runtime CI. |
+
+CI15-A closeout note, 2026-07-01:
+- Meta published `docs/plans/Wave-1.5-CI15-A-CI-Readiness-Contract.md` as the accepted local contract-CI readiness contract.
+- Official local verify sequence is `python -m pip install -r requirements-dev.txt` followed by `python tools/schema_check.py`.
+- CI15-A defines scope only; it does not add GitHub Actions workflow files, runtime code, provider/model behavior, Unity work, scenarios, simulation logic, coverage hard gates, artifact upload, Refinery tooling, or formal-solver CI.
+- Local verification evidence at closeout: `python -m pip install -r requirements-dev.txt` confirmed the dev dependency is satisfied, and `python tools/schema_check.py` passed against 16 schemas and 41 fixture entries.
+- CI15-B/CI15-C are unblocked for Track E to implement the first reviewed contract CI workflow and hygiene/leak guard.
 
 **⬜ Step 2 — First CI implementation**
 
@@ -2209,14 +2216,14 @@ Ringfall must first produce stable artifacts independently.
 
 ## Current frontier
 
-The project is post-Wave-1 and pre-Wave-2 runtime implementation. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, and Wave 1 contract/artifact spine is accepted through W1-S7/C1-K. The accepted Wave 1 surface now includes schema drafts, valid/invalid examples, `tools/schema_check.py`, and cross-track contract handoff review. No C#/.NET solution, Python brain service, Unity project, model provider implementation, scenarios, or simulation logic has started. The next mainline frontier is Wave 1.5 contract CI readiness before Wave 2 deterministic core work.
+The project is post-Wave-1 and pre-Wave-2 runtime implementation. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, and Wave 1 contract/artifact spine is accepted through W1-S7/C1-K. The accepted Wave 1 surface now includes schema drafts, valid/invalid examples, `tools/schema_check.py`, and cross-track contract handoff review. No C#/.NET solution, Python brain service, Unity project, model provider implementation, scenarios, or simulation logic has started. Wave 1.5 contract CI readiness is active: CI15-A is accepted, and the next mainline frontier is CI15-B/CI15-C contract CI workflow plus hygiene/leak guard before Wave 2 deterministic core work.
 
 The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-01` aligned post-Wave-0 status/frontier docs, and `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary with the Risk Register G1-G10 list. The separate Wave 1 planning brief is present at `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md`; W1-S1 through W1-S7 are accepted, and `docs/plans/W1-S7-C1-K-Contract-Handoff-Review-Packet.md` is the shared Wave 1 handoff/gate artifact for the transition into Wave 1.5 and later Wave 2 planning.
 
 ## Immediate sequence
 
-1. Open Wave 1.5 `CI15-A` under a new Meta-gated implementation plan: define RingFall's official contract-CI scope and local verify contract.
-2. After `CI15-A`, Track E may implement `CI15-B`/`CI15-C`: the first GitHub Actions contract CI plus hygiene/leak guard.
+1. `CI15-A` is accepted in `docs/plans/Wave-1.5-CI15-A-CI-Readiness-Contract.md`: RingFall's official contract-CI scope and local verify contract are defined.
+2. Track E may implement `CI15-B`/`CI15-C`: the first GitHub Actions contract CI plus hygiene/leak guard.
 3. After `CI15-B/C`, Meta + Track E close `CI15-D/E/F`: future runtime CI slot map, future formal-intervention CI slot map, and report-only/later coverage policy.
 4. Do not start C#/.NET, Python brain, Unity, provider/model runtime, scenarios, or simulation logic from Wave 1 acceptance alone; Wave 2 waits for Wave 1.5 acceptance or an explicit Meta CI-debt exception.
 5. Treat `docs/design/Formal-Intervention-Gates-Refinery.md` as the approved formal-gate design direction, but do not implement Refinery tooling until a later named family gate opens.
@@ -2224,14 +2231,15 @@ The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-0
 ## First actionable step
 
 ```text
-Wave 1.5 / CI15-A — Meta defines the RingFall contract-CI readiness contract and the official local verify command.
+Wave 1.5 / CI15-B and CI15-C — Track E implements the first reviewed contract CI workflow and hygiene/leak guard.
 ```
 
-Expected Wave 1.5 planning brief:
+Expected CI15-B/CI15-C implementation brief:
 
 ```text
-Prepare a narrow plan for Wave 1.5 contract CI readiness.
-Define the official local verify command around `python tools/schema_check.py`, the first GitHub Actions contract CI lane, CI hygiene/leak boundaries, future runtime CI slots, future formal-intervention CI slot, and report-only/later coverage policy.
+Prepare a narrow implementation for Wave 1.5 contract CI workflow and hygiene/leak guard.
+Use the official local verify contract from `docs/plans/Wave-1.5-CI15-A-CI-Readiness-Contract.md`: `python -m pip install -r requirements-dev.txt` then `python tools/schema_check.py`.
+Add a reviewed GitHub Actions workflow that runs `python tools/schema_check.py` on push/PR and records CI hygiene boundaries for private/local state.
 Do not add C#/.NET runtime, Python brain runtime, provider calls, Unity work, scenarios, runtime cost collection, eval runner logic, Refinery/solver tooling, or simulation logic.
 Preserve the accepted Wave 1 contract semantics and treat green CI as mechanical evidence only, not domain approval.
 ```
