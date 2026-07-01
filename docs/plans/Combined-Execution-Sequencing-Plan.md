@@ -134,34 +134,53 @@ Execution steps use the same markers as epics:
 - `Track E session` = eval / replay / artifact validation / cost / quality
 - `Scenario/Analyst session` = optional later cascade/scenario/cost analysis
 
-### Execution-step structuring rule
+### Canonical execution-table protocol
 
-- if two or more tracks can work in parallel safely, keep them in the same numbered step
-- if one item must wait for another, move it to a later numbered step
-- do not split steps only to look more detailed
-- do split steps where contracts, artifacts, or gates create a real dependency
+Execution tables are the chronological contract for Meta and Track sessions. They must be unambiguous enough that a new session can tell what starts next, what may run in parallel, and what must wait.
 
-### Step isolation and same-track fork rule
+Hard formatting rules:
 
-A numbered step should be a set of actions that can be started from the same accepted prerequisite state.
-If a row depends on another row's output, that dependent row belongs in a later numbered step.
+- one execution-table row equals one concrete session assignment for one epic or one named gate;
+- do not put comma-separated epic IDs in a single `Epic(s)` cell;
+- a closeout, review fan-in, or wave-gate decision is also a single row, not bundled with implementation epics;
+- a numbered step is a chronological barrier: all rows in step N must be startable from the same accepted prerequisite frontier;
+- multiple rows inside the same numbered step mean explicit parallelism;
+- rows inside the same numbered step must use distinct `Session` labels;
+- rows inside the same numbered step must not depend on another row in that same step;
+- if one row needs another row's artifact, review, hygiene check, or gate result, put it in a later numbered step;
+- if the same session owns two epics, split them into separate numbered steps even when the files do not conflict;
+- same-session forked parallelism is not part of the current workflow and requires an explicit future workflow change before use;
+- notes may mention related epics, but must not hide execution order by implying two epics are done in one row;
+- if an older planned section still has bundled legacy rows, Meta must normalize that section to this protocol before opening it for implementation.
 
-Default preference:
+Good patterns:
 
 ```text
-one numbered step → one active implementation track
+Step N
+| Track B session | C2-A | Wave 1.5 ✅ | Build core shell. |
+| Track E session | E2-A | Wave 1.5 ✅ | Prepare independent verification fixture. |
 ```
 
-Parallel rows are allowed only when they are genuinely independent and the Meta Coordinator can brief them from the same stable context.
-If the same track appears more than once in a step, that is an explicit fork. The Meta Coordinator must provide:
+The two rows above may run in parallel only because they are different sessions and neither row waits for the other.
 
-- fork reason,
-- exact scope split,
-- shared contract assumptions,
-- merge-back expectation,
-- and which fork returns first if there is an implicit dependency.
+```text
+Step N
+| Track E session | CI15-B | CI15-A ✅ | Add contract CI workflow. |
 
-Same-track forks are allowed, but not preferred. Use them only when the parallelism is worth the extra coordination overhead.
+Step N+1
+| Track E session | CI15-C | CI15-B ✅ | Add hygiene/leak guard for that workflow. |
+```
+
+The two rows above are separate steps because the same session owns both epics and the second should inspect the first workflow artifact.
+
+Bad patterns:
+
+```text
+| Track E session | EPIC-B, EPIC-C | EPIC-A ✅ | Add workflow and hygiene guard. |
+| Meta Coordinator session | EPIC-D, EPIC-F | EPIC-B ✅ + EPIC-C ✅ | Record future slots. |
+```
+
+Both rows hide chronology by bundling multiple epics into one row. Split them before implementation starts.
 
 ### Optional Parallel Side-Lane rule
 
@@ -819,21 +838,38 @@ CI15-A closeout note, 2026-07-01:
 - Official local verify sequence is `python -m pip install -r requirements-dev.txt` followed by `python tools/schema_check.py`.
 - CI15-A defines scope only; it does not add GitHub Actions workflow files, runtime code, provider/model behavior, Unity work, scenarios, simulation logic, coverage hard gates, artifact upload, Refinery tooling, or formal-solver CI.
 - Local verification evidence at closeout: `python -m pip install -r requirements-dev.txt` confirmed the dev dependency is satisfied, and `python tools/schema_check.py` passed against 16 schemas and 41 fixture entries.
-- CI15-B/CI15-C are unblocked for Track E to implement the first reviewed contract CI workflow and hygiene/leak guard.
+- CI15-B is unblocked for Track E to implement the first reviewed contract CI workflow; CI15-C follows in the next sequential Track E step after the workflow artifact exists.
 
 **⬜ Step 2 — First CI implementation**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Track E session | CI15-B, CI15-C | CI15-A ✅ | Add `.github/workflows/contract-ci.yml` or equivalent reviewed workflow. It must run schema checker on push/PR and must not use secrets, provider calls, Unity, C# runtime, OpenCode sessions, or private artifact upload. |
+| Track E session | CI15-B | CI15-A ✅ | Add `.github/workflows/contract-ci.yml` or equivalent reviewed workflow. It must run schema checker on push/PR and must not use secrets, provider calls, Unity, C# runtime, OpenCode sessions, or private artifact upload. CI15-C waits for this workflow artifact. |
 
-**⬜ Step 3 — Future slots and closeout**
+**⬜ Step 3 — CI hygiene/leak guard**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Meta Coordinator session | CI15-D, CI15-F | CI15-B/C ✅ | Record future CI lanes: `core-dotnet-ci`, `brain-python-ci`, `unity-client-ci`, `scenario-replay-ci`, and `formal-intervention-ci`, but keep them blocked until those runtime/formal surfaces exist. |
-| Track E session | CI15-E | CI15-B/C ✅ | Record that coverage is report-only/later and must not become a hard threshold before stable runtime modules and test corpus exist. |
-| Meta Coordinator session | Wave 1.5 gate | CI15-D/E/F ✅ | Decide whether Wave 2 planning may proceed with contract CI in place or with explicit CI-debt rationale. |
+| Track E session | CI15-C | CI15-B ✅ | Add the CI hygiene/leak guard for the contract workflow. It must preserve the no-secrets, no-provider, no-Unity, no-C# runtime, no-OpenCode-session, and no-private-artifact-upload boundaries. Meta reviews any boundary wording at closeout. |
+
+**⬜ Step 4 — Future runtime and coverage slots**
+
+| Session | Epic(s) | Prereq | Notes |
+|---|---|---|---|
+| Meta Coordinator session | CI15-D | CI15-C ✅ | Record future runtime CI lanes: `core-dotnet-ci`, `brain-python-ci`, `unity-client-ci`, and `scenario-replay-ci`, but keep them blocked until those runtime surfaces exist. |
+| Track E session | CI15-E | CI15-C ✅ | Record that coverage is report-only/later and must not become a hard threshold before stable runtime modules and test corpus exist. This row may run in parallel with CI15-D because it uses a different session and the same prerequisite frontier. |
+
+**⬜ Step 5 — Future formal-intervention CI slot**
+
+| Session | Epic(s) | Prereq | Notes |
+|---|---|---|---|
+| Meta Coordinator session | CI15-F | CI15-D ✅ + CI15-E ✅ | Record the future `formal-intervention-ci` lane for Refinery families, but keep it blocked until a named family has fixtures, bridge/core differential checks, and no unsupported silent accepts. |
+
+**⬜ Step 6 — Wave 1.5 closeout gate**
+
+| Session | Epic(s) | Prereq | Notes |
+|---|---|---|---|
+| Meta Coordinator session | Wave 1.5 gate | CI15-D ✅ + CI15-E ✅ + CI15-F ✅ | Decide whether Wave 2 planning may proceed with contract CI in place or with explicit CI-debt rationale. |
 
 ### Wave gate
 
@@ -2216,30 +2252,32 @@ Ringfall must first produce stable artifacts independently.
 
 ## Current frontier
 
-The project is post-Wave-1 and pre-Wave-2 runtime implementation. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, and Wave 1 contract/artifact spine is accepted through W1-S7/C1-K. The accepted Wave 1 surface now includes schema drafts, valid/invalid examples, `tools/schema_check.py`, and cross-track contract handoff review. No C#/.NET solution, Python brain service, Unity project, model provider implementation, scenarios, or simulation logic has started. Wave 1.5 contract CI readiness is active: CI15-A is accepted, and the next mainline frontier is CI15-B/CI15-C contract CI workflow plus hygiene/leak guard before Wave 2 deterministic core work.
+The project is post-Wave-1 and pre-Wave-2 runtime implementation. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, and Wave 1 contract/artifact spine is accepted through W1-S7/C1-K. The accepted Wave 1 surface now includes schema drafts, valid/invalid examples, `tools/schema_check.py`, and cross-track contract handoff review. No C#/.NET solution, Python brain service, Unity project, model provider implementation, scenarios, or simulation logic has started. Wave 1.5 contract CI readiness is active: CI15-A is accepted, and the next mainline frontier is CI15-B contract CI workflow, followed by CI15-C hygiene/leak guard, before Wave 2 deterministic core work.
 
 The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-01` aligned post-Wave-0 status/frontier docs, and `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary with the Risk Register G1-G10 list. The separate Wave 1 planning brief is present at `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md`; W1-S1 through W1-S7 are accepted, and `docs/plans/W1-S7-C1-K-Contract-Handoff-Review-Packet.md` is the shared Wave 1 handoff/gate artifact for the transition into Wave 1.5 and later Wave 2 planning.
 
 ## Immediate sequence
 
 1. `CI15-A` is accepted in `docs/plans/Wave-1.5-CI15-A-CI-Readiness-Contract.md`: RingFall's official contract-CI scope and local verify contract are defined.
-2. Track E may implement `CI15-B`/`CI15-C`: the first GitHub Actions contract CI plus hygiene/leak guard.
-3. After `CI15-B/C`, Meta + Track E close `CI15-D/E/F`: future runtime CI slot map, future formal-intervention CI slot map, and report-only/later coverage policy.
-4. Do not start C#/.NET, Python brain, Unity, provider/model runtime, scenarios, or simulation logic from Wave 1 acceptance alone; Wave 2 waits for Wave 1.5 acceptance or an explicit Meta CI-debt exception.
-5. Treat `docs/design/Formal-Intervention-Gates-Refinery.md` as the approved formal-gate design direction, but do not implement Refinery tooling until a later named family gate opens.
+2. Track E may implement `CI15-B`: the first GitHub Actions contract CI workflow.
+3. Track E then implements `CI15-C`: the hygiene/leak guard against the accepted workflow artifact.
+4. After `CI15-C`, `CI15-D` and `CI15-E` may run in parallel in distinct Meta Coordinator and Track E sessions.
+5. After `CI15-D` and `CI15-E`, Meta closes `CI15-F`: the future formal-intervention CI slot map.
+6. Do not start C#/.NET, Python brain, Unity, provider/model runtime, scenarios, or simulation logic from Wave 1 acceptance alone; Wave 2 waits for Wave 1.5 acceptance or an explicit Meta CI-debt exception.
+7. Treat `docs/design/Formal-Intervention-Gates-Refinery.md` as the approved formal-gate design direction, but do not implement Refinery tooling until a later named family gate opens.
 
 ## First actionable step
 
 ```text
-Wave 1.5 / CI15-B and CI15-C — Track E implements the first reviewed contract CI workflow and hygiene/leak guard.
+Wave 1.5 / CI15-B — Track E implements the first reviewed contract CI workflow.
 ```
 
-Expected CI15-B/CI15-C implementation brief:
+Expected CI15-B implementation brief:
 
 ```text
-Prepare a narrow implementation for Wave 1.5 contract CI workflow and hygiene/leak guard.
+Prepare a narrow implementation for the Wave 1.5 contract CI workflow.
 Use the official local verify contract from `docs/plans/Wave-1.5-CI15-A-CI-Readiness-Contract.md`: `python -m pip install -r requirements-dev.txt` then `python tools/schema_check.py`.
-Add a reviewed GitHub Actions workflow that runs `python tools/schema_check.py` on push/PR and records CI hygiene boundaries for private/local state.
+Add a reviewed GitHub Actions workflow that runs `python tools/schema_check.py` on push/PR. Do not close CI15-C in the same row; hygiene/leak guard follows as the next sequential Track E step.
 Do not add C#/.NET runtime, Python brain runtime, provider calls, Unity work, scenarios, runtime cost collection, eval runner logic, Refinery/solver tooling, or simulation logic.
 Preserve the accepted Wave 1 contract semantics and treat green CI as mechanical evidence only, not domain approval.
 ```
