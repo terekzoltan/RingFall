@@ -4,11 +4,11 @@
 **Owner:** Meta Coordinator  
 **Scope:** Track-level execution ordering for Ringfall FP1 — Aster/Vireo/Black Seam Slice  
 **Intent:** turn the Ringfall design canon into an actually executable Meta + Track wave plan  
-**Status:** active planning document / v03 controlled-parallelism revision  
+**Status:** active planning document / v04 controlled-parallelism + formal-intervention-gate revision
 **Baseline source:** `Ringfall-Implementation-Wave-Plan-v01.md`  
 **Expected location:** `docs/plans/Combined-Execution-Sequencing-Plan.md`  
 
-**v03 revision note:** This version preserves the v02 sequencing format but adds controlled optional parallel side-lanes. The main numbered steps remain the source of the next green-lit action. Optional side-lanes are capacity accelerators, not hidden prerequisites.
+**v04 revision note:** This version preserves the v03 controlled side-lane structure and integrates the approved Refinery direction as bounded formal intervention gates. Refinery is not a full-world model and is not part of Wave 1.5 contract CI; it becomes a family-by-family safety gate starting with Aster L1 tool/work-order proposals.
 
 ---
 
@@ -60,14 +60,15 @@ The execution ladder is:
 1. **Canon and skeleton** — docs, repo, contracts, artifact shape
 2. **Headless truth** — deterministic sim core and no-LLM state transitions
 3. **Cognition boundary** — brain emits typed packets, never truth
-4. **First L1 vertical** — Aster Heat Alarm proves LLM minds / deterministic hands
-5. **Memory and replay** — beliefs, rumors, visibility, and hard gates
-6. **L2 institutions** — real control rooms and withholding
-7. **L3 doctrine** — council, Charter, emergency powers
-8. **Cross-institution FP1** — Morrow, Ration, House, public narrative
-9. **Canonical hardening** — replay/eval/cost/regression
-10. **Unity observer** — visual legibility from artifacts
-11. **Remote/demo readiness** — safe curated package
+4. **Formal intervention safety** — named Refinery families check bounded candidate facts before runtime apply
+5. **First L1 vertical** — Aster Heat Alarm proves LLM minds / deterministic hands
+6. **Memory and replay** — beliefs, rumors, visibility, and hard gates
+7. **L2 institutions** — real control rooms and withholding
+8. **L3 doctrine** — council, Charter, emergency powers
+9. **Cross-institution FP1** — Morrow, Ration, House, public narrative
+10. **Canonical hardening** — replay/eval/cost/regression
+11. **Unity observer** — visual legibility from artifacts
+12. **Remote/demo readiness** — safe curated package
 
 The sequencing rule is:
 
@@ -101,6 +102,7 @@ Execution steps use the same markers as epics:
 - `READY` = prerequisites are accepted; track may begin
 - `HANDOFF READY` = producing track explicitly provides contract/artifact usable by consumer track
 - `VERIFY FIRST` = implementation may exist, but dependent work waits for smoke/schema/replay verification
+- `FORMAL READY` = a named bounded intervention family has fixtures, Refinery model evidence, bridge/core differential checks, and no unsupported silent accepts
 - `CANONICAL READY` = artifact-backed, hard-gate checked, and acceptable for canonical evidence
 - `DEV ONLY` = usable for local/dev experimentation but not canonical evidence
 
@@ -111,6 +113,7 @@ Execution steps use the same markers as epics:
 - `contract gate` = schemas/examples/consumers agree
 - `artifact gate` = required manifest/traces/diffs/cost/eval exist
 - `replay gate` = artifact or deterministic replay works
+- `formal intervention gate` = a bounded Refinery family checks candidate facts for a named intervention surface; it is not a full-world correctness claim
 - `wave gate` = mandatory epics complete and risks documented
 - `canonical gate` = hard evals pass and run mode is canonical
 
@@ -316,6 +319,7 @@ Wave 11: D/E/Meta remote/demo
 | MR-8 | L3 micromanagement | Council bypasses L1/L2 | L3 packet schema + authority eval |
 | MR-9 | Memory contamination | rumor/belief/official line becomes fact | Claim taxonomy and memory evals |
 | MR-10 | FP1 scope creep | Too many new systems before verticals prove | Meta guardrail and Risk Register |
+| MR-11 | Formal-model false assurance | Refinery model drifts from Core or silently treats unsupported surfaces as valid | bounded family ids, no-overclaim matrix, differential harness vs Core validator |
 
 ---
 
@@ -388,13 +392,15 @@ Prove the world exists without LLMs.
 
 Prove cognition emits packets, not truth.
 
+Formal-gate prep: output must be packet/candidate-fact shaped so later Refinery gates can consume it without trusting free-form prose.
+
 ### Wave 4 — L1 Aster vertical
 
-Prove LLM minds / deterministic hands.
+Prove LLM minds / deterministic hands through the first bounded formal intervention family: Aster L1 tool/work-order proposals.
 
 ### Wave 5 — Memory/replay/eval hard gates
 
-Prove the system can remember and replay safely.
+Prove the system can remember and replay safely, with memory/visibility formal-gate expansion if the Aster family has stabilized.
 
 ### Wave 6 — L2 institutions
 
@@ -403,6 +409,8 @@ Prove the middle layer is an actual institutional layer.
 ### Wave 7 — L3 council/doctrine
 
 Prove macro governance without micromanagement.
+
+Formal-gate expectation: L3 doctrine/emergency checks must remain macro-only and must not become a full governance/world model.
 
 ### Wave 8 — Cross-institution scenarios
 
@@ -775,6 +783,7 @@ Wave 1 passes when minimum schemas and examples validate, and downstream tracks 
 - ⬜ GitHub Actions contract CI that runs `python tools/schema_check.py`
 - ⬜ hygiene/leak boundary statement for CI artifacts and ignored private/local state
 - ⬜ future runtime CI slot map for C# core, Python brain, Unity client, and scenario replay
+- ⬜ future formal-intervention CI slot map for Refinery families, kept inactive until a named family has fixtures and a differential harness
 - ⬜ coverage policy kept report-only/later until runtime modules and test corpus exist
 
 ### Sprint breakdown
@@ -794,6 +803,7 @@ Epics:
 
 Epics:
 - ⬜ **CI15-D** Future runtime CI slot map — **Owner: Meta**
+- ⬜ **CI15-F** Future formal-intervention CI slot map — **Owner: Meta/Track E**
 - ⬜ **CI15-E** Coverage policy later/report-only — **Owner: Track E**
 
 ### Execution Steps
@@ -814,19 +824,20 @@ Epics:
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Meta Coordinator session | CI15-D | CI15-B/C ✅ | Record future CI lanes: `core-dotnet-ci`, `brain-python-ci`, `unity-client-ci`, and `scenario-replay-ci`, but keep them blocked until those runtime surfaces exist. |
+| Meta Coordinator session | CI15-D, CI15-F | CI15-B/C ✅ | Record future CI lanes: `core-dotnet-ci`, `brain-python-ci`, `unity-client-ci`, `scenario-replay-ci`, and `formal-intervention-ci`, but keep them blocked until those runtime/formal surfaces exist. |
 | Track E session | CI15-E | CI15-B/C ✅ | Record that coverage is report-only/later and must not become a hard threshold before stable runtime modules and test corpus exist. |
-| Meta Coordinator session | Wave 1.5 gate | CI15-D/E ✅ | Decide whether Wave 2 planning may proceed with contract CI in place or with explicit CI-debt rationale. |
+| Meta Coordinator session | Wave 1.5 gate | CI15-D/E/F ✅ | Decide whether Wave 2 planning may proceed with contract CI in place or with explicit CI-debt rationale. |
 
 ### Wave gate
 
-Wave 1.5 passes when Ringfall has a narrow contract CI workflow protecting `tools/schema_check.py`, private/local state boundaries are preserved, future runtime CI lanes are documented, and no runtime/provider/Unity/simulation scope has opened.
+Wave 1.5 passes when Ringfall has a narrow contract CI workflow protecting `tools/schema_check.py`, private/local state boundaries are preserved, future runtime/formal-intervention CI lanes are documented, and no runtime/provider/Unity/simulation/formal-solver scope has opened.
 
 ### Hold conditions
 - CI requires secrets or provider/model credentials
 - CI runs OpenCode sessions
 - CI uploads private/local FAL, `.opencode`, `.swarm`, `data/runs`, or design-canon artifacts
 - CI tries to build non-existent C#/.NET, Python brain, Unity, provider, scenario, or simulation surfaces
+- CI tries to run Refinery/formal intervention checks before a named family, fixtures, bridge, and differential harness exist
 - coverage is introduced as a broad hard gate before runtime modules exist
 - green CI is represented as domain/FAL approval instead of mechanical evidence
 
@@ -930,6 +941,12 @@ These can run after Wave 1 contract gate, while Track B builds the deterministic
   - no Unity sim truth, no gameplay
   - must carry the Track A C1-K route forward: connected artifact bundle graph assumptions need Track B/E review if they affect contracts or validation
 
+- **OSL-W2-D — Track B/E Refinery formal-gate spike planning**
+  - prereq: Wave 1.5 future formal-intervention CI slot recorded; no runtime dependency required
+  - output: design-only candidate for the F0 artifact-bundle graph family and F1 Aster L1 action/work-order family
+  - must not add Refinery runtime dependency, Docker/Java wiring, solver CI, C# bridge, Python bridge, or schema-body changes
+  - must classify every proposed check as `proved_by_refinery`, `guarded_by_core_validator`, `schema_only`, `observability_only`, or `unsupported`
+
 These side-lanes are useful because they touch separate paths. They must return merge briefs before being absorbed into Wave 3/10 work.
 
 ### Wave gate
@@ -942,6 +959,7 @@ Wave 2 passes when a no-LLM Aster seed run is deterministic and writes valid man
 - determinism not controlled
 - no artifact output
 - artifact bundle validation ignores the routed C1-K loader-graph concern without marking it in-scope, not-yet-in-scope, or already resolved
+- Refinery/formal-gate planning claims full-world validation or creates a hard Wave 2 dependency
 
 ---
 
@@ -961,6 +979,7 @@ Wave 2 passes when a no-LLM Aster seed run is deterministic and writes valid man
 - ⬜ mock provider
 - ⬜ OpenRouter provider shell
 - ⬜ strict JSON parser/validator
+- ⬜ designated output-area discipline for future formal intervention gates: model output is packet/candidate-fact shaped, not direct patches
 - ⬜ cognition trace writer
 - ⬜ cost tracker
 - ⬜ L1 pulse prompt/context template
@@ -1045,6 +1064,7 @@ Epics:
 Wave 3 carry-forward routes:
 - Track D owns the C1-K CostEvent provider/model evidence route. At the first provider/runtime implementation or runtime artifact bundle validation gate, CostEvent must be reconcilable with real provider request/response evidence before canonical provider evidence.
 - Track C owns the C1-K positive memory example route if Wave 3 expands prompt-memory fixtures. Positive examples for rumor, belief, official_line, and withheld_item must be added or explicitly judged not yet in scope, with Track B/E review if schemas, examples, or tooling are touched.
+- Track D/C own the future formal-gate output-area discipline: brain responses must remain strict packet/candidate-fact outputs that can be rejected, repaired, or classified unsupported before any Core apply.
 
 Do not start full L1 scene semantics before B3-F draft and strict JSON path are reviewed.
 
@@ -1057,6 +1077,7 @@ Wave 3 passes when mock cognition creates a schema-valid L1 pulse and a cognitio
 - hidden truth appears in L1 context
 - no cost trace
 - strict JSON not enforced
+- model output bypasses the future formal-gate-compatible candidate output area by emitting direct world patches or unbounded commands
 - real API key committed
 - real/manual provider evidence cannot be reconciled to CostEvent records once provider calls are enabled
 
@@ -1078,6 +1099,7 @@ Wave 3 passes when mock cognition creates a schema-valid L1 pulse and a cognitio
 - ⬜ crew_aster_repair_02
 - ⬜ local_grid_panel + maintenance_console minimal
 - ⬜ WorkOrderRequest/ToolAction execution
+- ⬜ Aster F1 formal intervention gate for L1 ToolAction/WorkOrder candidate facts, report-only during integration and hard before Wave 4 closeout
 - ⬜ ExecutionResult/VisibilityPartition
 - ⬜ Aster cognition/action/state/memory/cost traces
 
@@ -1100,6 +1122,7 @@ Epics:
 - ⬜ **A4-D** A1 pulse/scene prompt and context — **Owner: Track C**
 - ⬜ **A4-E** Brain emits ToolAction/WorkOrder packets — **Owner: Track D**
 - ⬜ **A4-F** Core validates authority/tool/crew packets — **Owner: Track B**
+- ⬜ **A4-J** Aster F1 formal intervention gate — **Owner: Track B/E**
 
 #### Sprint W4-S3 — End-to-end Aster Heat Alarm
 
@@ -1124,7 +1147,7 @@ Epics:
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
 | Track C session | A4-D | A4-A ✅ | Write L1 prompt/context rules. |
-| Track B session | A4-F | A4-B/C ✅ | Implement authority/tool/crew validation; reject invalid L1 macro actions. |
+| Track B session | A4-F, A4-J draft | A4-B/C ✅ | Implement authority/tool/crew validation and the Aster F1 formal intervention family in report-only mode; reject invalid L1 macro actions through Core regardless of solver status. |
 
 **⬜ Step 3**
 
@@ -1143,13 +1166,13 @@ Epics:
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Track E session | A4-I | A4-G/H ✅ | Run hard gates: schema, authority, hidden leak. |
+| Track E session | A4-I, A4-J evidence | A4-G/H ✅ | Run hard gates: schema, authority, hidden leak, and Aster F1 formal-gate differential evidence before Wave 4 closeout. |
 
 **⬜ Step 6**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Meta Coordinator session | Wave 4 closeout | A4-I ✅ | Decide whether Wave 5 memory/replay can start. |
+| Meta Coordinator session | Wave 4 closeout | A4-I ✅ + A4-J evidence accepted | Decide whether Wave 5 memory/replay can start. |
 ### Optional parallel side-lanes
 
 Wave 4 is the first real vertical, so parallelism must stay conservative.
@@ -1173,13 +1196,14 @@ Avoid extra same-track forks here unless the Meta Coordinator has a clear merge 
 
 ### Wave gate
 
-Wave 4 passes when Aster Heat Alarm runs end-to-end with L1 cognition, tool/crew execution, state diff, and hard-gate smoke artifacts.
+Wave 4 passes when Aster Heat Alarm runs end-to-end with L1 cognition, tool/crew execution, state diff, hard-gate smoke artifacts, and Aster F1 formal intervention gate evidence that agrees with Core authority validation for the scoped fixtures/artifacts.
 
 ### Hold conditions
 - L1 can issue L2/L3 action
 - LLM directly mutates state
 - hidden thermal debt in L1 context
 - tool/crew execution not traceable
+- Aster F1 formal intervention gate silently accepts unsupported candidate facts or disagrees with Core without a blocking diagnostic
 
 ---
 
@@ -1199,6 +1223,7 @@ Wave 4 passes when Aster Heat Alarm runs end-to-end with L1 cognition, tool/crew
 - ⬜ public rumor minimal
 - ⬜ positive memory examples or explicit not-yet-in-scope decision for rumor, belief, official_line, and withheld_item
 - ⬜ visibility partition validation
+- ⬜ F2 memory/visibility formal-gate expansion or explicit unsupported/no-hard-gate decision if F1 is not stable enough
 - ⬜ hidden truth leak eval
 - ⬜ rumor/fact contamination eval
 - ⬜ artifact replay for Aster
@@ -1223,6 +1248,7 @@ Epics:
 - ⬜ **M5-D** Utility coverup rumor/narrative state — **Owner: Track C**
 - ⬜ **M5-E** VisibilityPartition eval — **Owner: Track E**
 - ⬜ **M5-F** hidden truth leak regression case — **Owner: Track E**
+- ⬜ **M5-J** F2 memory/visibility formal-gate expansion decision — **Owner: Track C/E/B**
 
 #### Sprint W5-S3 — Artifact replay
 
@@ -1258,7 +1284,7 @@ Epics:
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Track E session | M5-E, M5-F | M5-D ✅ | Add VisibilityPartition and hidden truth leak checks. |
+| Track E session | M5-E, M5-F, M5-J evidence | M5-D ✅ | Add VisibilityPartition and hidden truth leak checks; decide whether F2 memory/visibility formal-gate checks are hard, report-only, or explicitly unsupported for this wave. |
 
 **⬜ Step 5**
 
@@ -1292,12 +1318,13 @@ Epics:
 Wave 5 carry-forward routes:
 - Track C owns the C1-K positive memory example route if it was not closed in Wave 3. Positive examples for rumor, belief, official_line, and withheld_item must be added or explicitly judged not yet in scope before memory semantics are treated as complete.
 - Track E owns the C1-K EvalEvent/eval-runner decision. Later eval/replay schema and runtime artifact validation gates must decide whether EvalEvent is required before implementing eval-runner or replay evidence expansion.
+- Track C/E/B own the F2 memory/visibility formal-family decision. If it is implemented, it must classify rumor, belief, official_line, withheld_item, fact, hidden visibility, and source-ref relationships with a no-overclaim matrix before canonical memory claims.
 
 Memory/replay work is subtle. Do not run side-lanes that alter claim semantics without Meta and Track E review.
 
 ### Wave gate
 
-Wave 5 passes when Aster artifact replay works and memory/visibility hard gates pass.
+Wave 5 passes when Aster artifact replay works, memory/visibility hard gates pass, and the F2 memory/visibility formal-family decision is accepted as hard, report-only, or explicitly unsupported/not-yet-in-scope.
 
 ### Hold conditions
 - rumor stored as fact
@@ -1305,6 +1332,7 @@ Wave 5 passes when Aster artifact replay works and memory/visibility hard gates 
 - hidden truth leak
 - artifact replay cannot reproduce downstream effects
 - role/memory implementation proceeds without resolving or explicitly deferring the C1-K positive memory example concern
+- memory/visibility formal-gate expansion treats natural-language truth or unmodeled claim graph semantics as formally validated
 
 ---
 
@@ -1321,6 +1349,7 @@ Wave 5 passes when Aster artifact replay works and memory/visibility hard gates 
 ### Mandatory outputs
 - ⬜ InstitutionProfile/Seat/Dashboard
 - ⬜ InstitutionBrief/Order/WithholdingRecord/EscalationRequest
+- ⬜ F3 institution-order formal intervention gate for bounded L2 order/withholding/escalation surfaces, hard only after Utility Board fixtures and Core differential evidence exist
 - ⬜ Utility Board full vertical
 - ⬜ Bio-Life Directorate vertical
 - ⬜ Dock/Warden/Security/Ration/House skeletons
@@ -1336,6 +1365,7 @@ Epics:
 - ⬜ **L6-A** Utility Board profile/seats/dashboard — **Owner: Track B/C**
 - ⬜ **L6-B** L2 seat packets + chair synthesis — **Owner: Track C/D**
 - ⬜ **L6-C** WithholdingRecord and InstitutionOrder execution — **Owner: Track B/C**
+- ⬜ **L6-L** F3 institution-order formal intervention gate — **Owner: Track B/E/C**
 - ⬜ **L6-D** Utility L2 eval — **Owner: Track E**
 
 #### Sprint W6-S2 — Bio-Life Directorate vertical
@@ -1371,13 +1401,13 @@ Epics:
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
 | Track D session | Utility L2 runtime integration | Utility prompt/schema handoff accepted | Run L2 seat/chair lane through brain. |
-| Track B session | L6-C | L6-A ✅ | Execute InstitutionOrder/WithholdingRecord artifacts. |
+| Track B session | L6-C, L6-L draft | L6-A ✅ | Execute InstitutionOrder/WithholdingRecord artifacts and draft the F3 institution-order formal gate for bounded authority/withholding/escalation checks. |
 
 **⬜ Step 3**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Track E session | L6-D | L6-B/C ✅ | Check no neutral summary collapse / no omniscient dashboard. |
+| Track E session | L6-D, L6-L evidence | L6-B/C ✅ | Check no neutral summary collapse / no omniscient dashboard; compare F3 formal verdicts against Core authority/eval verdicts if F3 is active. |
 
 **⬜ Step 4**
 
@@ -1432,7 +1462,7 @@ The main numbered steps still control readiness. Bio-Life runtime work should no
 
 ### Wave gate
 
-Wave 6 passes when Utility Board and Bio-Life verticals work, and all 7 L2 institutions exist at least as loadable skeletons.
+Wave 6 passes when Utility Board and Bio-Life verticals work, all 7 L2 institutions exist at least as loadable skeletons, and any active F3 institution-order formal gate has no Core/Refinery drift or unsupported silent accepts.
 
 ### Hold conditions
 - L2 gets true hidden state
@@ -1440,6 +1470,7 @@ Wave 6 passes when Utility Board and Bio-Life verticals work, and all 7 L2 insti
 - no withholding trace
 - L2 outputs all neutral/generic
 - Bio symptom cluster becomes pathogen fact prematurely
+- L2 formal gate validates institution/world behavior beyond the bounded order/withholding/escalation family
 
 ---
 
@@ -1460,6 +1491,7 @@ Wave 6 passes when Utility Board and Bio-Life verticals work, and all 7 L2 insti
 - ⬜ CouncilChairSynthesis
 - ⬜ CharterAuditPacket
 - ⬜ CouncilDoctrinePacket/NoActionPacket
+- ⬜ F4 council-doctrine formal intervention gate for macro-only doctrine/emergency decisions
 - ⬜ Black Seam state/actors
 - ⬜ Deepworks Warden vertical
 - ⬜ Demo C L3 decision
@@ -1491,6 +1523,7 @@ Epics:
 Epics:
 - ⬜ **G7-G** L3 seat calls + chair synthesis — **Owner: Track C/D**
 - ⬜ **G7-H** Charter Auditor and sunset eval — **Owner: Track C/E**
+- ⬜ **G7-K** F4 council-doctrine formal intervention gate — **Owner: Track B/E/C**
 - ⬜ **G7-I** Controlled excerpt access decision effects — **Owner: Track B**
 - ⬜ **G7-J** L3 review package — **Owner: Track E/Meta**
 
@@ -1525,13 +1558,13 @@ Epics:
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Track E/C session | G7-H | G7-G ✅ | Evaluate sunset/Charter/no-micromanagement; refine Charter prompt if needed. |
+| Track E/C session | G7-H, G7-K evidence | G7-G ✅ | Evaluate sunset/Charter/no-micromanagement; run F4 formal-gate evidence if active; refine Charter prompt if needed. |
 
 **⬜ Step 6**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Track B session | G7-I | G7-G/H ✅ | Apply controlled excerpt access effects through core. |
+| Track B session | G7-I, G7-K mapper/core comparison | G7-G/H ✅ | Apply controlled excerpt access effects through core only after F4 formal/core verdicts agree or unsupported surfaces are blocked. |
 
 **⬜ Step 7**
 
@@ -1564,7 +1597,7 @@ Meta must merge these before the final Black Seam L3 vertical gate.
 
 ### Wave gate
 
-Wave 7 passes when Black Seam Protocol Access produces a valid L3 council decision with Charter conditions and no local micromanagement.
+Wave 7 passes when Black Seam Protocol Access produces a valid L3 council decision with Charter conditions, no local micromanagement, and F4 council-doctrine formal-gate evidence for bounded macro-only doctrine/emergency checks.
 
 ### Hold conditions
 - L3 orders local repair/crew action
@@ -1572,6 +1605,7 @@ Wave 7 passes when Black Seam Protocol Access produces a valid L3 council decisi
 - Deepworks hidden truth leaks
 - Charter ignored
 - Qwen/model-bakeoff reopened without Meta decision
+- F4 formal model validates local repair/crew actions or other non-macro surfaces
 
 ---
 
@@ -2035,10 +2069,10 @@ Wave 11 passes when a curated sanitized FP1 run can be packaged, validated, load
 | Wave 1.5 | 2 | Meta/E | schema checker | contract CI + CI policy slots |
 | Wave 2 | 3 | B | C# solution | deterministic no-LLM run |
 | Wave 3 | 3 | D/C | model policy/mock | cognition trace |
-| Wave 4 | 3 | B/C/D/E | Aster context | L1 action/tool/crew vertical |
-| Wave 5 | 3 | C/E/B | memory contracts | artifact replay + hard gates |
-| Wave 6 | 3 | C/B/D/E | Utility Board | L2 Utility/Bio vertical |
-| Wave 7 | 3 | C/B/D/E | doctrine contracts | Black Seam L3 decision |
+| Wave 4 | 3 | B/C/D/E | Aster context | L1 action/tool/crew vertical + F1 formal gate |
+| Wave 5 | 3 | C/E/B | memory contracts | artifact replay + hard gates + F2 decision |
+| Wave 6 | 3 | C/B/D/E | Utility Board | L2 Utility/Bio vertical + F3 evidence if active |
+| Wave 7 | 3 | C/B/D/E | doctrine contracts | Black Seam L3 decision + F4 evidence |
 | Wave 8 | 3 | all | Morrow/Ration/House data | five-demo headless set |
 | Wave 9 | 3 | E/Meta | eval hardening | FP1 canonical gate |
 | Wave 10 | 3 | A | artifact loader | Unity observer loads FP1 |
@@ -2052,7 +2086,7 @@ Best side-lane zones:
 
 | Zone | Recommended parallelism | Why it is safe |
 |---|---|---|
-| Wave 2/3 | Track B core + Track D brain skeleton + Track E eval skeleton + Track A loader planning | separate folders, contracts already gated |
+| Wave 2/3 | Track B core + Track D brain skeleton + Track E eval skeleton + Track A loader planning + Track B/E formal-gate spike planning | separate folders, contracts already gated, formal spike is design-only |
 | Wave 6 | Bio-Life prep while Utility Board runtime stabilizes | prep only; runtime waits for Utility proof |
 | Wave 7 | L3 prompt law + Black Seam data + L3 eval skeleton | independent surfaces, merged before L3 vertical |
 | Wave 8 | Morrow/Ration and House lanes | strongest safe feature parallelism |
@@ -2183,8 +2217,9 @@ The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-0
 
 1. Open Wave 1.5 `CI15-A` under a new Meta-gated implementation plan: define RingFall's official contract-CI scope and local verify contract.
 2. After `CI15-A`, Track E may implement `CI15-B`/`CI15-C`: the first GitHub Actions contract CI plus hygiene/leak guard.
-3. After `CI15-B/C`, Meta + Track E close `CI15-D/E`: future runtime CI slot map and report-only/later coverage policy.
+3. After `CI15-B/C`, Meta + Track E close `CI15-D/E/F`: future runtime CI slot map, future formal-intervention CI slot map, and report-only/later coverage policy.
 4. Do not start C#/.NET, Python brain, Unity, provider/model runtime, scenarios, or simulation logic from Wave 1 acceptance alone; Wave 2 waits for Wave 1.5 acceptance or an explicit Meta CI-debt exception.
+5. Treat `docs/design/Formal-Intervention-Gates-Refinery.md` as the approved formal-gate design direction, but do not implement Refinery tooling until a later named family gate opens.
 
 ## First actionable step
 
@@ -2196,8 +2231,8 @@ Expected Wave 1.5 planning brief:
 
 ```text
 Prepare a narrow plan for Wave 1.5 contract CI readiness.
-Define the official local verify command around `python tools/schema_check.py`, the first GitHub Actions contract CI lane, CI hygiene/leak boundaries, future runtime CI slots, and report-only/later coverage policy.
-Do not add C#/.NET runtime, Python brain runtime, provider calls, Unity work, scenarios, runtime cost collection, eval runner logic, or simulation logic.
+Define the official local verify command around `python tools/schema_check.py`, the first GitHub Actions contract CI lane, CI hygiene/leak boundaries, future runtime CI slots, future formal-intervention CI slot, and report-only/later coverage policy.
+Do not add C#/.NET runtime, Python brain runtime, provider calls, Unity work, scenarios, runtime cost collection, eval runner logic, Refinery/solver tooling, or simulation logic.
 Preserve the accepted Wave 1 contract semantics and treat green CI as mechanical evidence only, not domain approval.
 ```
 
@@ -2357,6 +2392,7 @@ Meta must:
 - sequence track handoffs,
 - require artifacts for claims,
 - enforce findings-first review,
+- enforce formal-gate no-overclaim language and unsupported-surface diagnostics,
 - update decision log when locked decisions change,
 - stop hidden truth leaks,
 - stop direct LLM state mutation,
@@ -2368,6 +2404,7 @@ Meta should not:
 - let tracks silently adapt broken contracts,
 - reopen model choices casually,
 - couple Ringfall to FAL runtime too early.
+- treat `Refinery valid` as full-world correctness or as permission to bypass Core validation.
 
 ---
 
@@ -2385,6 +2422,8 @@ These are not blockers for Wave 0.
 - L3 heavy debate mode
 - Charter Auditor soft veto mode
 - future model bakeoff timing
+- exact Refinery integration route: local Docker CLI, Java library, or a later pinned tool wrapper
+- first formal-gate CI activation timing after F1 fixtures and differential harness exist
 
 Do not block Wave 0 or Wave 1 on these.
 
@@ -2418,10 +2457,10 @@ The near-term path is:
 
 ```text
 Wave 0 → Wave 1 → Wave 2 → Wave 3 → Wave 4
-repo/docs → contracts → core → brain → Aster vertical
+repo/docs → contracts → core → brain → Aster vertical + first formal intervention gate
 ```
 
-If the Aster vertical becomes real and replayable, the rest of Ringfall has a foundation.  
+If the Aster vertical becomes real, replayable, and formally bounded at the intervention surface, the rest of Ringfall has a foundation.
 If the project skips to UI, models, or broad world scope before that, it risks becoming LLM theater.
 
 Implementation motto:

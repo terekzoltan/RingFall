@@ -19,6 +19,8 @@ Current W1-S6 static fixtures cover the routed generic schema categories, includ
 
 The schema checker is dev-only contract tooling. It does not implement a runtime validation pipeline, provider/model routing, eval runner behavior, world simulation behavior, scenario generation, or canonical artifact production.
 
+It also does not implement Refinery formal intervention gates. Future Refinery fixtures, if added, must live behind a reviewed formal-family gate and must clearly distinguish `proved_by_refinery`, `guarded_by_core_validator`, `schema_only`, `observability_only`, and `unsupported` claims.
+
 Static semantic checks are limited to W1-S2 through W1-S5 routed validation debt that can be inspected inside example JSON files.
 
 `source_ref_vocabulary` validates `ref_type` only inside known reference structures such as `source_refs`, `system_refs`, `artifact_refs`, and explicit `*_ref` fields that use source-reference objects. It does not define a global `ref_type` namespace for arbitrary fixture objects. Bundle-level reference existence and cross-artifact consistency remain deferred to runtime/artifact bundle validation.
@@ -41,3 +43,4 @@ Deferred runtime/artifact-context debts are routed to the W1-S7/C1-K contract ha
 - a connected manifest-to-trace-to-state/eval artifact bundle graph, routed to the first artifact bundle validation or Track A loader-planning gate with Track A ownership and Track B/E support if contract validation is touched;
 - real CostEvent provider/model evidence reconciliation against provider request/response records, routed to the first Track D provider/runtime implementation or runtime artifact bundle validation gate;
 - EvalEvent and eval-runner behavior decisions, routed to later Track E eval/replay schema and runtime artifact validation gates.
+- bounded Refinery formal intervention models and differential harnesses, routed to the later formal-family gates documented in `docs/design/Formal-Intervention-Gates-Refinery.md`.

@@ -374,6 +374,8 @@ Meta implemented only the `W1-S7-C1-K` cross-track contract handoff review and W
 
 ## Next Meta Gate Decision
 
-Meta accepts `W1-S7-C1-K` and Wave 1 contract handoff as complete. Wave 2 deterministic core/headless shell planning may begin under a new Meta-gated implementation plan.
+Meta accepts `W1-S7-C1-K` and Wave 1 contract handoff as complete. The immediate post-Wave-1 frontier is Wave 1.5 contract CI readiness, followed by Wave 2 deterministic core/headless shell planning under a new Meta-gated implementation plan or an explicit Meta CI-debt exception.
 
 Wave 1 remains closed after the post-closeout pre-Wave-2 cleanup. No runtime work is approved by this cleanup.
+
+Post-Wave-1 formal-intervention gate direction is tracked outside Wave 1 scope in `docs/design/Formal-Intervention-Gates-Refinery.md`: Refinery may later be used as a bounded family-by-family formal gate, starting with Aster L1 tool/work-order proposals, but Wave 1 acceptance does not approve Refinery tooling, solver CI, runtime bridge code, or a full formal world model.

@@ -10,6 +10,10 @@ W1 schemas are draft contract surfaces. Structural validation is available throu
 
 Future execution-impacting model outputs must become strict typed packets before they can affect the simulation. Contracts must not allow direct LLM world-state mutation or authoritative truth edits.
 
+The approved Refinery direction does not replace JSON Schema. JSON Schema remains the external artifact shape contract; future Refinery models may add bounded formal intervention gates for named candidate-output families after schema validation and before Core authority validation. A formal gate must return `valid`, `invalid`, `repairable`, `unsupported`, or `fallback` evidence and must not directly write runtime state. Full-world formal validation is explicitly out of scope.
+
 ## Runtime Next Steps Remain Blocked
 
 C#/.NET runtime code, Python runtime code, provider/model behavior, Unity work, scenarios, generated artifacts, eval runner logic, runtime cost collection, and simulation logic remain out of scope.
+
+Refinery runtime integration, formal gate CI, bridge mapping, and generated formal evidence are also out of scope until a later reviewed implementation gate opens them.
