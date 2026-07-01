@@ -1,0 +1,28 @@
+name: Contract CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  schema-check:
+    name: Schema checker
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dev requirements
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Run contract schema checker
+        run: python tools/schema_check.py
