@@ -914,11 +914,17 @@ CI15-F closeout note, 2026-07-03:
 - Future activation must preserve the no-overclaim boundary: `Refinery valid` is never domain approval or full-world correctness, and unsupported surfaces must not be silently accepted.
 - Wave 1.5 contract CI remains limited to mechanical schema/hygiene evidence around `tools/schema_check.py` and does not run formal-intervention tooling.
 
-**⬜ Step 6 — Wave 1.5 closeout gate**
+**✅ Step 6 — Wave 1.5 closeout gate**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Meta Coordinator session | Wave 1.5 gate | CI15-D ✅ + CI15-E ✅ + CI15-F ✅ | Decide whether Wave 2 planning may proceed with contract CI in place or with explicit CI-debt rationale. |
+| Meta Coordinator session | Wave 1.5 gate | CI15-D ✅ + CI15-E ✅ + CI15-F ✅ | Completed. Wave 2 planning may proceed with contract CI in place; no explicit CI-debt exception is required. |
+
+Wave 1.5 closeout note, 2026-07-03:
+- Meta accepted Wave 1.5 without a CI-debt exception because CI15-A through CI15-F are complete and internally consistent.
+- Accepted Wave 1.5 outputs now include the local contract-CI readiness contract, the reviewed contract CI workflow, the CI hygiene/leak guard with durable proof coverage, the future runtime CI lane slot map, the report-only/later coverage policy, and the future formal-intervention CI slot map.
+- Wave 2 may begin with Track B `K2-A` / `K2-B`: create the first C# solution and headless CLI skeleton without brain/provider/Unity/runtime cross-dependencies.
+- Green Wave 1.5 CI remains mechanical evidence only; it does not claim domain approval, runtime correctness, or formal-model execution readiness.
 
 ### Wave gate
 
@@ -2301,7 +2307,7 @@ Ringfall must first produce stable artifacts independently.
 
 ## Current frontier
 
-The project is post-Wave-1 and pre-Wave-2 runtime implementation. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, and Wave 1 contract/artifact spine is accepted through W1-S7/C1-K. The accepted Wave 1 surface now includes schema drafts, valid/invalid examples, `tools/schema_check.py`, and cross-track contract handoff review. No C#/.NET solution, Python brain service, Unity project, model provider implementation, scenarios, or simulation logic has started. Wave 1.5 contract CI readiness is active: CI15-A, CI15-B, CI15-C, CI15-D, CI15-E, and CI15-F are accepted. The Wave 1.5 closeout gate is the next immediate sequence frontier.
+The project is post-Wave-1 and is now opening Wave 2 runtime implementation. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, Wave 1 contract/artifact spine is accepted through W1-S7/C1-K, and Wave 1.5 contract CI readiness is accepted through CI15-A/B/C/D/E/F with no recorded CI-debt exception. The accepted Wave 1 surface now includes schema drafts, valid/invalid examples, `tools/schema_check.py`, the reviewed contract CI workflow, the CI hygiene/leak guard, runtime/formal CI slot maps, and the report-only coverage policy. No C#/.NET solution, Python brain service, Unity project, model provider implementation, scenarios, or simulation logic has started yet. Wave 2 `K2-A` / `K2-B` is the next immediate sequence frontier.
 
 The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-01` aligned post-Wave-0 status/frontier docs, and `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary with the Risk Register G1-G10 list. The separate Wave 1 planning brief is present at `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md`; W1-S1 through W1-S7 are accepted, and `docs/plans/W1-S7-C1-K-Contract-Handoff-Review-Packet.md` is the shared Wave 1 handoff/gate artifact for the transition into Wave 1.5 and later Wave 2 planning.
 
@@ -2313,22 +2319,21 @@ The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-0
 4. `CI15-D` is accepted: future runtime CI lane names are recorded as blocked slots until their runtime surfaces exist.
 5. `CI15-E` is accepted: coverage is report-only/later only and not a hard threshold before stable runtime modules and representative test corpus evidence exist.
 6. `CI15-F` is accepted: the future `formal-intervention-ci` lane is recorded but blocked until a named Refinery family has fixtures, bridge/core differential checks, and explicit unsupported-surface handling.
-7. The Wave 1.5 closeout gate is next: decide whether Wave 2 planning may proceed with contract CI in place or with explicit CI-debt rationale.
-8. Do not start C#/.NET, Python brain, Unity, provider/model runtime, scenarios, or simulation logic from Wave 1 acceptance alone; Wave 2 waits for Wave 1.5 acceptance or an explicit Meta CI-debt exception.
+7. The Wave 1.5 closeout gate is accepted: Wave 2 planning may proceed with contract CI in place and no explicit CI-debt exception.
+8. Wave 2 begins with `K2-A` / `K2-B`: create the first C# solution/projects and headless CLI skeleton without brain/provider/Unity references.
 9. Treat `docs/design/Formal-Intervention-Gates-Refinery.md` as the approved formal-gate design direction, but do not implement Refinery tooling until a later named family gate opens.
 
 ## First actionable step
 
 ```text
-Wave 1.5 closeout gate — decide whether Wave 2 planning may proceed.
+Wave 2 / K2-A + K2-B — create the first C# solution and headless CLI skeleton.
 ```
 
-Expected Wave 1.5 gate brief:
+Expected Wave 2 first-step brief:
 
 ```text
-Decide whether Wave 2 planning may proceed with CI15-A through CI15-F accepted, or record an explicit CI-debt exception if any Wave 1.5 output is insufficient.
-Do not add C#/.NET runtime, Python brain runtime, provider calls, Unity work, scenarios, runtime cost collection, eval runner logic, Refinery/solver tooling, simulation logic, or coverage hard gates.
-Preserve the accepted Wave 1 contract semantics and treat green CI as mechanical evidence only, not domain approval.
+Create a buildable C# solution and headless CLI shell for the deterministic core. Do not add brain/provider/Unity references, runtime cost collection, scenario execution logic beyond the approved shell scope, Refinery/solver tooling, or coverage hard gates.
+Preserve the accepted Wave 1/Wave 1.5 contract semantics and treat green CI as mechanical evidence only, not domain approval.
 ```
 
 W1-S1 closeout note, 2026-06-14:
