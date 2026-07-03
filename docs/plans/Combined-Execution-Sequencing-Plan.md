@@ -801,7 +801,7 @@ Wave 1 passes when minimum schemas and examples validate, and downstream tracks 
 - ✅ CI readiness contract for the current Ringfall skeleton (`docs/plans/Wave-1.5-CI15-A-CI-Readiness-Contract.md`)
 - ✅ GitHub Actions contract CI that runs `python tools/schema_check.py` (`.github/workflows/contract-ci.yml`)
 - ✅ hygiene/leak boundary guard and durable proof coverage for CI artifacts and ignored private/local state
-- ⬜ future runtime CI slot map for C# core, Python brain, Unity client, and scenario replay
+- ✅ future runtime CI slot map for C# core, Python brain, Unity client, and scenario replay
 - ⬜ future formal-intervention CI slot map for Refinery families, kept inactive until a named family has fixtures and a differential harness
 - ⬜ coverage policy kept report-only/later until runtime modules and test corpus exist
 
@@ -821,7 +821,7 @@ Epics:
 **Owner priority:** Meta + Track E
 
 Epics:
-- ⬜ **CI15-D** Future runtime CI slot map — **Owner: Meta**
+- ✅ **CI15-D** Future runtime CI slot map — **Owner: Meta**
 - ⬜ **CI15-F** Future formal-intervention CI slot map — **Owner: Meta/Track E**
 - ⬜ **CI15-E** Coverage policy later/report-only — **Owner: Track E**
 
@@ -879,12 +879,20 @@ CI review-scope freeze note:
 - Broader GitHub Actions hardening concerns should route to later CI hardening debt by default rather than silently widening the current CI15-C acceptance bar.
 - After two RED review-fix loops on one narrow CI slice, Meta should either refreeze the contract or stop the loop with an explicit owner-visible decision.
 
-**⬜ Step 4 — Future runtime and coverage slots**
+**🔄 Step 4 — Future runtime and coverage slots**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Meta Coordinator session | CI15-D | CI15-C ✅ | Record future runtime CI lanes: `core-dotnet-ci`, `brain-python-ci`, `unity-client-ci`, and `scenario-replay-ci`, but keep them blocked until those runtime surfaces exist. |
+| Meta Coordinator session | CI15-D | CI15-C ✅ | Completed as a docs-only slot map. Future runtime CI lanes are named but blocked until their runtime surfaces and local verify commands exist: `core-dotnet-ci`, `brain-python-ci`, `unity-client-ci`, and `scenario-replay-ci`. |
 | Track E session | CI15-E | CI15-C ✅ | Record that coverage is report-only/later and must not become a hard threshold before stable runtime modules and test corpus exist. This row may run in parallel with CI15-D because it uses a different session and the same prerequisite frontier. |
+
+CI15-D closeout note, 2026-07-03:
+- Meta recorded future runtime CI lane slots only; no GitHub Actions workflow, runtime code, provider/model behavior, Unity project, scenario runner, replay runner, coverage gate, or simulation logic was added.
+- `core-dotnet-ci` is blocked until Track B creates the deterministic C#/.NET core surface and an accepted local verify command.
+- `brain-python-ci` is blocked until Track D/Track C create the Python brain/provider-runtime surface and an accepted non-secret local verify command.
+- `unity-client-ci` is blocked until Track A creates the Unity client surface and an accepted local verify command.
+- `scenario-replay-ci` is blocked until scenario/replay runner surfaces exist and artifact/replay evidence rules are accepted.
+- Future activation of any runtime CI lane must preserve the existing contract-CI boundary: no private artifact upload, no implicit provider/model secrets, no OpenCode/FAL session execution, and no claim that green CI is domain approval.
 
 **⬜ Step 5 — Future formal-intervention CI slot**
 
@@ -2279,7 +2287,7 @@ Ringfall must first produce stable artifacts independently.
 
 ## Current frontier
 
-The project is post-Wave-1 and pre-Wave-2 runtime implementation. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, and Wave 1 contract/artifact spine is accepted through W1-S7/C1-K. The accepted Wave 1 surface now includes schema drafts, valid/invalid examples, `tools/schema_check.py`, and cross-track contract handoff review. No C#/.NET solution, Python brain service, Unity project, model provider implementation, scenarios, or simulation logic has started. Wave 1.5 contract CI readiness is active: CI15-A, CI15-B, and CI15-C are accepted. CI15-D/CI15-E future CI slot mapping is the next immediate sequence frontier.
+The project is post-Wave-1 and pre-Wave-2 runtime implementation. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, and Wave 1 contract/artifact spine is accepted through W1-S7/C1-K. The accepted Wave 1 surface now includes schema drafts, valid/invalid examples, `tools/schema_check.py`, and cross-track contract handoff review. No C#/.NET solution, Python brain service, Unity project, model provider implementation, scenarios, or simulation logic has started. Wave 1.5 contract CI readiness is active: CI15-A, CI15-B, CI15-C, and CI15-D are accepted. CI15-E coverage policy is the next immediate sequence frontier.
 
 The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-01` aligned post-Wave-0 status/frontier docs, and `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary with the Risk Register G1-G10 list. The separate Wave 1 planning brief is present at `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md`; W1-S1 through W1-S7 are accepted, and `docs/plans/W1-S7-C1-K-Contract-Handoff-Review-Packet.md` is the shared Wave 1 handoff/gate artifact for the transition into Wave 1.5 and later Wave 2 planning.
 
@@ -2288,21 +2296,22 @@ The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-0
 1. `CI15-A` is accepted in `docs/plans/Wave-1.5-CI15-A-CI-Readiness-Contract.md`: RingFall's official contract-CI scope and local verify contract are defined.
 2. `CI15-B` is accepted: `.github/workflows/contract-ci.yml` runs the contract schema checker on push/PR.
 3. `CI15-C` is accepted: the contract workflow hygiene guard and durable proof script protect the accepted contract CI workflow.
-4. `CI15-D` and `CI15-E` may run in parallel in distinct Meta Coordinator and Track E sessions.
-5. After `CI15-D` and `CI15-E`, Meta closes `CI15-F`: the future formal-intervention CI slot map.
-6. Do not start C#/.NET, Python brain, Unity, provider/model runtime, scenarios, or simulation logic from Wave 1 acceptance alone; Wave 2 waits for Wave 1.5 acceptance or an explicit Meta CI-debt exception.
-7. Treat `docs/design/Formal-Intervention-Gates-Refinery.md` as the approved formal-gate design direction, but do not implement Refinery tooling until a later named family gate opens.
+4. `CI15-D` is accepted: future runtime CI lane names are recorded as blocked slots until their runtime surfaces exist.
+5. `CI15-E` is next: record that coverage is report-only/later and not a hard threshold before stable runtime modules and test corpus exist.
+6. After `CI15-E`, Meta closes `CI15-F`: the future formal-intervention CI slot map.
+7. Do not start C#/.NET, Python brain, Unity, provider/model runtime, scenarios, or simulation logic from Wave 1 acceptance alone; Wave 2 waits for Wave 1.5 acceptance or an explicit Meta CI-debt exception.
+8. Treat `docs/design/Formal-Intervention-Gates-Refinery.md` as the approved formal-gate design direction, but do not implement Refinery tooling until a later named family gate opens.
 
 ## First actionable step
 
 ```text
-Wave 1.5 / CI15-D + CI15-E — record future runtime CI lanes and report-only coverage policy.
+Wave 1.5 / CI15-E — record report-only coverage policy.
 ```
 
-Expected CI15-D / CI15-E brief:
+Expected CI15-E brief:
 
 ```text
-CI15-D records future runtime CI lane names only; CI15-E records coverage as report-only/later only.
+CI15-E records coverage as report-only/later only.
 Do not add C#/.NET runtime, Python brain runtime, provider calls, Unity work, scenarios, runtime cost collection, eval runner logic, Refinery/solver tooling, simulation logic, or coverage hard gates.
 Preserve the accepted Wave 1 contract semantics and treat green CI as mechanical evidence only, not domain approval. Wave 2 remains blocked until the Wave 1.5 gate or an explicit Meta CI-debt exception.
 ```
