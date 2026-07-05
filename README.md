@@ -2,7 +2,7 @@
 
 Ringfall is a replayable, inspectable, LLM-heavy civilization simulation set in a fractured orbital ring. It is built around deterministic simulation boundaries, typed action/tool contracts, memory/belief/truth separation, institutional distortion, council doctrine, OpenRouter-based model orchestration, and a Unity-rendered observer client.
 
-Current phase: Wave 0 bootstrap and Wave 1 contract handoff are closed through W1-S7/C1-K. Wave 1.5 contract CI readiness is accepted through CI15-A/CI15-B/CI15-C/CI15-D/CI15-E/CI15-F with no recorded CI-debt exception. Wave 2 deterministic core/headless shell work is now the active frontier, starting with K2-A/K2-B to create the first C# solution and headless CLI skeleton. This repository is not ready for public use. The detailed design canon, world bible, implementation plan, and private coordination notes are local/private until an explicit export review approves public release material.
+Current phase: Wave 0 bootstrap and Wave 1 contract handoff are closed through W1-S7/C1-K. Wave 1.5 contract CI readiness is accepted through CI15-A/CI15-B/CI15-C/CI15-D/CI15-E/CI15-F with no recorded CI-debt exception. Wave 2 K2-A/K2-B is accepted with the first C# solution and shell-only headless CLI skeleton; the active frontier is now Step 2 K2-C/K2-D/K2-E for the first state subset. This repository is not ready for public use. The detailed design canon, world bible, implementation plan, and private coordination notes are local/private until an explicit export review approves public release material.
 
 ## First Playable Scope
 
@@ -57,7 +57,7 @@ Architectural guardrails:
 | Path | Purpose |
 |---|---|
 | `docs/` | Public-safe placeholders; private canon is ignored until export review. |
-| `src/` | Future source code plus Wave 1 contract layout and packet/trace/state/memory/cost/eval schema drafts. |
+| `src/` | Source code, including the Wave 1 contract layout/schema drafts and the Wave 2 C# core/headless shell skeleton. |
 | `client/` | Future client code. Empty in this skeleton. |
 | `configs/` | Example configs only; no local secrets. |
 | `scenarios/` | Future scenario packs. Empty in this skeleton. |
@@ -69,7 +69,7 @@ Architectural guardrails:
 ## Current Non-Goals
 
 - no simulation implementation yet
-- no C#/.NET solution yet
+- no deterministic simulation runtime beyond the shell-only C#/.NET headless skeleton yet
 - no Python brain service yet
 - no runtime schema tooling; W1-S6 added dev-only contract validation tooling only
 - no Refinery runtime integration or formal gate CI yet

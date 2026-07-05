@@ -952,7 +952,7 @@ Wave 1.5 passes when Ringfall has a narrow contract CI workflow protecting `tool
 **Secondary support:** Track E for artifact smoke; Track A may start artifact-reader prep after manifest shape
 
 ### Mandatory outputs
-- ⬜ C# solution with `Ringfall.Core`, `Ringfall.Headless`, tests
+- ✅ C# solution with `Ringfall.Core`, `Ringfall.Headless`, tests
 - ⬜ initial FP1 state subset loads
 - ⬜ T0 tick executes deterministically
 - ⬜ Aster Heat Alarm seed produces event/state diff
@@ -965,8 +965,8 @@ Wave 1.5 passes when Ringfall has a narrow contract CI workflow protecting `tool
 **Owner priority:** Track B
 
 Epics:
-- ⬜ **K2-A** Create solution/projects — **Owner: Track B**
-- ⬜ **K2-B** Headless CLI skeleton — **Owner: Track B**
+- ✅ **K2-A** Create solution/projects — **Owner: Track B**
+- ✅ **K2-B** Headless CLI skeleton — **Owner: Track B**
 
 #### Sprint W2-S2 — FP1 state subset
 
@@ -988,17 +988,25 @@ Epics:
 
 ### Execution Steps
 
-**⬜ Step 1**
+**✅ Step 1**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Track B session | K2-A, K2-B | Wave 1 ✅ + Wave 1.5 ✅ or explicit Meta CI-debt exception | Create buildable C# core/headless shell; no brain/provider/Unity refs. |
+| Track B session | K2-A, K2-B | Wave 1 ✅ + Wave 1.5 ✅ or explicit Meta CI-debt exception | Completed. Buildable C# core/headless shell exists under `src/ringfall-core`; no brain/provider/Unity refs. |
+
+W2-S1 closeout note, 2026-07-05:
+- Track B added the first buildable C# solution under `src/ringfall-core` with `Ringfall.Core`, `Ringfall.Headless`, and `Ringfall.Core.Tests`.
+- The CLI is shell-only: `--help`, `--version`, and deterministic unknown-argument failure are accepted. No scenario execution, state model, T0 tick, artifact writers, provider/brain code, Unity/client code, schema changes, CI changes, or Refinery/formal-gate runtime was added.
+- Verification passed for build, test, CLI smoke, project-reference checks, contract schema checker, CI hygiene guard, diff whitespace, forbidden-scope search, and source secrets scan.
+- Carry-forward gate for Step 2/K2-C-K2-E: before CLI behavior grows beyond shell-only, check whether process-level CLI tests are in-scope now, not yet in scope, or already resolved.
+- Carry-forward gate for future command-surface expansion: revisit `CoreInfo.SupportedCommands` immutability before in-process consumers or a mutable command registry appear.
+- The unrelated `.gitignore` `ops/temp/` quarantine change remains outside this step and must not be treated as K2-A/K2-B product scope.
 
 **⬜ Step 2**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Track B session | K2-C, K2-D, K2-E | K2-A ✅ | Add minimal state model and scenario loader. |
+| Track B session | K2-C, K2-D, K2-E | K2-A ✅ + K2-B ✅ | Add minimal state model and scenario loader. Before expanding CLI behavior, resolve the W2-S1 CLI-test and command-metadata carry-forward gates. |
 
 **⬜ Step 3**
 
@@ -2307,7 +2315,7 @@ Ringfall must first produce stable artifacts independently.
 
 ## Current frontier
 
-The project is post-Wave-1 and is now opening Wave 2 runtime implementation. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, Wave 1 contract/artifact spine is accepted through W1-S7/C1-K, and Wave 1.5 contract CI readiness is accepted through CI15-A/B/C/D/E/F with no recorded CI-debt exception. The accepted Wave 1 surface now includes schema drafts, valid/invalid examples, `tools/schema_check.py`, the reviewed contract CI workflow, the CI hygiene/leak guard, runtime/formal CI slot maps, and the report-only coverage policy. No C#/.NET solution, Python brain service, Unity project, model provider implementation, scenarios, or simulation logic has started yet. Wave 2 `K2-A` / `K2-B` is the next immediate sequence frontier.
+The project is post-Wave-1 and is now in Wave 2 runtime implementation. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, Wave 1 contract/artifact spine is accepted through W1-S7/C1-K, and Wave 1.5 contract CI readiness is accepted through CI15-A/B/C/D/E/F with no recorded CI-debt exception. The accepted Wave 1 surface now includes schema drafts, valid/invalid examples, `tools/schema_check.py`, the reviewed contract CI workflow, the CI hygiene/leak guard, runtime/formal CI slot maps, and the report-only coverage policy. Wave 2 `K2-A` / `K2-B` is accepted with a buildable C# solution and shell-only headless CLI under `src/ringfall-core`. No Python brain service, Unity project, model provider implementation, scenarios, state model, T0 tick, artifact writers, or simulation logic beyond the shell skeleton has started yet. Wave 2 Step 2 `K2-C` / `K2-D` / `K2-E` is the next immediate sequence frontier.
 
 The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-01` aligned post-Wave-0 status/frontier docs, and `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary with the Risk Register G1-G10 list. The separate Wave 1 planning brief is present at `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md`; W1-S1 through W1-S7 are accepted, and `docs/plans/W1-S7-C1-K-Contract-Handoff-Review-Packet.md` is the shared Wave 1 handoff/gate artifact for the transition into Wave 1.5 and later Wave 2 planning.
 
@@ -2320,20 +2328,20 @@ The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-0
 5. `CI15-E` is accepted: coverage is report-only/later only and not a hard threshold before stable runtime modules and representative test corpus evidence exist.
 6. `CI15-F` is accepted: the future `formal-intervention-ci` lane is recorded but blocked until a named Refinery family has fixtures, bridge/core differential checks, and explicit unsupported-surface handling.
 7. The Wave 1.5 closeout gate is accepted: Wave 2 planning may proceed with contract CI in place and no explicit CI-debt exception.
-8. Wave 2 begins with `K2-A` / `K2-B`: create the first C# solution/projects and headless CLI skeleton without brain/provider/Unity references.
-9. Treat `docs/design/Formal-Intervention-Gates-Refinery.md` as the approved formal-gate design direction, but do not implement Refinery tooling until a later named family gate opens.
+8. Wave 2 `K2-A` / `K2-B` is accepted: the first C# solution/projects and headless CLI skeleton exist without brain/provider/Unity references.
+9. Wave 2 Step 2 begins with `K2-C` / `K2-D` / `K2-E`: add the first minimal state subset without provider/brain/Unity/refinery scope.
+10. Treat `docs/design/Formal-Intervention-Gates-Refinery.md` as the approved formal-gate design direction, but do not implement Refinery tooling until a later named family gate opens.
 
 ## First actionable step
 
 ```text
-Wave 2 / K2-A + K2-B — create the first C# solution and headless CLI skeleton.
+Wave 2 / K2-C + K2-D + K2-E — add the first minimal state subset for the deterministic core.
 ```
 
-Expected Wave 2 first-step brief:
+Expected Wave 2 next-step brief:
 
 ```text
-Create a buildable C# solution and headless CLI shell for the deterministic core. Do not add brain/provider/Unity references, runtime cost collection, scenario execution logic beyond the approved shell scope, Refinery/solver tooling, or coverage hard gates.
-Preserve the accepted Wave 1/Wave 1.5 contract semantics and treat green CI as mechanical evidence only, not domain approval.
+Add the first minimal state subset for the deterministic core after the accepted K2-A/K2-B shell. Do not add brain/provider/Unity references, runtime cost collection, T0 tick, artifact writers, Refinery/solver tooling, or coverage hard gates unless a later accepted step explicitly opens that scope. Preserve the accepted Wave 1/Wave 1.5 contract semantics and treat green CI as mechanical evidence only, not domain approval. Before expanding CLI behavior beyond shell-only, resolve the W2-S1 carry-forward gates for process-level CLI tests and `CoreInfo.SupportedCommands` immutability.
 ```
 
 W1-S1 closeout note, 2026-06-14:
