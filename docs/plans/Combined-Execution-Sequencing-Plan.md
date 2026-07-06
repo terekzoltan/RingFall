@@ -954,9 +954,9 @@ Wave 1.5 passes when Ringfall has a narrow contract CI workflow protecting `tool
 ### Mandatory outputs
 - ✅ C# solution with `Ringfall.Core`, `Ringfall.Headless`, tests
 - ✅ initial FP1 state subset loads
-- ⬜ T0 tick executes deterministically
-- ⬜ Aster Heat Alarm seed produces event/state diff
-- ⬜ run manifest, initial/final snapshots, event log, state diffs written
+- ✅ T0 tick executes deterministically
+- ✅ Aster Heat Alarm seed produces event/state diff
+- ✅ run manifest, initial/final snapshots, event log, state diffs written
 
 ### Sprint breakdown
 
@@ -982,8 +982,8 @@ Epics:
 **Owner priority:** Track B + Track E
 
 Epics:
-- ⬜ **K2-F** T0 tick deterministic update — **Owner: Track B**
-- ⬜ **K2-G** Event log/state diff writers — **Owner: Track B**
+- ✅ **K2-F** T0 tick deterministic update — **Owner: Track B**
+- ✅ **K2-G** Event log/state diff writers — **Owner: Track B**
 - ⬜ **K2-H** Core artifact smoke validation — **Owner: Track E**
 
 ### Execution Steps
@@ -1016,19 +1016,35 @@ W2-S2 closeout note, 2026-07-06:
 - No provider/brain code, Unity/client code, schema changes, CI changes, T0 tick, artifact writers, event logs, state diffs, scenario-output folders, or Refinery/formal-gate runtime was added.
 - The unrelated `.gitignore` `ops/temp/` quarantine change remains outside this step and must not be treated as K2-C/K2-D/K2-E product scope.
 
-**⬜ Step 3**
+**✅ Step 3**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Track B session | K2-F, K2-G | K2-C/D/E ✅ | Implement deterministic tick, Aster seed, and artifact writers. |
+| Track B session | K2-F | K2-C/D/E ✅ | Completed. Implemented deterministic T0 Aster R2 heat-alarm tick. |
 
-**⬜ Step 4**
+**✅ Step 4**
+
+| Session | Epic(s) | Prereq | Notes |
+|---|---|---|---|
+| Track B session | K2-G | K2-F ✅ | Completed. Implemented event log/state diff artifacts and run artifact writer. |
+
+W2-S3 Track B closeout note, 2026-07-07:
+- Track B added deterministic T0 Aster R2 heat-alarm behavior under `src/ringfall-core` with threshold trigger semantics: `gridLoad >= 0.65` and `thermalDebt >= 0.40`.
+- The T0 tick emits one internal Aster heat-alarm event, preserves shell-only CLI behavior, and writes the approved core artifact tree: `manifest.json`, initial/final snapshots, `events/event-log.json`, and `state-diffs/state-diff-t000.json`.
+- `StateDiff` artifacts use `source_action_trace_id = "system-t0-tick"` for the system tick placeholder. The event log remains an internal Track B artifact shape, not a public schema.
+- Manifest artifact refs remain schema-checker-safe and include only `run_manifest` and `state_diff`; snapshot and event-log files are present in the bundle but not advertised as manifest `artifact_refs`.
+- Verification passed for targeted T0/writer tests, full build/test, CLI smoke, schema checker, CI hygiene guard, diff whitespace, forbidden-scope search, and source secrets scan. Step-review synthesis accepted after adding threshold boundary, byte-level stability, writer guard/reuse, and persisted state-diff old/new assertions.
+- No provider/brain code, Unity/client code, schema changes, CI changes, Track E validator work, generated `data/runs` artifacts, or Refinery/formal-gate runtime was added.
+- Carry-forward gate for K2-H: Track E owns generated artifact bundle/schema smoke validation, including generated `manifest.json` and `state-diff-t000.json` interaction with existing schemas.
+- The unrelated `.gitignore` `ops/temp/` quarantine change remains outside this step and must not be treated as K2-F/K2-G product scope.
+
+**⬜ Step 5**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
 | Track E session | K2-H | K2-G ✅ | Validate artifact bundle against schemas. |
 
-**⬜ Step 5**
+**⬜ Step 6**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
