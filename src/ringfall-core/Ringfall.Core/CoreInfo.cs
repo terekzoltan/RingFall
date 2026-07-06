@@ -5,9 +5,11 @@ namespace Ringfall.Core;
 /// </summary>
 public static class CoreInfo
 {
+    private static readonly IReadOnlyList<string> SupportedCommandValues = Array.AsReadOnly(["--help", "--version"]);
+
     public static string ProductName => "Ringfall Headless";
     public static string Version => "0.1.0-shell";
     public static string ShellStatus => "core/headless shell only";
 
-    public static readonly string[] SupportedCommands = ["--help", "--version"];
+    public static IReadOnlyList<string> SupportedCommands => SupportedCommandValues;
 }

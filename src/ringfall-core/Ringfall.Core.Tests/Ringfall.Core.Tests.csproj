@@ -19,4 +19,8 @@
     <ProjectReference Include="..\Ringfall.Core\Ringfall.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Fixtures\*.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

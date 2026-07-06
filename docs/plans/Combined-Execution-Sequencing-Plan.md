@@ -953,7 +953,7 @@ Wave 1.5 passes when Ringfall has a narrow contract CI workflow protecting `tool
 
 ### Mandatory outputs
 - ✅ C# solution with `Ringfall.Core`, `Ringfall.Headless`, tests
-- ⬜ initial FP1 state subset loads
+- ✅ initial FP1 state subset loads
 - ⬜ T0 tick executes deterministically
 - ⬜ Aster Heat Alarm seed produces event/state diff
 - ⬜ run manifest, initial/final snapshots, event log, state diffs written
@@ -973,9 +973,9 @@ Epics:
 **Owner priority:** Track B
 
 Epics:
-- ⬜ **K2-C** Aster R2/R5/R6/R10 state subset — **Owner: Track B**
-- ⬜ **K2-D** Actor/crew basic state — **Owner: Track B**
-- ⬜ **K2-E** Vireo/Morrow/Black Seam stubs — **Owner: Track B**
+- ✅ **K2-C** Aster R2/R5/R6/R10 state subset — **Owner: Track B**
+- ✅ **K2-D** Actor/crew basic state — **Owner: Track B**
+- ✅ **K2-E** Vireo/Morrow/Black Seam stubs — **Owner: Track B**
 
 #### Sprint W2-S3 — Deterministic tick and artifacts
 
@@ -1002,11 +1002,19 @@ W2-S1 closeout note, 2026-07-05:
 - Carry-forward gate for future command-surface expansion: revisit `CoreInfo.SupportedCommands` immutability before in-process consumers or a mutable command registry appear.
 - The unrelated `.gitignore` `ops/temp/` quarantine change remains outside this step and must not be treated as K2-A/K2-B product scope.
 
-**⬜ Step 2**
+**✅ Step 2**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Track B session | K2-C, K2-D, K2-E | K2-A ✅ + K2-B ✅ | Add minimal state model and scenario loader. Before expanding CLI behavior, resolve the W2-S1 CLI-test and command-metadata carry-forward gates. |
+| Track B session | K2-C, K2-D, K2-E | K2-A ✅ + K2-B ✅ | Completed. Added minimal state model and scenario loader. CLI behavior remained shell-only; `CoreInfo.SupportedCommands` is exposed through a read-only command list. |
+
+W2-S2 closeout note, 2026-07-06:
+- Track B added the first internal `WorldState` subset under `src/ringfall-core` with Aster `R2`/`R5`/`R6`/`R10`, required actors `A1`/`A2`/`A4`/`A6`/`A9`, required crew `crew_aster_repair_02`, and Vireo/Morrow/Black Seam stub sectors.
+- `InitialStateLoader` owns deterministic fixture-load validation and rejects duplicate system IDs, missing required actors/crew/stub sectors, unknown crew actor refs, malformed structural inputs, invalid/default seeds, undefined or numeric metric visibility values, and non-finite metric values.
+- `WorldStateJsonSerializer` remains a lower-level utility with private serializer options and no scenario-validation exception coupling.
+- Verification passed for targeted loader/serializer tests, full build/test, CLI smoke, schema checker, CI hygiene guard, diff whitespace, forbidden-scope search, and source secrets scan.
+- No provider/brain code, Unity/client code, schema changes, CI changes, T0 tick, artifact writers, event logs, state diffs, scenario-output folders, or Refinery/formal-gate runtime was added.
+- The unrelated `.gitignore` `ops/temp/` quarantine change remains outside this step and must not be treated as K2-C/K2-D/K2-E product scope.
 
 **⬜ Step 3**
 
