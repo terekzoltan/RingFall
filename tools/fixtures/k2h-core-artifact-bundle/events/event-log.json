@@ -1,0 +1,17 @@
+{
+  "schema_version": "0.1-internal",
+  "scenario_id": "fixture-aster-state-subset",
+  "deterministic_seed": 42,
+  "events": [
+    {
+      "event_type": "AsterHeatAlarm",
+      "event_id": "event-t000-aster-r2-heat-alarm",
+      "tick": 0,
+      "sector_id": "Aster",
+      "system_id": "R2",
+      "severity": "alarm",
+      "message": "Aster R2 heat alarm triggered during T0 system tick.",
+      "deterministic_seed": 42
+    }
+  ]
+}

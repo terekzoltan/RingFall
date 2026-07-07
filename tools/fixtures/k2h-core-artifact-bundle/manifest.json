@@ -1,0 +1,28 @@
+{
+  "run_id": "run-t000-aster",
+  "schema_version": "0.1",
+  "created_at_utc": "2026-07-07T00:00:00Z",
+  "scenario_id": "fixture-aster-state-subset",
+  "run_mode": "dev",
+  "simulation_seed": 42,
+  "contract_version": "0.1",
+  "tracks": [
+    {
+      "track_id": "track-b-core",
+      "role": "deterministic_core_artifacts",
+      "artifact_refs": [
+        {
+          "ref_id": "artifact-run-manifest-t000",
+          "ref_type": "run_manifest",
+          "artifact_uri": "manifest.json"
+        },
+        {
+          "ref_id": "state-diff-t000-aster-r2-heat-alarm",
+          "ref_type": "state_diff",
+          "artifact_uri": "state-diffs/state-diff-t000.json"
+        }
+      ]
+    }
+  ],
+  "status": "completed"
+}

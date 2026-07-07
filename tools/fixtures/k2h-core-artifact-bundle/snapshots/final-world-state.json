@@ -1,0 +1,105 @@
+{
+  "schemaVersion": "0.1",
+  "scenarioId": "fixture-aster-state-subset",
+  "simulationSeed": 42,
+  "sectors": [
+    {
+      "sectorId": "Aster",
+      "displayName": "Aster Industrial / Utility Sector",
+      "systems": [
+        {
+          "systemId": "R2",
+          "displayName": "Energy and heat grid",
+          "category": "energy_heat",
+          "metrics": [
+            { "name": "gridLoad", "value": 0.73, "visibility": "observable" },
+            { "name": "thermalDebt", "value": 0.46, "visibility": "hidden" }
+          ]
+        },
+        {
+          "systemId": "R5",
+          "displayName": "Maintenance debt",
+          "category": "maintenance",
+          "metrics": [
+            { "name": "debtLevel", "value": 0.52, "visibility": "devOnly" }
+          ]
+        },
+        {
+          "systemId": "R6",
+          "displayName": "Labor and crew pressure",
+          "category": "labor",
+          "metrics": [
+            { "name": "crewPressure", "value": 0.37, "visibility": "observable" }
+          ]
+        },
+        {
+          "systemId": "R10",
+          "displayName": "Information and rumor",
+          "category": "information",
+          "metrics": [
+            { "name": "rumorPressure", "value": 0.18, "visibility": "observable" }
+          ]
+        }
+      ]
+    },
+    {
+      "sectorId": "Vireo",
+      "displayName": "Vireo Bio-Life Support Sector",
+      "systems": [
+        {
+          "systemId": "VIREO-STUB",
+          "displayName": "Bio-life support stub",
+          "category": "bio_life_support",
+          "metrics": [
+            { "name": "stubReadiness", "value": 0.1, "visibility": "devOnly" }
+          ]
+        }
+      ]
+    },
+    {
+      "sectorId": "Morrow",
+      "displayName": "Morrow Chain",
+      "systems": [
+        {
+          "systemId": "MORROW-STUB",
+          "displayName": "Convoy and dock stub",
+          "category": "convoy_dock",
+          "metrics": [
+            { "name": "stubReadiness", "value": 0.1, "visibility": "devOnly" }
+          ]
+        }
+      ]
+    },
+    {
+      "sectorId": "BlackSeam",
+      "displayName": "Black Seam",
+      "systems": [
+        {
+          "systemId": "BLACK-SEAM-STUB",
+          "displayName": "Deepworks branch stub",
+          "category": "deepworks",
+          "metrics": [
+            { "name": "stubReadiness", "value": 0.1, "visibility": "devOnly" }
+          ]
+        }
+      ]
+    }
+  ],
+  "actors": [
+    { "actorId": "A1", "displayName": "A1", "role": "senior grid runner", "layer": "L1", "homeSectorId": "Aster", "systemRefs": ["R2", "R5", "R6"] },
+    { "actorId": "A2", "displayName": "A2", "role": "thermal mechanic", "layer": "L1", "homeSectorId": "Aster", "systemRefs": ["R2", "R5"] },
+    { "actorId": "A4", "displayName": "A4", "role": "night-shift repair lead", "layer": "L1", "homeSectorId": "Aster", "systemRefs": ["R5", "R6"] },
+    { "actorId": "A6", "displayName": "A6", "role": "spare-parts broker", "layer": "L1", "homeSectorId": "Aster", "systemRefs": ["R5"] },
+    { "actorId": "A9", "displayName": "A9", "role": "shift recorder / incident clerk", "layer": "L1", "homeSectorId": "Aster", "systemRefs": ["R10", "R5"] }
+  ],
+  "crews": [
+    {
+      "crewId": "crew_aster_repair_02",
+      "displayName": "Aster repair crew 02",
+      "homeSectorId": "Aster",
+      "status": "available",
+      "assignedActorId": "A1",
+      "systemRefs": ["R2", "R5", "R6"]
+    }
+  ]
+}

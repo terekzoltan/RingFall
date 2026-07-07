@@ -122,6 +122,32 @@ public sealed class RunArtifactWriterTests
     }
 
     [TestMethod]
+    public void Write_matches_k2h_core_artifact_smoke_fixture_semantically()
+    {
+        using var directory = TemporaryDirectory.Create();
+        var result = T0TickRunner.Run(LoadFixture());
+        RunArtifactWriter.Write(directory.Path, "run-t000-aster", FixedCreatedAtUtc, result);
+
+        var fixtureRoot = Path.Combine(FindRepositoryRoot(), "tools", "fixtures", "k2h-core-artifact-bundle");
+        foreach (var relativePath in ExpectedArtifactPaths())
+        {
+            AssertSemanticJsonEquivalent(
+                File.ReadAllText(Combine(directory.Path, relativePath)),
+                File.ReadAllText(Combine(fixtureRoot, relativePath)),
+                relativePath);
+        }
+    }
+
+    [TestMethod]
+    public void SemanticJsonFixtureComparison_ignores_object_property_order_and_preserves_array_order()
+    {
+        AssertSemanticJsonEquivalent("{\"a\":1,\"b\":[2,3]}", "{\"b\":[2,3],\"a\":1}", "object-order");
+
+        Assert.ThrowsExactly<AssertFailedException>(() =>
+            AssertSemanticJsonEquivalent("{\"items\":[1,2]}", "{\"items\":[2,1]}", "array-order"));
+    }
+
+    [TestMethod]
     public void Write_rejects_invalid_arguments()
     {
         using var directory = TemporaryDirectory.Create();
@@ -174,6 +200,61 @@ public sealed class RunArtifactWriterTests
     {
         Assert.AreEqual(Combine(root, expectedRelativePath), actualPath);
         Assert.IsTrue(File.Exists(actualPath), actualPath);
+    }
+
+    private static void AssertSemanticJsonEquivalent(string expected, string actual, string message)
+    {
+        using var expectedJson = JsonDocument.Parse(expected);
+        using var actualJson = JsonDocument.Parse(actual);
+        AssertSemanticJsonElementEquivalent(expectedJson.RootElement, actualJson.RootElement, message);
+    }
+
+    private static void AssertSemanticJsonElementEquivalent(JsonElement expected, JsonElement actual, string path)
+    {
+        Assert.AreEqual(expected.ValueKind, actual.ValueKind, path);
+        switch (expected.ValueKind)
+        {
+            case JsonValueKind.Object:
+                var expectedProperties = expected.EnumerateObject().ToDictionary(property => property.Name, property => property.Value);
+                var actualProperties = actual.EnumerateObject().ToDictionary(property => property.Name, property => property.Value);
+                CollectionAssert.AreEquivalent(expectedProperties.Keys.ToArray(), actualProperties.Keys.ToArray(), path);
+                foreach (var property in expectedProperties)
+                {
+                    AssertSemanticJsonElementEquivalent(property.Value, actualProperties[property.Key], $"{path}.{property.Key}");
+                }
+                break;
+            case JsonValueKind.Array:
+                var expectedItems = expected.EnumerateArray().ToArray();
+                var actualItems = actual.EnumerateArray().ToArray();
+                Assert.HasCount(expectedItems.Length, actualItems, path);
+                for (var index = 0; index < expectedItems.Length; index++)
+                {
+                    AssertSemanticJsonElementEquivalent(expectedItems[index], actualItems[index], $"{path}[{index}]");
+                }
+                break;
+            case JsonValueKind.Number:
+                Assert.AreEqual(expected.GetDouble(), actual.GetDouble(), path);
+                break;
+            default:
+                Assert.AreEqual(expected.ToString(), actual.ToString(), path);
+                break;
+        }
+    }
+
+    private static string FindRepositoryRoot()
+    {
+        var directory = new DirectoryInfo(AppContext.BaseDirectory);
+        while (directory is not null)
+        {
+            if (Directory.Exists(Path.Combine(directory.FullName, "tools"))
+                && Directory.Exists(Path.Combine(directory.FullName, "src", "ringfall-core")))
+            {
+                return directory.FullName;
+            }
+            directory = directory.Parent;
+        }
+
+        throw new DirectoryNotFoundException("Could not locate repository root for K2-H smoke fixture.");
     }
 
     private static string Combine(string root, string relativePath)

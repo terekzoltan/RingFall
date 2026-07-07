@@ -984,7 +984,7 @@ Epics:
 Epics:
 - ✅ **K2-F** T0 tick deterministic update — **Owner: Track B**
 - ✅ **K2-G** Event log/state diff writers — **Owner: Track B**
-- ⬜ **K2-H** Core artifact smoke validation — **Owner: Track E**
+- ✅ **K2-H** Core artifact smoke validation — **Owner: Track E**
 
 ### Execution Steps
 
@@ -1038,11 +1038,21 @@ W2-S3 Track B closeout note, 2026-07-07:
 - Carry-forward gate for K2-H: Track E owns generated artifact bundle/schema smoke validation, including generated `manifest.json` and `state-diff-t000.json` interaction with existing schemas.
 - The unrelated `.gitignore` `ops/temp/` quarantine change remains outside this step and must not be treated as K2-F/K2-G product scope.
 
-**⬜ Step 5**
+**✅ Step 5**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Track E session | K2-H | K2-G ✅ | Validate artifact bundle against schemas. |
+| Track E session | K2-H | K2-G ✅ | Completed. Validated the generated core artifact bundle against accepted public schemas and internal bundle smoke rules. |
+
+W2-S3 Track E closeout note, 2026-07-07:
+- Track E added `tools/core_artifact_smoke.py` and `tools/core_artifact_smoke_tests.py` as the K2-H artifact smoke validator and focused regression suite for the current core artifact bundle.
+- The smoke validates `manifest.json` against `run-manifest.schema.json` and `state-diffs/state-diff-t000.json` against `state-diff.schema.json`, enforces exact `ref_type` + `artifact_uri` pairings for `run_manifest -> manifest.json` and `state_diff -> state-diffs/state-diff-t000.json`, and keeps `ref_id` exactness out of K2-H scope by Meta decision.
+- Snapshot files and the internal event log remain existence/basic JSON/internal-smoke only; no public snapshot or event-log schema was introduced.
+- Timestamp validation now rejects non-RFC3339 forms including space separators, missing timezones, impossible date/time fields, and invalid timezone offsets; focused validator tests cover those cases plus URI safety, all-event hidden leak scanning, CLI success/failure behavior, and internal JSON failure modes.
+- Track E added a semantic JSON fixture drift guard in `RunArtifactWriterTests` that compares the checked-in K2-H fixture bundle against current `RunArtifactWriter` output while ignoring object property order and preserving array order.
+- Final Meta + Swarm step-review synthesis was GREEN. Verification passed for K2-H smoke, 32 validator tests, contract schema check, CI hygiene check, targeted `RunArtifactWriterTests`, forbidden-scope search, diff hygiene, and Swarm secrets scan.
+- No schema body changes, CI workflow changes, Track B runtime writer changes, provider/brain/OpenRouter work, Unity/client work, Refinery/formal runtime, coverage gate, generated `data/runs` artifact, or README/frontier work beyond this closeout was added.
+- The unrelated `.gitignore` `ops/temp/` quarantine change remains outside K2-H scope and must not be treated as product work.
 
 **⬜ Step 6**
 
