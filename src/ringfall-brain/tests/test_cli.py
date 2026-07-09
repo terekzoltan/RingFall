@@ -8,12 +8,14 @@ from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = ROOT.parents[1]
 sys.path.insert(0, str(ROOT))
 
 from ringfall_brain.cli import main
 
 
 SAMPLE_POLICY = ROOT / "examples" / "model-policy.example.json"
+AVATAR_PULSE_SCHEMA = REPO_ROOT / "src" / "ringfall-contracts" / "schemas" / "packets" / "avatar-pulse-packet.schema.json"
 
 
 class CliTests(unittest.TestCase):
@@ -111,6 +113,22 @@ class CliTests(unittest.TestCase):
 
         self.assertEqual(2, code)
         self.assertIn("policy JSON is invalid", stderr)
+
+    def test_mock_pulse_validates_against_schema(self) -> None:
+        code, stdout, stderr = self.run_cli("mock", "pulse", "--schema", str(AVATAR_PULSE_SCHEMA))
+
+        self.assertEqual(0, code)
+        self.assertIn("Mock packet OK", stdout)
+        self.assertIn("packet_type=AvatarPulsePacket", stdout)
+        self.assertEqual("", stderr)
+
+    def test_mock_pulse_missing_schema_fails_without_traceback(self) -> None:
+        code, stdout, stderr = self.run_cli("mock", "pulse", "--schema", str(ROOT / "missing.schema.json"))
+
+        self.assertEqual(2, code)
+        self.assertEqual("", stdout)
+        self.assertIn("schema file not found", stderr)
+        self.assertNotIn("Traceback", stderr)
 
 
 if __name__ == "__main__":

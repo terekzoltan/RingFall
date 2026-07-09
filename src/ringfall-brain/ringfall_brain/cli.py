@@ -13,6 +13,8 @@ from ringfall_brain.config.model_policy_loader import (
     ModelPolicyError,
     load_model_policy,
 )
+from ringfall_brain.providers.mock_provider import build_avatar_pulse_packet_json
+from ringfall_brain.schemas.validator import BrainValidationError, validate_packet_json
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -23,6 +25,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--version", action="store_true", help="Print the Ringfall brain version and exit.")
 
     subparsers = parser.add_subparsers(dest="command")
+    mock_parser = subparsers.add_parser("mock", help="Deterministic mock commands.")
+    mock_subparsers = mock_parser.add_subparsers(dest="mock_command")
+
+    pulse_parser = mock_subparsers.add_parser("pulse", help="Emit and validate a mock AvatarPulsePacket.")
+    pulse_parser.add_argument("--schema", required=True, help="Path to the AvatarPulsePacket JSON Schema file.")
+
     policy_parser = subparsers.add_parser("policy", help="Policy inspection commands.")
     policy_subparsers = policy_parser.add_subparsers(dest="policy_command")
 
@@ -44,6 +52,21 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.version:
         print(f"Ringfall Brain {__version__}")
         return 0
+
+    if args.command == "mock" and args.mock_command == "pulse":
+        raw_packet = build_avatar_pulse_packet_json()
+        try:
+            packet = validate_packet_json(raw_packet, Path(args.schema))
+        except BrainValidationError as exc:
+            print(f"Mock pulse failed: {exc}", file=sys.stderr)
+            return 2
+
+        print(f"Mock packet OK: packet_type={packet['packet_type']} packet_id={packet['packet_id']}")
+        return 0
+
+    if args.command == "mock":
+        print("mock subcommand required: choose pulse", file=sys.stderr)
+        return 2
 
     if args.command == "policy" and args.policy_command == "check":
         try:
