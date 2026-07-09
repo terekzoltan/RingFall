@@ -1152,7 +1152,7 @@ Epics:
 Epics:
 - ✅ **B3-C** Mock provider returns valid packet — **Owner: Track D**
 - ✅ **B3-D** Strict JSON schema parser/validator — **Owner: Track D**
-- ⬜ **B3-E** OpenRouter provider shell/env handling — **Owner: Track D**
+- ✅ **B3-E** OpenRouter provider shell/env handling — **Owner: Track D**
 
 #### Sprint W3-S3 — First L1 cognition semantics
 
@@ -1160,7 +1160,7 @@ Epics:
 
 Epics:
 - ✅ **B3-F** L1 pulse context/prompt template — **Owner: Track C**
-- ⬜ **B3-G** Cognition trace + cost event — **Owner: Track D**
+- ✅ **B3-G** Cognition trace + cost event — **Owner: Track D**
 - ⬜ **B3-H** Brain artifact smoke — **Owner: Track E**
 
 ### Execution Steps
@@ -1197,11 +1197,20 @@ W3-S2 closeout note, 2026-07-09:
 - No real provider/API/OpenRouter calls, provider credentials, `.env` handling, Core/C# changes, Unity/client work, schema-body changes, root YAML config changes, workflow/CI changes, prompt runtime loader, trace/cost writer, Refinery/solver runtime, or generated `data/runs` artifact was added.
 - The unrelated `.gitignore` `ops/temp/` quarantine change remains outside Wave 3 Step 2 scope and must not be treated as product work.
 
-**⬜ Step 3**
+**✅ Step 3**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Track D session | B3-E, B3-G | B3-D ✅ and B3-F draft accepted | Add OpenRouter shell and trace/cost logging; real call optional/manual. |
+| Track D session | B3-E, B3-G | B3-D ✅ and B3-F draft accepted | Completed. Added shell-only OpenRouter env checks and deterministic dev/mock cognition trace + cost artifacts. |
+
+W3-S3 closeout note, 2026-07-09:
+- Track D added shell-only OpenRouter environment validation under `src/ringfall-brain`, exposed through `provider openrouter check-env`; the check reads process environment only, performs no network/API call, reads no `.env` file, creates no provider client, and emits only allowlisted public metadata.
+- The OpenRouter shell output reports `api_key_present`, model metadata, and sanitized base URL metadata only. Raw `OPENROUTER_API_KEY` and raw `OPENROUTER_BASE_URL` values are not printed or stored in public config output; adversarial URL tests cover userinfo, path, query, token, fragment, malformed URL, and whitespace cases.
+- Track D added deterministic dev/mock cognition artifacts using the existing mock `AvatarPulsePacket`: `avatar-pulse-packet.json`, `cognition-trace.json`, and `cost-event.json` are written only when `mock cognition --output-dir <path>` is explicitly supplied. Without `--output-dir`, the CLI validates and prints a bounded summary only.
+- The cognition trace and cost event validate against the existing `CognitionTrace` and `CostEvent` schemas without schema body/example changes. The artifacts are labeled dev/mock evidence and are not canonical provider evidence.
+- Final Meta + Swarm review synthesis was GREEN after review-fix for the base URL credential echo blocker. Verification evidence included 40 brain unittests, targeted provider/CLI adversarial redaction tests, CLI smoke, py_compile, schema check, CI hygiene check, diff check, secrets scan, and forbidden-path boundary review.
+- No real provider/API/OpenRouter call path, provider credential output, `.env` handling, Core/C# changes, Unity/client work, schema-body changes, root YAML config changes, workflow/CI changes, prompt runtime loader, model-policy OpenRouter lane, Refinery/solver runtime, or generated default run artifact was added.
+- The unrelated `.gitignore` `ops/temp/` quarantine change remains outside Wave 3 Step 3 scope and must not be treated as product work.
 
 **⬜ Step 4**
 
@@ -2379,7 +2388,7 @@ Ringfall must first produce stable artifacts independently.
 
 ## Current frontier
 
-The project is post-Wave-2 and is now in Wave 3 brain-service scaffolding. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, Wave 1 contract/artifact spine is accepted through W1-S7/C1-K, and Wave 1.5 contract CI readiness is accepted through CI15-A/B/C/D/E/F with no recorded CI-debt exception. The accepted Wave 1 surface now includes schema drafts, valid/invalid examples, `tools/schema_check.py`, the reviewed contract CI workflow, the CI hygiene/leak guard, runtime/formal CI slot maps, and the report-only coverage policy. Wave 2 is accepted through K2-A/B/C/D/E/F/G/H and the Meta closeout gate: the C# core/headless runner can load the first FP1 state subset, execute deterministic Aster T0 heat-alarm behavior, write the accepted core artifact tree, and pass Track E artifact smoke validation. Wave 3 `B3-A` / `B3-B` is accepted with a stdlib-only Python brain CLI skeleton and local JSON model-policy loader. Wave 3 `B3-C` / `B3-D` / `B3-F` is accepted with deterministic mock packet output, reject-only schema validation, and non-runtime L1 pulse context boundaries. No real provider/API call path, Unity project, Refinery/solver runtime, runtime coverage gate, prompt runtime loader, trace/cost writer, or LLM-driven sim-truth mutation has started yet. Wave 3 Step 3 `B3-E` / `B3-G` is the next immediate sequence frontier.
+The project is post-Wave-2 and is now in Wave 3 brain-service scaffolding. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, Wave 1 contract/artifact spine is accepted through W1-S7/C1-K, and Wave 1.5 contract CI readiness is accepted through CI15-A/B/C/D/E/F with no recorded CI-debt exception. The accepted Wave 1 surface now includes schema drafts, valid/invalid examples, `tools/schema_check.py`, the reviewed contract CI workflow, the CI hygiene/leak guard, runtime/formal CI slot maps, and the report-only coverage policy. Wave 2 is accepted through K2-A/B/C/D/E/F/G/H and the Meta closeout gate: the C# core/headless runner can load the first FP1 state subset, execute deterministic Aster T0 heat-alarm behavior, write the accepted core artifact tree, and pass Track E artifact smoke validation. Wave 3 `B3-A` / `B3-B` is accepted with a stdlib-only Python brain CLI skeleton and local JSON model-policy loader. Wave 3 `B3-C` / `B3-D` / `B3-F` is accepted with deterministic mock packet output, reject-only schema validation, and non-runtime L1 pulse context boundaries. Wave 3 `B3-E` / `B3-G` is accepted with shell-only OpenRouter env validation and deterministic dev/mock cognition trace + cost event artifacts. No real provider/API call path, Unity project, Refinery/solver runtime, runtime coverage gate, prompt runtime loader, model-policy OpenRouter lane, or LLM-driven sim-truth mutation has started yet. Wave 3 Step 4 `B3-H` is the next immediate sequence frontier.
 
 The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-01` aligned post-Wave-0 status/frontier docs, and `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary with the Risk Register G1-G10 list. The separate Wave 1 planning brief is present at `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md`; W1-S1 through W1-S7 are accepted, and `docs/plans/W1-S7-C1-K-Contract-Handoff-Review-Packet.md` is the shared Wave 1 handoff/gate artifact for the transition into Wave 1.5 and later Wave 2 planning.
 
@@ -2399,18 +2408,19 @@ The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-0
 12. The Wave 2 closeout gate is accepted: Wave 3 may begin with the core still independent of brain/provider/Unity/Refinery runtime dependencies.
 13. Wave 3 `B3-A` / `B3-B` is accepted: the first Python brain package/CLI skeleton and local JSON model-policy loader exist without provider/API calls, credentials, Core mutation, Unity/client work, schema changes, CI activation, prompt runtime, trace/cost writer, or Refinery/solver runtime.
 14. Wave 3 `B3-C` / `B3-D` / `B3-F` is accepted: deterministic mock `AvatarPulsePacket` output, strict schema validation, and non-runtime L1 pulse context boundaries exist without real provider/API calls, Core mutation, schema changes, CI activation, prompt runtime loader, trace/cost writer, or hidden truth in actor-authored sample output.
-15. Treat `docs/design/Formal-Intervention-Gates-Refinery.md` as the approved formal-gate design direction, but do not implement Refinery tooling until a later named family gate opens.
+15. Wave 3 `B3-E` / `B3-G` is accepted: shell-only OpenRouter env validation and deterministic dev/mock cognition trace + cost event artifacts exist without real provider/API calls, raw credential output, `.env` loading, schema changes, prompt runtime loader, model-policy OpenRouter lane, Core mutation, CI activation, or default generated run artifacts.
+16. Treat `docs/design/Formal-Intervention-Gates-Refinery.md` as the approved formal-gate design direction, but do not implement Refinery tooling until a later named family gate opens.
 
 ## First actionable step
 
 ```text
-Wave 3 / B3-E + B3-G — add OpenRouter provider shell/env handling and cognition trace + cost event logging.
+Wave 3 / B3-H — validate cognition trace/cost event shape.
 ```
 
 Expected Wave 3 next-step brief:
 
 ```text
-Add the OpenRouter provider shell/env handling and cognition trace + cost event logging after accepted B3-D strict validation and B3-F prompt-context draft. Real calls remain optional/manual; do not mutate Core state, add Unity/client work, change schema bodies, add runtime Refinery/solver tooling, commit provider credentials, activate CI, add coverage hard gates, or emit direct world patches unless a later accepted step explicitly opens that scope. Brain outputs must stay strict packet/candidate-fact shaped for later Core validation. Preserve C1-K carry-forward routes: CostEvent provider/model evidence must be reconcilable with provider request/response evidence before canonical provider evidence, and positive memory examples only enter scope through an accepted step or an explicit not-yet-in-scope decision.
+Validate the B3-G cognition trace and cost event artifact shape after accepted B3-E/B3-G. Track E owns B3-H artifact smoke only: do not add real provider/API calls, mutate Core state, add Unity/client work, change schema bodies, activate CI, add coverage hard gates, implement prompt runtime, add model-policy OpenRouter routing, or emit direct world patches unless a later accepted step explicitly opens that scope. Preserve the accepted boundary that B3-G artifacts are dev/mock evidence, not canonical provider evidence.
 ```
 
 W1-S1 closeout note, 2026-06-14:
