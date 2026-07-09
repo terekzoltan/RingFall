@@ -2,7 +2,7 @@
 
 Ringfall is a replayable, inspectable, LLM-heavy civilization simulation set in a fractured orbital ring. It is built around deterministic simulation boundaries, typed action/tool contracts, memory/belief/truth separation, institutional distortion, council doctrine, OpenRouter-based model orchestration, and a Unity-rendered observer client.
 
-Current phase: Wave 0 bootstrap and Wave 1 contract handoff are closed through W1-S7/C1-K. Wave 1.5 contract CI readiness is accepted through CI15-A/CI15-B/CI15-C/CI15-D/CI15-E/CI15-F with no recorded CI-debt exception. Wave 2 K2-A/K2-B is accepted with the first C# solution and shell-only headless CLI skeleton; K2-C/K2-D/K2-E is accepted with the first deterministic internal state subset and scenario loader; K2-F/K2-G is accepted with deterministic T0 tick and core artifact writers; K2-H is accepted with Track E artifact smoke validation; the active frontier is now the Wave 2 closeout gate. This repository is not ready for public use. The detailed design canon, world bible, implementation plan, and private coordination notes are local/private until an explicit export review approves public release material.
+Current phase: Wave 0 bootstrap and Wave 1 contract handoff are closed through W1-S7/C1-K. Wave 1.5 contract CI readiness is accepted through CI15-A/CI15-B/CI15-C/CI15-D/CI15-E/CI15-F with no recorded CI-debt exception. Wave 2 is closed through K2-A/K2-B/K2-C/K2-D/K2-E/K2-F/K2-G/K2-H and the Wave 2 Meta closeout gate: the no-LLM Aster seed run is deterministic and writes smoke-validated manifest/snapshot/event/state-diff artifacts. The active frontier is now Wave 3 B3-A/B3-B brain skeleton and model-policy loading. This repository is not ready for public use. The detailed design canon, world bible, implementation plan, and private coordination notes are local/private until an explicit export review approves public release material.
 
 ## First Playable Scope
 
@@ -57,21 +57,21 @@ Architectural guardrails:
 | Path | Purpose |
 |---|---|
 | `docs/` | Public-safe placeholders; private canon is ignored until export review. |
-| `src/` | Source code, including the Wave 1 contract layout/schema drafts and the Wave 2 C# core/headless shell skeleton. |
+| `src/` | Source code, including the Wave 1 contract layout/schema drafts and the Wave 2 C# deterministic core/headless runner. |
 | `client/` | Future client code. Empty in this skeleton. |
 | `configs/` | Example configs only; no local secrets. |
 | `scenarios/` | Future scenario packs. Empty in this skeleton. |
 | `data/` | Local/generated run artifacts; ignored except `.gitkeep`. |
 | `tests/` | Future tests. Empty in this skeleton. |
-| `tools/` | Developer utilities, including the Wave 1 contract schema checker. |
+| `tools/` | Developer utilities, including the Wave 1 contract schema checker and Wave 2 core artifact smoke validator. |
 | `infra/` | Optional deployment/remote-run material later. Empty in this skeleton. |
 
 ## Current Non-Goals
 
-- no simulation implementation yet
-- no deterministic simulation runtime beyond the shell-only C#/.NET headless skeleton yet
+- no LLM-driven or multi-step simulation beyond the Wave 2 deterministic Aster T0 seed slice yet
+- no deterministic runtime beyond the Wave 2 C#/.NET headless core artifact slice yet
 - no Python brain service yet
-- no runtime schema tooling; W1-S6 added dev-only contract validation tooling only
+- no production runtime schema service or generated contract bindings; current validation tooling is developer-only
 - no Refinery runtime integration or formal gate CI yet
 - no full formal world model
 - no Unity project yet

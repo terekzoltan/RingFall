@@ -1054,11 +1054,20 @@ W2-S3 Track E closeout note, 2026-07-07:
 - No schema body changes, CI workflow changes, Track B runtime writer changes, provider/brain/OpenRouter work, Unity/client work, Refinery/formal runtime, coverage gate, generated `data/runs` artifact, or README/frontier work beyond this closeout was added.
 - The unrelated `.gitignore` `ops/temp/` quarantine change remains outside K2-H scope and must not be treated as product work.
 
-**⬜ Step 6**
+**✅ Step 6**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Meta Coordinator session | Wave 2 closeout | K2-H ✅ | Confirm core is independent and Wave 3 can call into stable contexts. |
+| Meta Coordinator session | Wave 2 closeout | K2-H ✅ | Completed. Wave 2 gate passed: core remains independent, and Wave 3 may begin against stable Wave 2 core artifacts without mutating sim truth. |
+
+Wave 2 closeout note, 2026-07-07:
+- Meta gate result: **PASS**. The no-LLM Aster seed run is deterministic and writes the accepted core artifact tree: `manifest.json`, initial/final snapshots, `events/event-log.json`, and `state-diffs/state-diff-t000.json`.
+- Closeout verification passed: `python tools/core_artifact_smoke.py tools/fixtures/k2h-core-artifact-bundle`, `python tools/core_artifact_smoke_tests.py`, `python tools/schema_check.py`, `python tools/ci_hygiene_check.py`, `dotnet test src/ringfall-core/Ringfall.Core.sln`, and source secrets scan.
+- Source-boundary search over `src/ringfall-core` `.cs`, `.csproj`, and `.sln` files found no brain/OpenRouter/provider/Unity/Refinery/solver/formal references. Generated `.NET` build-output hits are not source dependencies.
+- Wave 3 may start with `B3-A`/`B3-B`: create the Python brain project/CLI and model-policy loader without real API calls, Core mutation, Unity/client work, schema-body changes, runtime Refinery/solver tooling, or coverage hard gates.
+- Carry-forward routes remain active for Wave 3: brain outputs must stay strict packet/candidate-fact shaped, CostEvent provider/model evidence is deferred until runtime provider artifacts exist, and positive memory examples are only in scope if a later accepted step opens them or records them as not yet in scope.
+- The unrelated `.gitignore` `ops/temp/` quarantine change remains outside Wave 2 closeout scope and must not be treated as product work.
+
 ### Optional parallel side-lanes
 
 These can run after Wave 1 contract gate, while Track B builds the deterministic core.
@@ -1092,6 +1101,8 @@ These side-lanes are useful because they touch separate paths. They must return 
 ### Wave gate
 
 Wave 2 passes when a no-LLM Aster seed run is deterministic and writes valid manifest/snapshot/event/state-diff artifacts.
+
+Gate result, 2026-07-07: **PASS** through the Step 6 Meta closeout gate.
 
 ### Hold conditions
 - core references brain/OpenRouter/Unity
@@ -2349,7 +2360,7 @@ Ringfall must first produce stable artifacts independently.
 
 ## Current frontier
 
-The project is post-Wave-1 and is now in Wave 2 runtime implementation. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, Wave 1 contract/artifact spine is accepted through W1-S7/C1-K, and Wave 1.5 contract CI readiness is accepted through CI15-A/B/C/D/E/F with no recorded CI-debt exception. The accepted Wave 1 surface now includes schema drafts, valid/invalid examples, `tools/schema_check.py`, the reviewed contract CI workflow, the CI hygiene/leak guard, runtime/formal CI slot maps, and the report-only coverage policy. Wave 2 `K2-A` / `K2-B` is accepted with a buildable C# solution and shell-only headless CLI under `src/ringfall-core`. No Python brain service, Unity project, model provider implementation, scenarios, state model, T0 tick, artifact writers, or simulation logic beyond the shell skeleton has started yet. Wave 2 Step 2 `K2-C` / `K2-D` / `K2-E` is the next immediate sequence frontier.
+The project is post-Wave-2 and is now ready to enter Wave 3 brain-service scaffolding. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, Wave 1 contract/artifact spine is accepted through W1-S7/C1-K, and Wave 1.5 contract CI readiness is accepted through CI15-A/B/C/D/E/F with no recorded CI-debt exception. The accepted Wave 1 surface now includes schema drafts, valid/invalid examples, `tools/schema_check.py`, the reviewed contract CI workflow, the CI hygiene/leak guard, runtime/formal CI slot maps, and the report-only coverage policy. Wave 2 is accepted through K2-A/B/C/D/E/F/G/H and the Meta closeout gate: the C# core/headless runner can load the first FP1 state subset, execute deterministic Aster T0 heat-alarm behavior, write the accepted core artifact tree, and pass Track E artifact smoke validation. No Python brain service, real provider/API call path, Unity project, Refinery/solver runtime, runtime coverage gate, or LLM-driven sim-truth mutation has started yet. Wave 3 Step 1 `B3-A` / `B3-B` is the next immediate sequence frontier.
 
 The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-01` aligned post-Wave-0 status/frontier docs, and `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary with the Risk Register G1-G10 list. The separate Wave 1 planning brief is present at `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md`; W1-S1 through W1-S7 are accepted, and `docs/plans/W1-S7-C1-K-Contract-Handoff-Review-Packet.md` is the shared Wave 1 handoff/gate artifact for the transition into Wave 1.5 and later Wave 2 planning.
 
@@ -2363,19 +2374,22 @@ The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-0
 6. `CI15-F` is accepted: the future `formal-intervention-ci` lane is recorded but blocked until a named Refinery family has fixtures, bridge/core differential checks, and explicit unsupported-surface handling.
 7. The Wave 1.5 closeout gate is accepted: Wave 2 planning may proceed with contract CI in place and no explicit CI-debt exception.
 8. Wave 2 `K2-A` / `K2-B` is accepted: the first C# solution/projects and headless CLI skeleton exist without brain/provider/Unity references.
-9. Wave 2 Step 2 begins with `K2-C` / `K2-D` / `K2-E`: add the first minimal state subset without provider/brain/Unity/refinery scope.
-10. Treat `docs/design/Formal-Intervention-Gates-Refinery.md` as the approved formal-gate design direction, but do not implement Refinery tooling until a later named family gate opens.
+9. Wave 2 `K2-C` / `K2-D` / `K2-E` is accepted: the first deterministic internal state subset and scenario loader exist without provider/brain/Unity/refinery scope.
+10. Wave 2 `K2-F` / `K2-G` is accepted: deterministic T0 Aster heat-alarm behavior and core artifact writers exist.
+11. Wave 2 `K2-H` is accepted: Track E validates the generated core artifact bundle against public schemas and internal smoke rules.
+12. The Wave 2 closeout gate is accepted: Wave 3 may begin with the core still independent of brain/provider/Unity/Refinery runtime dependencies.
+13. Treat `docs/design/Formal-Intervention-Gates-Refinery.md` as the approved formal-gate design direction, but do not implement Refinery tooling until a later named family gate opens.
 
 ## First actionable step
 
 ```text
-Wave 2 / K2-C + K2-D + K2-E — add the first minimal state subset for the deterministic core.
+Wave 3 / B3-A + B3-B — create the Python brain project/CLI and model-policy loader.
 ```
 
-Expected Wave 2 next-step brief:
+Expected Wave 3 next-step brief:
 
 ```text
-Add the first minimal state subset for the deterministic core after the accepted K2-A/K2-B shell. Do not add brain/provider/Unity references, runtime cost collection, T0 tick, artifact writers, Refinery/solver tooling, or coverage hard gates unless a later accepted step explicitly opens that scope. Preserve the accepted Wave 1/Wave 1.5 contract semantics and treat green CI as mechanical evidence only, not domain approval. Before expanding CLI behavior beyond shell-only, resolve the W2-S1 carry-forward gates for process-level CLI tests and `CoreInfo.SupportedCommands` immutability.
+Create the Python brain project/CLI and model-policy loader after the accepted Wave 2 closeout. Do not make real API calls, mutate Core state, add Unity/client work, change schema bodies, add runtime Refinery/solver tooling, introduce provider credentials, or add coverage hard gates unless a later accepted step explicitly opens that scope. Brain outputs must stay strict packet/candidate-fact shaped for later Core validation. Preserve C1-K carry-forward routes: CostEvent provider/model evidence is required when runtime provider artifacts appear, and positive memory examples only enter scope through an accepted step or an explicit not-yet-in-scope decision.
 ```
 
 W1-S1 closeout note, 2026-06-14:
