@@ -1142,8 +1142,8 @@ Gate result, 2026-07-07: **PASS** through the Step 6 Meta closeout gate.
 **Owner priority:** Track D
 
 Epics:
-- ⬜ **B3-A** Python project + CLI — **Owner: Track D**
-- ⬜ **B3-B** Model policy loader and run mode handling — **Owner: Track D**
+- ✅ **B3-A** Python project + CLI — **Owner: Track D**
+- ✅ **B3-B** Model policy loader and run mode handling — **Owner: Track D**
 
 #### Sprint W3-S2 — Provider and strict output
 
@@ -1165,11 +1165,20 @@ Epics:
 
 ### Execution Steps
 
-**⬜ Step 1**
+**✅ Step 1**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Track D session | B3-A, B3-B | Wave 1 ✅ | Create brain project and load lane policy; no real API required. |
+| Track D session | B3-A, B3-B | Wave 1 ✅ | Completed. Created stdlib-only Python brain CLI skeleton and local JSON model-policy loader; no real API/provider/runtime behavior. |
+
+W3-S1 closeout note, 2026-07-09:
+- Track D added the first `src/ringfall-brain` Python brain package skeleton with local CLI entrypoint, package README, JSON model-policy fixture, model-policy loader, and focused unittest coverage.
+- The CLI supports `--help`, `--version`, and `policy check --policy <path> --mode <disabled|mock|manual>` only. Incomplete `policy` command paths fail closed with non-zero status.
+- The model-policy loader is stdlib-only and enforces Step-1-local run modes through `SUPPORTED_STEP_ONE_RUN_MODES`; policy-declared unsupported modes such as `canonical` are rejected at the loader boundary, not only by CLI argparse.
+- `src/ringfall-brain/README.md` documents the accepted Step-1 invocation contract: package-root execution or explicit `PYTHONPATH`; no installed console script, install contract, CI lane, provider/API call path, credential handling, prompt runtime, trace writer, or cost writer was introduced.
+- Final Meta + Swarm review synthesis was GREEN after review-fix. Verification evidence included 15 unittests, CLI smoke for help/version and valid modes, schema check, CI hygiene check, boundary searches, secrets scan, and diff/status hygiene.
+- No Core/C# changes, Unity/client work, schema-body changes, root YAML config changes, workflow/CI changes, provider/API/network/env behavior, prompt semantics, trace/cost writer, Refinery/solver runtime, or generated run artifacts were added.
+- The unrelated `.gitignore` `ops/temp/` quarantine change remains outside B3-A/B3-B scope and must not be treated as product work.
 
 **⬜ Step 2**
 
@@ -2360,7 +2369,7 @@ Ringfall must first produce stable artifacts independently.
 
 ## Current frontier
 
-The project is post-Wave-2 and is now ready to enter Wave 3 brain-service scaffolding. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, Wave 1 contract/artifact spine is accepted through W1-S7/C1-K, and Wave 1.5 contract CI readiness is accepted through CI15-A/B/C/D/E/F with no recorded CI-debt exception. The accepted Wave 1 surface now includes schema drafts, valid/invalid examples, `tools/schema_check.py`, the reviewed contract CI workflow, the CI hygiene/leak guard, runtime/formal CI slot maps, and the report-only coverage policy. Wave 2 is accepted through K2-A/B/C/D/E/F/G/H and the Meta closeout gate: the C# core/headless runner can load the first FP1 state subset, execute deterministic Aster T0 heat-alarm behavior, write the accepted core artifact tree, and pass Track E artifact smoke validation. No Python brain service, real provider/API call path, Unity project, Refinery/solver runtime, runtime coverage gate, or LLM-driven sim-truth mutation has started yet. Wave 3 Step 1 `B3-A` / `B3-B` is the next immediate sequence frontier.
+The project is post-Wave-2 and is now in Wave 3 brain-service scaffolding. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, Wave 1 contract/artifact spine is accepted through W1-S7/C1-K, and Wave 1.5 contract CI readiness is accepted through CI15-A/B/C/D/E/F with no recorded CI-debt exception. The accepted Wave 1 surface now includes schema drafts, valid/invalid examples, `tools/schema_check.py`, the reviewed contract CI workflow, the CI hygiene/leak guard, runtime/formal CI slot maps, and the report-only coverage policy. Wave 2 is accepted through K2-A/B/C/D/E/F/G/H and the Meta closeout gate: the C# core/headless runner can load the first FP1 state subset, execute deterministic Aster T0 heat-alarm behavior, write the accepted core artifact tree, and pass Track E artifact smoke validation. Wave 3 `B3-A` / `B3-B` is accepted with a stdlib-only Python brain CLI skeleton and local JSON model-policy loader. No real provider/API call path, Unity project, Refinery/solver runtime, runtime coverage gate, prompt runtime, trace/cost writer, or LLM-driven sim-truth mutation has started yet. Wave 3 Step 2 `B3-C` / `B3-D` plus Track C `B3-F` draft is the next immediate sequence frontier.
 
 The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-01` aligned post-Wave-0 status/frontier docs, and `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary with the Risk Register G1-G10 list. The separate Wave 1 planning brief is present at `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md`; W1-S1 through W1-S7 are accepted, and `docs/plans/W1-S7-C1-K-Contract-Handoff-Review-Packet.md` is the shared Wave 1 handoff/gate artifact for the transition into Wave 1.5 and later Wave 2 planning.
 
@@ -2378,18 +2387,19 @@ The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-0
 10. Wave 2 `K2-F` / `K2-G` is accepted: deterministic T0 Aster heat-alarm behavior and core artifact writers exist.
 11. Wave 2 `K2-H` is accepted: Track E validates the generated core artifact bundle against public schemas and internal smoke rules.
 12. The Wave 2 closeout gate is accepted: Wave 3 may begin with the core still independent of brain/provider/Unity/Refinery runtime dependencies.
-13. Treat `docs/design/Formal-Intervention-Gates-Refinery.md` as the approved formal-gate design direction, but do not implement Refinery tooling until a later named family gate opens.
+13. Wave 3 `B3-A` / `B3-B` is accepted: the first Python brain package/CLI skeleton and local JSON model-policy loader exist without provider/API calls, credentials, Core mutation, Unity/client work, schema changes, CI activation, prompt runtime, trace/cost writer, or Refinery/solver runtime.
+14. Treat `docs/design/Formal-Intervention-Gates-Refinery.md` as the approved formal-gate design direction, but do not implement Refinery tooling until a later named family gate opens.
 
 ## First actionable step
 
 ```text
-Wave 3 / B3-A + B3-B — create the Python brain project/CLI and model-policy loader.
+Wave 3 / B3-C + B3-D and B3-F draft — add mock provider plus strict JSON validation path, and draft L1 pulse context without hidden truth.
 ```
 
 Expected Wave 3 next-step brief:
 
 ```text
-Create the Python brain project/CLI and model-policy loader after the accepted Wave 2 closeout. Do not make real API calls, mutate Core state, add Unity/client work, change schema bodies, add runtime Refinery/solver tooling, introduce provider credentials, or add coverage hard gates unless a later accepted step explicitly opens that scope. Brain outputs must stay strict packet/candidate-fact shaped for later Core validation. Preserve C1-K carry-forward routes: CostEvent provider/model evidence is required when runtime provider artifacts appear, and positive memory examples only enter scope through an accepted step or an explicit not-yet-in-scope decision.
+Add the mock provider and strict JSON validation path after the accepted B3-A/B3-B brain skeleton, while Track C drafts the L1 pulse context without hidden truth. Do not make real API calls, mutate Core state, add Unity/client work, change schema bodies, add runtime Refinery/solver tooling, introduce provider credentials, activate CI, add trace/cost writers, or add coverage hard gates unless a later accepted step explicitly opens that scope. Brain outputs must stay strict packet/candidate-fact shaped for later Core validation. Preserve C1-K carry-forward routes: CostEvent provider/model evidence is required when runtime provider artifacts appear, and positive memory examples only enter scope through an accepted step or an explicit not-yet-in-scope decision.
 ```
 
 W1-S1 closeout note, 2026-06-14:

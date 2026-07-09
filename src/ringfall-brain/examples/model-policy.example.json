@@ -1,0 +1,25 @@
+{
+  "version": "0.1",
+  "run_modes": {
+    "default": "disabled",
+    "available": ["disabled", "mock", "manual"]
+  },
+  "models": {
+    "fixture_disabled": {
+      "id": "fixture/disabled",
+      "role": "disabled_local_fixture"
+    },
+    "fixture_mock": {
+      "id": "fixture/mock",
+      "role": "deterministic_local_fixture"
+    }
+  },
+  "lanes": {
+    "policy_check": {
+      "primary": ["fixture_disabled"],
+      "fallback": ["fixture_mock"],
+      "temperature": 0,
+      "max_output_tokens": 1
+    }
+  }
+}
