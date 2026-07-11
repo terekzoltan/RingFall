@@ -1337,8 +1337,8 @@ Epics:
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Track C session | A4-A | Wave 2/3 ✅ | Define A1/Aster context against actor census and hidden truth boundaries. |
-| Track B session | A4-B, A4-C | Wave 2 ✅ | Implement crew and tool surfaces, but no LLM logic. |
+| Track C session | A4-A planning | Wave 2/3 ✅ | Prepare its own A4-A scope/visibility plan using `docs/plans/Wave-4-Step-1-Track-Planning-Preparation.md` as non-binding input; no implementation starts until Meta review accepts the plan. |
+| Track B session | A4-B, A4-C planning | Wave 2 ✅ | Prepare its own scoped plan; use `docs/plans/Wave-4-Step-1-Track-Planning-Preparation.md` to choose and justify bundled or split execution. No implementation starts until Meta review accepts the plan. |
 
 **⬜ Step 2**
 
