@@ -138,20 +138,20 @@ Execution steps use the same markers as epics:
 
 Execution tables are the chronological contract for Meta and Track sessions. They must be unambiguous enough that a new session can tell what starts next, what may run in parallel, and what must wait.
 
-Hard formatting rules:
+Execution rules:
 
-- one execution-table row equals one concrete session assignment for one epic or one named gate;
-- do not put comma-separated epic IDs in a single `Epic(s)` cell;
+- one execution-table row equals one concrete session assignment; that assignment may cover one or more epics, or one named gate;
+- multiple epic IDs may share one `Epic(s)` cell when one session can complete them as a coherent assignment;
 - a closeout, review fan-in, or wave-gate decision is also a single row, not bundled with implementation epics;
 - a numbered step is a chronological barrier: all rows in step N must be startable from the same accepted prerequisite frontier;
 - multiple rows inside the same numbered step mean explicit parallelism;
 - rows inside the same numbered step must use distinct `Session` labels;
 - rows inside the same numbered step must not depend on another row in that same step;
 - if one row needs another row's artifact, review, hygiene check, or gate result, put it in a later numbered step;
-- if the same session owns two epics, split them into separate numbered steps even when the files do not conflict;
-- same-session forked parallelism is not part of the current workflow and requires an explicit future workflow change before use;
-- notes may mention related epics, but must not hide execution order by implying two epics are done in one row;
-- if an older planned section still has bundled legacy rows, Meta must normalize that section to this protocol before opening it for implementation.
+- when the same session owns multiple epics, Meta must always offer separate rows/steps as an optional clarity or risk-reduction choice, but bundling is allowed and the split is not mandatory;
+- bundled epics in one row are one session assignment, not same-session parallelism; the session may execute them in the order stated in the row notes;
+- notes for a bundled row must state any internal dependency or required order that matters to acceptance;
+- older bundled rows do not require normalization solely because they contain multiple epics; Meta revises them only when ordering, ownership, or prerequisites are ambiguous.
 
 Good patterns:
 
@@ -173,14 +173,13 @@ Step N+1
 
 The two rows above are separate steps because the same session owns both epics and the second should inspect the first workflow artifact.
 
-Bad patterns:
+An allowed bundled alternative, when one session can own the whole coherent assignment, is:
 
 ```text
-| Track E session | EPIC-B, EPIC-C | EPIC-A ✅ | Add workflow and hygiene guard. |
-| Meta Coordinator session | EPIC-D, EPIC-F | EPIC-B ✅ + EPIC-C ✅ | Record future slots. |
+| Track E session | CI15-B, CI15-C | CI15-A ✅ | Add the workflow, then add its hygiene guard; accept both together. |
 ```
 
-Both rows hide chronology by bundling multiple epics into one row. Split them before implementation starts.
+Meta must offer the split form during planning, but the owning session may keep this bundled form. Bundling is a problem only when the row leaves ownership, prerequisites, internal order, or acceptance ambiguous; in that case Meta should recommend a split and ask rather than infer.
 
 ### Optional Parallel Side-Lane rule
 
@@ -2408,7 +2407,7 @@ Ringfall must first produce stable artifacts independently.
 
 ## Current frontier
 
-The project is post-Wave-3 closeout. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, Wave 1 contract/artifact spine is accepted through W1-S7/C1-K, and Wave 1.5 contract CI readiness is accepted through CI15-A/B/C/D/E/F with no recorded CI-debt exception. Wave 2 is accepted through K2-A/B/C/D/E/F/G/H and the Meta closeout gate: the C# core/headless runner can load the first FP1 state subset, execute deterministic Aster T0 heat-alarm behavior, write the accepted core artifact tree, and pass Track E artifact smoke validation. Wave 3 is accepted through B3-A/B/C/D/E/F/G/H and its Meta closeout gate: the Python brain scaffold can emit a deterministic schema-valid L1 packet plus dev/mock cognition trace and cost event, and Track E can validate the evidence bundle without any brain-to-Core mutation path. No real provider/API call path, Unity project, Refinery/solver runtime, runtime coverage gate, prompt runtime loader, model-policy OpenRouter lane, or LLM-driven sim-truth mutation has started yet. Wave 4 Step 1 sequence planning and legacy execution-table normalization for A4-A/A4-B/A4-C is the next immediate frontier; Wave 4 implementation has not started.
+The project is post-Wave-3 closeout. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, Wave 1 contract/artifact spine is accepted through W1-S7/C1-K, and Wave 1.5 contract CI readiness is accepted through CI15-A/B/C/D/E/F with no recorded CI-debt exception. Wave 2 is accepted through K2-A/B/C/D/E/F/G/H and the Meta closeout gate: the C# core/headless runner can load the first FP1 state subset, execute deterministic Aster T0 heat-alarm behavior, write the accepted core artifact tree, and pass Track E artifact smoke validation. Wave 3 is accepted through B3-A/B/C/D/E/F/G/H and its Meta closeout gate: the Python brain scaffold can emit a deterministic schema-valid L1 packet plus dev/mock cognition trace and cost event, and Track E can validate the evidence bundle without any brain-to-Core mutation path. No real provider/API call path, Unity project, Refinery/solver runtime, runtime coverage gate, prompt runtime loader, model-policy OpenRouter lane, or LLM-driven sim-truth mutation has started yet. Wave 4 Step 1 sequence planning for A4-A/A4-B/A4-C is the next immediate frontier; Meta must offer optional split and bundled execution forms, but legacy bundled rows do not require normalization solely because they contain multiple epics. Wave 4 implementation has not started.
 
 The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-01` aligned post-Wave-0 status/frontier docs, and `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary with the Risk Register G1-G10 list. The separate Wave 1 planning brief is present at `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md`; W1-S1 through W1-S7 are accepted, and `docs/plans/W1-S7-C1-K-Contract-Handoff-Review-Packet.md` is the shared Wave 1 handoff/gate artifact for the transition into Wave 1.5 and later Wave 2 planning.
 
@@ -2436,13 +2435,13 @@ The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-0
 ## First actionable step
 
 ```text
-Wave 4 Step 1 sequence planning — normalize the legacy A4-A/A4-B/A4-C execution rows before implementation.
+Wave 4 Step 1 sequence planning — review the A4-A/A4-B/A4-C execution rows and offer both bundled and split forms before implementation.
 ```
 
 Expected Wave 4 planning brief:
 
 ```text
-Plan Wave 4 Step 1 without starting implementation. Normalize the legacy bundled Track B `A4-B, A4-C` row under the canonical execution-table protocol, determine the required same-session ordering, and retain Track C A4-A only where it is independently startable from the accepted Wave 3 frontier. Preserve hidden-truth separation, Core authority, and the rule that no schema change or production prompt work begins without its accepted Track plan.
+Plan Wave 4 Step 1 without starting implementation. Review the bundled Track B `A4-B, A4-C` row, state its internal order and acceptance boundary, and always offer separate-row execution as an optional clarity or risk-reduction alternative without requiring that split. Retain Track C A4-A only where it is independently startable from the accepted Wave 3 frontier. Preserve hidden-truth separation, Core authority, and the rule that no schema change or production prompt work begins without its accepted Track plan.
 ```
 
 W1-S1 closeout note, 2026-06-14:
