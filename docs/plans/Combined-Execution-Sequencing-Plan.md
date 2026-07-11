@@ -1227,11 +1227,22 @@ W3-S4 closeout note, 2026-07-11:
 - No Track D runtime, schema body/example, Core/C#, Unity/client, Refinery/formal runtime, workflow/CI, root config, generated `data/runs` artifact, or provider credential behavior was changed.
 - The unrelated `.gitignore` `ops/temp/` quarantine change remains outside Wave 3 Step 4 scope and must not be treated as product work.
 
-**⬜ Step 5**
+**✅ Step 5**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Meta Coordinator session | Wave 3 closeout | B3-H ✅ | Confirm cognition path emits packets only and cannot mutate state. |
+| Meta Coordinator session | Wave 3 closeout | B3-H ✅ | Completed. Confirmed the accepted cognition path emits strict packet/trace/cost evidence only and cannot mutate Core state. |
+
+Wave 3 closeout note, 2026-07-11:
+- Wave 3 is accepted through B3-A/B/C/D/E/F/G/H and the Meta closeout gate. The brain package provides a local CLI/policy shell, deterministic mock `AvatarPulsePacket`, strict schema validation, non-runtime L1 prompt/context guidance, shell-only OpenRouter environment checks, deterministic dev/mock cognition trace + cost event output, and Track E artifact smoke validation.
+- The accepted path emits packet, cognition-trace, and cost-event evidence only. It has no Core/C# reference or state-apply path, and B3-H rejects direct world-mutation keys, unbounded commands, malformed evidence, hidden-truth strings, broken provenance, non-L1 mock packets, and inconsistent dev/mock cost metadata.
+- OpenRouter remains configuration/env validation only: no provider client, network/API call, credential output, `.env` loading, model-policy provider lane, or canonical provider evidence was added.
+- Contract schemas and examples remain owned by `src/ringfall-contracts`; Wave 3 added no schema-body change, runtime schema service, generated bindings, or contract ownership transfer.
+- Prompt runtime/rendering, real model execution, Core mutation, Unity/client work, Refinery/formal runtime, CI activation, coverage hard gates, committed generated artifacts, and Wave 4 action/tool/crew implementation remain deferred.
+- Final evidence included 31 focused B3-H categories, 40 brain unittests, packet/trace/cost schema validation, schema and CI hygiene checks, py_compile, secrets scans, whitespace/diff checks, and explicit scope/status review.
+- The C1-K CostEvent provider-evidence reconciliation route remains active for the first real provider call; positive memory examples remain deferred to an accepted memory-scope step; formal-gate output-area discipline remains a Wave 4/later responsibility.
+- The unrelated `.gitignore` `ops/temp/` quarantine change remains outside Wave 3 scope and must not be treated as product work.
+
 ### Optional parallel side-lanes
 
 - **OSL-W3-A — Track B core context export prep**
@@ -2397,7 +2408,7 @@ Ringfall must first produce stable artifacts independently.
 
 ## Current frontier
 
-The project is post-Wave-2 and is now in Wave 3 brain-service scaffolding. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, Wave 1 contract/artifact spine is accepted through W1-S7/C1-K, and Wave 1.5 contract CI readiness is accepted through CI15-A/B/C/D/E/F with no recorded CI-debt exception. The accepted Wave 1 surface now includes schema drafts, valid/invalid examples, `tools/schema_check.py`, the reviewed contract CI workflow, the CI hygiene/leak guard, runtime/formal CI slot maps, and the report-only coverage policy. Wave 2 is accepted through K2-A/B/C/D/E/F/G/H and the Meta closeout gate: the C# core/headless runner can load the first FP1 state subset, execute deterministic Aster T0 heat-alarm behavior, write the accepted core artifact tree, and pass Track E artifact smoke validation. Wave 3 `B3-A` / `B3-B` is accepted with a stdlib-only Python brain CLI skeleton and local JSON model-policy loader. Wave 3 `B3-C` / `B3-D` / `B3-F` is accepted with deterministic mock packet output, reject-only schema validation, and non-runtime L1 pulse context boundaries. Wave 3 `B3-E` / `B3-G` is accepted with shell-only OpenRouter env validation and deterministic dev/mock cognition trace + cost event artifacts. Wave 3 `B3-H` is accepted with deterministic Track E validation of the packet/trace/cost artifact bundle, strict evidence-integrity checks, and L1 mock-boundary smoke. No real provider/API call path, Unity project, Refinery/solver runtime, runtime coverage gate, prompt runtime loader, model-policy OpenRouter lane, or LLM-driven sim-truth mutation has started yet. Wave 3 Step 5 Meta closeout is the next immediate sequence frontier.
+The project is post-Wave-3 closeout. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, Wave 1 contract/artifact spine is accepted through W1-S7/C1-K, and Wave 1.5 contract CI readiness is accepted through CI15-A/B/C/D/E/F with no recorded CI-debt exception. Wave 2 is accepted through K2-A/B/C/D/E/F/G/H and the Meta closeout gate: the C# core/headless runner can load the first FP1 state subset, execute deterministic Aster T0 heat-alarm behavior, write the accepted core artifact tree, and pass Track E artifact smoke validation. Wave 3 is accepted through B3-A/B/C/D/E/F/G/H and its Meta closeout gate: the Python brain scaffold can emit a deterministic schema-valid L1 packet plus dev/mock cognition trace and cost event, and Track E can validate the evidence bundle without any brain-to-Core mutation path. No real provider/API call path, Unity project, Refinery/solver runtime, runtime coverage gate, prompt runtime loader, model-policy OpenRouter lane, or LLM-driven sim-truth mutation has started yet. Wave 4 Step 1 sequence planning and legacy execution-table normalization for A4-A/A4-B/A4-C is the next immediate frontier; Wave 4 implementation has not started.
 
 The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-01` aligned post-Wave-0 status/frontier docs, and `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary with the Risk Register G1-G10 list. The separate Wave 1 planning brief is present at `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md`; W1-S1 through W1-S7 are accepted, and `docs/plans/W1-S7-C1-K-Contract-Handoff-Review-Packet.md` is the shared Wave 1 handoff/gate artifact for the transition into Wave 1.5 and later Wave 2 planning.
 
@@ -2419,18 +2430,19 @@ The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-0
 14. Wave 3 `B3-C` / `B3-D` / `B3-F` is accepted: deterministic mock `AvatarPulsePacket` output, strict schema validation, and non-runtime L1 pulse context boundaries exist without real provider/API calls, Core mutation, schema changes, CI activation, prompt runtime loader, trace/cost writer, or hidden truth in actor-authored sample output.
 15. Wave 3 `B3-E` / `B3-G` is accepted: shell-only OpenRouter env validation and deterministic dev/mock cognition trace + cost event artifacts exist without real provider/API calls, raw credential output, `.env` loading, schema changes, prompt runtime loader, model-policy OpenRouter lane, Core mutation, CI activation, or default generated run artifacts.
 16. Wave 3 `B3-H` is accepted: Track E validates the deterministic dev/mock packet, cognition trace, and cost event bundle against public schemas plus bounded semantic, evidence-integrity, hidden-truth, direct-mutation, and L1 smoke rules without changing runtime or contract ownership.
-17. Treat `docs/design/Formal-Intervention-Gates-Refinery.md` as the approved formal-gate design direction, but do not implement Refinery tooling until a later named family gate opens.
+17. The Wave 3 Meta closeout gate is accepted: the cognition path emits strict packet/trace/cost evidence only, cannot mutate Core state, and preserves all provider, schema, prompt-runtime, CI, Unity/client, Refinery, and canonical-evidence deferrals.
+18. Treat `docs/design/Formal-Intervention-Gates-Refinery.md` as the approved formal-gate design direction, but do not implement Refinery tooling until the named Wave 4 Aster F1 family gate opens under its accepted step.
 
 ## First actionable step
 
 ```text
-Wave 3 closeout — confirm the accepted cognition path emits packets/evidence only and cannot mutate Core state.
+Wave 4 Step 1 sequence planning — normalize the legacy A4-A/A4-B/A4-C execution rows before implementation.
 ```
 
-Expected Wave 3 next-step brief:
+Expected Wave 4 planning brief:
 
 ```text
-Close Wave 3 after accepted B3-H by confirming that the brain path remains strict packet/trace/cost evidence only, cannot mutate Core state, and preserves all accepted provider, schema, prompt-runtime, CI, Unity/client, Refinery, and canonical-evidence deferrals. Do not start Wave 4 implementation until the Meta closeout gate is accepted.
+Plan Wave 4 Step 1 without starting implementation. Normalize the legacy bundled Track B `A4-B, A4-C` row under the canonical execution-table protocol, determine the required same-session ordering, and retain Track C A4-A only where it is independently startable from the accepted Wave 3 frontier. Preserve hidden-truth separation, Core authority, and the rule that no schema change or production prompt work begins without its accepted Track plan.
 ```
 
 W1-S1 closeout note, 2026-06-14:
