@@ -1,14 +1,14 @@
-namespace Ringfall.Core.State;
+using Ringfall.Core.State;
 
-public sealed record ActorState
+namespace Ringfall.Core.Projection;
+
+internal sealed record ActorContextProjection
 {
     public required string ActorId { get; init; }
     public required string DisplayName { get; init; }
     public required string Role { get; init; }
     public required string Layer { get; init; }
-    public required string HomeSectorId { get; init; }
-    public required IReadOnlyList<string> SystemRefs { get; init; }
-    public required IReadOnlyList<ActorLocalObservation> LocalObservations { get; init; }
+    public required IReadOnlyList<ActorLocalObservation> Observations { get; init; }
     public required IReadOnlyList<string> CrewRefs { get; init; }
     public required IReadOnlyList<string> ToolRefs { get; init; }
 }

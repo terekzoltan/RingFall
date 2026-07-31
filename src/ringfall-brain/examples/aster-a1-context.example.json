@@ -1,0 +1,21 @@
+{
+  "actorId": "A1",
+  "displayName": "A1",
+  "role": "senior grid runner",
+  "layer": "L1",
+  "observations": [
+    {
+      "observationId": "obs-a1-t000-aster-r2-heat-alarm",
+      "kind": "alarm",
+      "signal": "Local R2 heat alarm is active.",
+      "sourceRef": "event:event-t000-aster-r2-heat-alarm"
+    }
+  ],
+  "crewRefs": [
+    "crew_aster_repair_02"
+  ],
+  "toolRefs": [
+    "local_grid_panel",
+    "maintenance_console"
+  ]
+}

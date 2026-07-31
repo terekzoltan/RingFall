@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Ringfall.Core.Snapshots;
 using Ringfall.Core.State;
+using Ringfall.Core.Visibility;
 
 namespace Ringfall.Core.Scenarios;
 
@@ -71,6 +72,9 @@ public static class InitialStateLoader
         {
             RequireElement(actor, "actor entry is required.");
             RequireCollection(actor.SystemRefs, $"actor {actor.ActorId} systemRefs are required.");
+            RequireCollection(actor.LocalObservations, $"actor {actor.ActorId} localObservations are required.");
+            RequireCollection(actor.CrewRefs, $"actor {actor.ActorId} crewRefs are required.");
+            RequireCollection(actor.ToolRefs, $"actor {actor.ActorId} toolRefs are required.");
         }
 
         foreach (var crew in worldState.Crews)
@@ -101,6 +105,7 @@ public static class InitialStateLoader
                         throw new InitialStateValidationException($"system {system.SystemId} metric {metric.Name} value must be finite.");
                     }
                 }
+                EnsureUnique(system.Metrics.Select(metric => metric.Name), $"system {system.SystemId} metric names must be unique.");
             }
         }
 
@@ -111,6 +116,7 @@ public static class InitialStateLoader
             RequireNonEmpty(actor.Role, $"actor {actor.ActorId} role is required.");
             RequireNonEmpty(actor.Layer, $"actor {actor.ActorId} layer is required.");
             RequireNonEmpty(actor.HomeSectorId, $"actor {actor.ActorId} homeSectorId is required.");
+            ValidateActorContext(actor);
         }
 
         foreach (var crew in worldState.Crews)
@@ -142,6 +148,7 @@ public static class InitialStateLoader
         {
             RequireKnownSector(sectorIds, actor.HomeSectorId, $"actor {actor.ActorId} home sector must exist.");
             RequireKnownSystems(systemIds, actor.SystemRefs, $"actor {actor.ActorId}");
+            RequireKnownIds(crewIds, actor.CrewRefs, $"actor {actor.ActorId} crew reference");
         }
 
         foreach (var crew in worldState.Crews)
@@ -160,6 +167,29 @@ public static class InitialStateLoader
             if (!asterSystemIds.Contains(systemId))
             {
                 throw new InitialStateValidationException($"Aster system {systemId} is required.");
+            }
+        }
+
+        foreach (var actor in worldState.Actors)
+        {
+            foreach (var value in ActorProjectedTextValues(actor))
+            {
+                var contentViolation = ActorObservationVisibilityPolicy.EvaluateProjectedText(worldState, value);
+                if (contentViolation is not null)
+                {
+                    throw new InitialStateValidationException(
+                        $"actor context {ViolationMessage(contentViolation.Value.Category)}");
+                }
+            }
+
+            foreach (var observation in actor.LocalObservations)
+            {
+                var violation = ActorObservationVisibilityPolicy.Evaluate(worldState, actor, observation);
+                if (violation is not null)
+                {
+                    throw new InitialStateValidationException(
+                        $"actor observation {ViolationMessage(violation.Value.Category)}");
+                }
             }
         }
     }
@@ -238,6 +268,65 @@ public static class InitialStateLoader
             {
                 throw new InitialStateValidationException($"{itemName} {requiredId} is required.");
             }
+        }
+    }
+
+    private static void ValidateActorContext(ActorState actor)
+    {
+        EnsureUnique(actor.CrewRefs, $"actor {actor.ActorId} crewRefs must be non-empty and unique.");
+        EnsureUnique(actor.ToolRefs, $"actor {actor.ActorId} toolRefs must be non-empty and unique.");
+
+        var observationIds = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var observation in actor.LocalObservations)
+        {
+            RequireElement(observation, $"actor {actor.ActorId} observation entry is required.");
+            RequireNonEmpty(observation.ObservationId, $"actor {actor.ActorId} observation id is required.");
+            RequireNonEmpty(observation.Kind, $"actor {actor.ActorId} observation kind is required.");
+            RequireNonEmpty(observation.Signal, $"actor {actor.ActorId} observation signal is required.");
+            RequireNonEmpty(observation.SourceRef, $"actor {actor.ActorId} observation sourceRef is required.");
+
+            if (!observationIds.Add(observation.ObservationId))
+            {
+                throw new InitialStateValidationException($"actor {actor.ActorId} observation ids must be unique.");
+            }
+
+            if (!ActorObservationVisibilityPolicy.IsSourceSyntaxValid(observation.SourceRef))
+            {
+                throw new InitialStateValidationException(
+                    $"actor {actor.ActorId} observation sourceRef is invalid.");
+            }
+        }
+    }
+
+    private static string ViolationMessage(ActorObservationViolationCategory category)
+    {
+        return category switch
+        {
+            ActorObservationViolationCategory.InvalidSourceSyntax => "sourceRef is invalid.",
+            ActorObservationViolationCategory.UnsupportedSource => "uses an unsupported source.",
+            ActorObservationViolationCategory.ActorSourceMismatch => "source is not authorized for that actor.",
+            ActorObservationViolationCategory.UnknownOrAmbiguousSource => "source cannot be resolved uniquely.",
+            ActorObservationViolationCategory.NonObservableSource => "uses a non-observable source.",
+            ActorObservationViolationCategory.ProtectedMetricName => "exposes a protected metric name.",
+            ActorObservationViolationCategory.ProtectedMetricValue => "exposes a protected metric value.",
+            ActorObservationViolationCategory.NonAsciiProjectedContent => "contains unsupported non-ASCII content.",
+            _ => "cannot be validated against the loaded world state."
+        };
+    }
+
+    private static IEnumerable<string> ActorProjectedTextValues(ActorState actor)
+    {
+        yield return actor.ActorId;
+        yield return actor.DisplayName;
+        yield return actor.Role;
+        yield return actor.Layer;
+        foreach (var crewRef in actor.CrewRefs)
+        {
+            yield return crewRef;
+        }
+        foreach (var toolRef in actor.ToolRefs)
+        {
+            yield return toolRef;
         }
     }
 }

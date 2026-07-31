@@ -77,11 +77,24 @@
     }
   ],
   "actors": [
-    { "actorId": "A1", "displayName": "A1", "role": "senior grid runner", "layer": "L1", "homeSectorId": "Aster", "systemRefs": ["R5", "R6"] },
-    { "actorId": "A2", "displayName": "A2", "role": "thermal mechanic", "layer": "L1", "homeSectorId": "Aster", "systemRefs": ["R5"] },
-    { "actorId": "A4", "displayName": "A4", "role": "night-shift repair lead", "layer": "L1", "homeSectorId": "Aster", "systemRefs": ["R5", "R6"] },
-    { "actorId": "A6", "displayName": "A6", "role": "spare-parts broker", "layer": "L1", "homeSectorId": "Aster", "systemRefs": ["R5"] },
-    { "actorId": "A9", "displayName": "A9", "role": "shift recorder / incident clerk", "layer": "L1", "homeSectorId": "Aster", "systemRefs": ["R10", "R5"] }
+    {
+      "actorId": "A1", "displayName": "A1", "role": "senior grid runner", "layer": "L1", "homeSectorId": "Aster",
+      "systemRefs": ["R5", "R6"],
+      "localObservations": [
+        {
+          "observationId": "obs-a1-t000-aster-r2-heat-alarm",
+          "kind": "alarm",
+          "signal": "Local R2 heat alarm is active.",
+          "sourceRef": "event:event-t000-aster-r2-heat-alarm"
+        }
+      ],
+      "crewRefs": ["crew_aster_repair_02"],
+      "toolRefs": ["local_grid_panel", "maintenance_console"]
+    },
+    { "actorId": "A2", "displayName": "A2", "role": "thermal mechanic", "layer": "L1", "homeSectorId": "Aster", "systemRefs": ["R5"], "localObservations": [], "crewRefs": [], "toolRefs": [] },
+    { "actorId": "A4", "displayName": "A4", "role": "night-shift repair lead", "layer": "L1", "homeSectorId": "Aster", "systemRefs": ["R5", "R6"], "localObservations": [], "crewRefs": [], "toolRefs": [] },
+    { "actorId": "A6", "displayName": "A6", "role": "spare-parts broker", "layer": "L1", "homeSectorId": "Aster", "systemRefs": ["R5"], "localObservations": [], "crewRefs": [], "toolRefs": [] },
+    { "actorId": "A9", "displayName": "A9", "role": "shift recorder / incident clerk", "layer": "L1", "homeSectorId": "Aster", "systemRefs": ["R10", "R5"], "localObservations": [], "crewRefs": [], "toolRefs": [] }
   ],
   "crews": [
     {

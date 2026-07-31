@@ -53,6 +53,27 @@ public sealed class RunArtifactWriterTests
     }
 
     [TestMethod]
+    public void Write_preserves_actor_context_in_initial_and_final_snapshots()
+    {
+        using var directory = TemporaryDirectory.Create();
+        var bundle = RunArtifactWriter.Write(
+            directory.Path,
+            "run-t000-aster",
+            FixedCreatedAtUtc,
+            T0TickRunner.Run(LoadFixture()));
+
+        var initial = InitialStateLoader.LoadFromJson(File.ReadAllText(bundle.InitialSnapshotPath));
+        var final = InitialStateLoader.LoadFromJson(File.ReadAllText(bundle.FinalSnapshotPath));
+        var initialA1 = initial.Actors.Single(actor => actor.ActorId == "A1");
+        var finalA1 = final.Actors.Single(actor => actor.ActorId == "A1");
+
+        CollectionAssert.AreEqual(initialA1.LocalObservations.ToArray(), finalA1.LocalObservations.ToArray());
+        CollectionAssert.AreEqual(initialA1.CrewRefs.ToArray(), finalA1.CrewRefs.ToArray());
+        CollectionAssert.AreEqual(initialA1.ToolRefs.ToArray(), finalA1.ToolRefs.ToArray());
+        Assert.HasCount(1, finalA1.LocalObservations);
+    }
+
+    [TestMethod]
     public void Write_emits_state_diff_with_t0_placeholder_and_required_fields()
     {
         using var directory = TemporaryDirectory.Create();

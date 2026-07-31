@@ -50,6 +50,28 @@ public sealed class T0TickRunnerTests
     }
 
     [TestMethod]
+    public void Run_preserves_actor_context_field_by_field()
+    {
+        var initialState = LoadFixture();
+
+        var finalState = T0TickRunner.Run(initialState).FinalState;
+
+        Assert.HasCount(initialState.Actors.Count, finalState.Actors);
+        for (var index = 0; index < initialState.Actors.Count; index++)
+        {
+            CollectionAssert.AreEqual(
+                initialState.Actors[index].LocalObservations.ToArray(),
+                finalState.Actors[index].LocalObservations.ToArray());
+            CollectionAssert.AreEqual(
+                initialState.Actors[index].CrewRefs.ToArray(),
+                finalState.Actors[index].CrewRefs.ToArray());
+            CollectionAssert.AreEqual(
+                initialState.Actors[index].ToolRefs.ToArray(),
+                finalState.Actors[index].ToolRefs.ToArray());
+        }
+    }
+
+    [TestMethod]
     public void Run_is_deterministic_for_same_input()
     {
         var first = T0TickRunner.Run(LoadFixture());

@@ -77,6 +77,9 @@ public sealed class WorldStateJsonSerializerTests
             Assert.AreEqual(expected[index].Layer, actual[index].Layer);
             Assert.AreEqual(expected[index].HomeSectorId, actual[index].HomeSectorId);
             CollectionAssert.AreEqual(expected[index].SystemRefs.ToArray(), actual[index].SystemRefs.ToArray());
+            CollectionAssert.AreEqual(expected[index].LocalObservations.ToArray(), actual[index].LocalObservations.ToArray());
+            CollectionAssert.AreEqual(expected[index].CrewRefs.ToArray(), actual[index].CrewRefs.ToArray());
+            CollectionAssert.AreEqual(expected[index].ToolRefs.ToArray(), actual[index].ToolRefs.ToArray());
         }
     }
 
