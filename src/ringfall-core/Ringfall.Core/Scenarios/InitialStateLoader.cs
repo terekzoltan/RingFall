@@ -7,9 +7,15 @@ namespace Ringfall.Core.Scenarios;
 
 public static class InitialStateLoader
 {
+    private static readonly HashSet<string> AvailableStatuses = new(StringComparer.Ordinal)
+    {
+        "available",
+        "unavailable"
+    };
     private static readonly string[] RequiredAsterSystems = ["R2", "R5", "R6", "R10"];
     private static readonly string[] RequiredActorIds = ["A1", "A2", "A4", "A6", "A9"];
     private static readonly string[] RequiredCrewIds = ["crew_aster_repair_02"];
+    private static readonly string[] RequiredToolIds = ["local_grid_panel", "maintenance_console"];
     private static readonly string[] RequiredStubSectors = ["Vireo", "Morrow", "BlackSeam"];
 
     public static WorldState LoadFromJson(string json)
@@ -47,6 +53,7 @@ public static class InitialStateLoader
         RequireCollection(worldState.Sectors, "sectors is required.");
         RequireCollection(worldState.Actors, "actors is required.");
         RequireCollection(worldState.Crews, "crews is required.");
+        RequireCollection(worldState.Tools, "tools is required.");
 
         if (worldState.Sectors.Count == 0)
         {
@@ -81,6 +88,13 @@ public static class InitialStateLoader
         {
             RequireElement(crew, "crew entry is required.");
             RequireCollection(crew.SystemRefs, $"crew {crew.CrewId} systemRefs are required.");
+        }
+
+        foreach (var tool in worldState.Tools)
+        {
+            RequireElement(tool, "tool entry is required.");
+            RequireCollection(tool.SystemRefs, $"tool {tool.ToolId} systemRefs are required.");
+            RequireCollection(tool.SupportedActions, $"tool {tool.ToolId} supportedActions are required.");
         }
 
         foreach (var sector in worldState.Sectors)
@@ -125,7 +139,31 @@ public static class InitialStateLoader
             RequireNonEmpty(crew.DisplayName, $"crew {crew.CrewId} displayName is required.");
             RequireNonEmpty(crew.HomeSectorId, $"crew {crew.CrewId} homeSectorId is required.");
             RequireNonEmpty(crew.Status, $"crew {crew.CrewId} status is required.");
+            if (!AvailableStatuses.Contains(crew.Status))
+            {
+                throw new InitialStateValidationException($"crew {crew.CrewId} status is invalid.");
+            }
             RequireNonEmpty(crew.AssignedActorId, $"crew {crew.CrewId} assignedActorId is required.");
+            EnsureNonEmptyUnique(
+                crew.SystemRefs,
+                $"crew {crew.CrewId} systemRefs must be non-empty and unique.");
+        }
+
+        foreach (var tool in worldState.Tools)
+        {
+            RequireNonEmpty(tool.ToolId, "tool id is required.");
+            RequireNonEmpty(tool.DisplayName, $"tool {tool.ToolId} displayName is required.");
+            RequireNonEmpty(tool.Status, $"tool {tool.ToolId} status is required.");
+            if (!AvailableStatuses.Contains(tool.Status))
+            {
+                throw new InitialStateValidationException($"tool {tool.ToolId} status is invalid.");
+            }
+            EnsureNonEmptyUnique(
+                tool.SystemRefs,
+                $"tool {tool.ToolId} systemRefs must be non-empty and unique.");
+            EnsureNonEmptyUnique(
+                tool.SupportedActions,
+                $"tool {tool.ToolId} supportedActions must be non-empty and unique.");
         }
 
         EnsureUnique(worldState.Sectors.Select(sector => sector.SectorId), "sector ids must be unique.");
@@ -134,21 +172,35 @@ public static class InitialStateLoader
             "system ids must be globally unique.");
         EnsureUnique(worldState.Actors.Select(actor => actor.ActorId), "actor ids must be unique.");
         EnsureUnique(worldState.Crews.Select(crew => crew.CrewId), "crew ids must be unique.");
+        EnsureUnique(worldState.Tools.Select(tool => tool.ToolId), "tool ids must be unique.");
 
         var sectorIds = worldState.Sectors.Select(sector => sector.SectorId).ToHashSet(StringComparer.Ordinal);
         var systemIds = worldState.Sectors.SelectMany(sector => sector.Systems.Select(system => system.SystemId)).ToHashSet(StringComparer.Ordinal);
         var actorIds = worldState.Actors.Select(actor => actor.ActorId).ToHashSet(StringComparer.Ordinal);
         var crewIds = worldState.Crews.Select(crew => crew.CrewId).ToHashSet(StringComparer.Ordinal);
+        var toolIds = worldState.Tools.Select(tool => tool.ToolId).ToHashSet(StringComparer.Ordinal);
 
         RequireKnownIds(sectorIds, RequiredStubSectors, "sector");
+        var aster = worldState.Sectors.FirstOrDefault(sector => sector.SectorId == "Aster")
+            ?? throw new InitialStateValidationException("Aster sector is required.");
+        var asterSystemIds = aster.Systems.Select(system => system.SystemId).ToHashSet(StringComparer.Ordinal);
+        foreach (var systemId in RequiredAsterSystems)
+        {
+            if (!asterSystemIds.Contains(systemId))
+            {
+                throw new InitialStateValidationException($"Aster system {systemId} is required.");
+            }
+        }
         RequireKnownIds(actorIds, RequiredActorIds, "actor");
         RequireKnownIds(crewIds, RequiredCrewIds, "crew");
+        RequireKnownIds(toolIds, RequiredToolIds, "tool");
 
         foreach (var actor in worldState.Actors)
         {
             RequireKnownSector(sectorIds, actor.HomeSectorId, $"actor {actor.ActorId} home sector must exist.");
             RequireKnownSystems(systemIds, actor.SystemRefs, $"actor {actor.ActorId}");
             RequireKnownIds(crewIds, actor.CrewRefs, $"actor {actor.ActorId} crew reference");
+            RequireKnownToolReferences(toolIds, actor);
         }
 
         foreach (var crew in worldState.Crews)
@@ -158,16 +210,9 @@ public static class InitialStateLoader
             RequireKnownActor(actorIds, crew.AssignedActorId, $"crew {crew.CrewId} assigned actor must exist.");
         }
 
-        var aster = worldState.Sectors.FirstOrDefault(sector => sector.SectorId == "Aster")
-            ?? throw new InitialStateValidationException("Aster sector is required.");
-        var asterSystemIds = aster.Systems.Select(system => system.SystemId).ToHashSet(StringComparer.Ordinal);
-
-        foreach (var systemId in RequiredAsterSystems)
+        foreach (var tool in worldState.Tools)
         {
-            if (!asterSystemIds.Contains(systemId))
-            {
-                throw new InitialStateValidationException($"Aster system {systemId} is required.");
-            }
+            RequireKnownSystems(systemIds, tool.SystemRefs, $"tool {tool.ToolId}");
         }
 
         foreach (var actor in worldState.Actors)
@@ -232,6 +277,16 @@ public static class InitialStateLoader
         }
     }
 
+    private static void EnsureNonEmptyUnique(IReadOnlyList<string> values, string message)
+    {
+        if (values.Count == 0)
+        {
+            throw new InitialStateValidationException(message);
+        }
+
+        EnsureUnique(values, message);
+    }
+
     private static void RequireKnownSector(IReadOnlySet<string> sectorIds, string sectorId, string message)
     {
         if (!sectorIds.Contains(sectorId))
@@ -257,6 +312,17 @@ public static class InitialStateLoader
         if (!actorIds.Contains(actorId))
         {
             throw new InitialStateValidationException(message);
+        }
+    }
+
+    private static void RequireKnownToolReferences(IReadOnlySet<string> toolIds, ActorState actor)
+    {
+        foreach (var toolRef in actor.ToolRefs)
+        {
+            if (!toolIds.Contains(toolRef))
+            {
+                throw new InitialStateValidationException($"actor {actor.ActorId} references unknown tool {toolRef}.");
+            }
         }
     }
 

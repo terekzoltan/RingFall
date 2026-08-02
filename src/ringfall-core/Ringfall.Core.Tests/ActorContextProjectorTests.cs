@@ -455,6 +455,40 @@ public sealed class ActorContextProjectorTests
     }
 
     [TestMethod]
+    public void Project_rejects_unknown_selected_actor_tool_refs_without_reflecting_the_id()
+    {
+        const string unknownToolId = "unknown_tool";
+        var state = LoadFixture();
+        var actors = state.Actors.ToArray();
+        actors[0] = actors[0] with { ToolRefs = [unknownToolId] };
+
+        var exception = Assert.ThrowsExactly<InvalidOperationException>(() =>
+            ActorContextProjector.Project(state with { Actors = actors }, "A1"));
+
+        Assert.AreEqual("Actor A1 context cannot be projected from an invalid world state.", exception.Message);
+        Assert.IsFalse(exception.Message.Contains(unknownToolId, StringComparison.Ordinal));
+    }
+
+    [TestMethod]
+    public void Project_rejects_ambiguous_selected_actor_tool_refs()
+    {
+        var state = LoadFixture();
+        var duplicate = state.Tools[0] with { DisplayName = "Duplicate local grid panel" };
+
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
+            ActorContextProjector.Project(state with { Tools = state.Tools.Concat([duplicate]).ToArray() }, "A1"));
+    }
+
+    [TestMethod]
+    public void Project_rejects_missing_tool_inventory()
+    {
+        var state = LoadFixture() with { Tools = null! };
+
+        Assert.ThrowsExactly<InvalidOperationException>(() =>
+            ActorContextProjector.Project(state, "A1"));
+    }
+
+    [TestMethod]
     public void Serializer_rejects_directly_constructed_unsafe_state()
     {
         var state = WithActorObservation(

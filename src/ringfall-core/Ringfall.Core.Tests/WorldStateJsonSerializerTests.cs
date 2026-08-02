@@ -20,6 +20,7 @@ public sealed class WorldStateJsonSerializerTests
         AssertSectorsEqual(source.Sectors, roundTripped.Sectors);
         AssertActorsEqual(source.Actors, roundTripped.Actors);
         AssertCrewsEqual(source.Crews, roundTripped.Crews);
+        AssertToolsEqual(source.Tools, roundTripped.Tools);
     }
 
     [TestMethod]
@@ -94,6 +95,19 @@ public sealed class WorldStateJsonSerializerTests
             Assert.AreEqual(expected[index].Status, actual[index].Status);
             Assert.AreEqual(expected[index].AssignedActorId, actual[index].AssignedActorId);
             CollectionAssert.AreEqual(expected[index].SystemRefs.ToArray(), actual[index].SystemRefs.ToArray());
+        }
+    }
+
+    private static void AssertToolsEqual(IReadOnlyList<ToolState> expected, IReadOnlyList<ToolState> actual)
+    {
+        Assert.HasCount(expected.Count, actual);
+        for (var index = 0; index < expected.Count; index++)
+        {
+            Assert.AreEqual(expected[index].ToolId, actual[index].ToolId);
+            Assert.AreEqual(expected[index].DisplayName, actual[index].DisplayName);
+            Assert.AreEqual(expected[index].Status, actual[index].Status);
+            CollectionAssert.AreEqual(expected[index].SystemRefs.ToArray(), actual[index].SystemRefs.ToArray());
+            CollectionAssert.AreEqual(expected[index].SupportedActions.ToArray(), actual[index].SupportedActions.ToArray());
         }
     }
 }

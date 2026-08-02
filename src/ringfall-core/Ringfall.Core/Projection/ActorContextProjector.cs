@@ -38,7 +38,8 @@ internal static class ActorContextProjector
             || string.IsNullOrWhiteSpace(actor.HomeSectorId)
             || !HasUniqueNonEmptyValues(actor.CrewRefs)
             || !HasUniqueNonEmptyValues(actor.ToolRefs)
-            || !HasKnownCrewReferences(state, actor.CrewRefs))
+            || !HasKnownCrewReferences(state, actor.CrewRefs)
+            || !HasKnownToolReferences(state, actor.ToolRefs))
         {
             throw new InvalidOperationException($"Actor {actorId} context cannot be projected from an invalid world state.");
         }
@@ -120,6 +121,25 @@ internal static class ActorContextProjector
         {
             if (state.Crews.Count(crew => crew is not null
                 && string.Equals(crew.CrewId, crewRef, StringComparison.Ordinal)) != 1)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static bool HasKnownToolReferences(WorldState state, IEnumerable<string> toolRefs)
+    {
+        if (state.Tools is null)
+        {
+            return false;
+        }
+
+        foreach (var toolRef in toolRefs)
+        {
+            if (state.Tools.Count(tool => tool is not null
+                && string.Equals(tool.ToolId, toolRef, StringComparison.Ordinal)) != 1)
             {
                 return false;
             }

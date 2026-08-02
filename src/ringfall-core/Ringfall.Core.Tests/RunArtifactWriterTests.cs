@@ -74,6 +74,42 @@ public sealed class RunArtifactWriterTests
     }
 
     [TestMethod]
+    public void Write_preserves_exact_tools_in_initial_and_final_snapshots()
+    {
+        using var directory = TemporaryDirectory.Create();
+        var bundle = RunArtifactWriter.Write(
+            directory.Path,
+            "run-t000-aster",
+            FixedCreatedAtUtc,
+            T0TickRunner.Run(LoadFixture()));
+
+        var initial = InitialStateLoader.LoadFromJson(File.ReadAllText(bundle.InitialSnapshotPath));
+        var final = InitialStateLoader.LoadFromJson(File.ReadAllText(bundle.FinalSnapshotPath));
+
+        Assert.HasCount(2, initial.Tools);
+        Assert.HasCount(initial.Tools.Count, final.Tools);
+        for (var index = 0; index < initial.Tools.Count; index++)
+        {
+            AssertToolEqual(initial.Tools[index], final.Tools[index]);
+        }
+
+        Assert.AreEqual("local_grid_panel", initial.Tools[0].ToolId);
+        Assert.AreEqual("Local grid panel", initial.Tools[0].DisplayName);
+        Assert.AreEqual("available", initial.Tools[0].Status);
+        CollectionAssert.AreEqual(new[] { "R2", "R5" }, initial.Tools[0].SystemRefs.ToArray());
+        CollectionAssert.AreEqual(
+            new[] { "query_branch_load", "query_heat_alarm", "dry_run_reroute" },
+            initial.Tools[0].SupportedActions.ToArray());
+        Assert.AreEqual("maintenance_console", initial.Tools[1].ToolId);
+        Assert.AreEqual("Maintenance console", initial.Tools[1].DisplayName);
+        Assert.AreEqual("available", initial.Tools[1].Status);
+        CollectionAssert.AreEqual(new[] { "R2", "R5" }, initial.Tools[1].SystemRefs.ToArray());
+        CollectionAssert.AreEqual(
+            new[] { "query_asset_status", "query_backlog", "dry_run_patch" },
+            initial.Tools[1].SupportedActions.ToArray());
+    }
+
+    [TestMethod]
     public void Write_emits_state_diff_with_t0_placeholder_and_required_fields()
     {
         using var directory = TemporaryDirectory.Create();
@@ -203,6 +239,15 @@ public sealed class RunArtifactWriterTests
     private static string ReadFixture(string fileName)
     {
         return File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Fixtures", fileName));
+    }
+
+    private static void AssertToolEqual(Core.State.ToolState expected, Core.State.ToolState actual)
+    {
+        Assert.AreEqual(expected.ToolId, actual.ToolId);
+        Assert.AreEqual(expected.DisplayName, actual.DisplayName);
+        Assert.AreEqual(expected.Status, actual.Status);
+        CollectionAssert.AreEqual(expected.SystemRefs.ToArray(), actual.SystemRefs.ToArray());
+        CollectionAssert.AreEqual(expected.SupportedActions.ToArray(), actual.SupportedActions.ToArray());
     }
 
     private static string[] ExpectedArtifactPaths()

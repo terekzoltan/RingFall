@@ -25,8 +25,13 @@ public sealed class InitialStateLoaderTests
     [TestMethod]
     public void Missing_required_aster_system_fails_deterministically()
     {
+        var root = ParseFixtureNode();
+        var systems = root["sectors"]!.AsArray()[0]!["systems"]!.AsArray();
+        var r2 = systems.Single(system => system!["systemId"]!.GetValue<string>() == "R2");
+        systems.Remove(r2);
+
         var exception = Assert.ThrowsExactly<InitialStateValidationException>(() =>
-            InitialStateLoader.LoadFromJson(ReadFixture("invalid-missing-aster-r2.json")));
+            InitialStateLoader.LoadFromJson(root.ToJsonString()));
 
         Assert.AreEqual("Aster system R2 is required.", exception.Message);
     }
@@ -77,6 +82,305 @@ public sealed class InitialStateLoaderTests
             InitialStateLoader.LoadFromJson(json));
 
         Assert.AreEqual("crew crew_aster_repair_02 is required.", exception.Message);
+    }
+
+    [TestMethod]
+    public void Loads_exact_canonical_crew_state()
+    {
+        var state = InitialStateLoader.LoadFromJson(ReadFixture("aster-minimal-world-state.json"));
+
+        var crew = state.Crews.Single(candidate => candidate.CrewId == "crew_aster_repair_02");
+        Assert.AreEqual("Aster repair crew 02", crew.DisplayName);
+        Assert.AreEqual("Aster", crew.HomeSectorId);
+        Assert.AreEqual("available", crew.Status);
+        Assert.AreEqual("A1", crew.AssignedActorId);
+        CollectionAssert.AreEqual(new[] { "R2", "R5", "R6" }, crew.SystemRefs.ToArray());
+    }
+
+    [TestMethod]
+    [DataRow("available")]
+    [DataRow("unavailable")]
+    public void Bounded_crew_statuses_are_accepted(string status)
+    {
+        var root = ParseFixtureNode();
+        root["crews"]!.AsArray()[0]!["status"] = status;
+
+        var state = InitialStateLoader.LoadFromJson(root.ToJsonString());
+
+        Assert.AreEqual(status, state.Crews[0].Status);
+    }
+
+    [TestMethod]
+    public void Unsupported_crew_status_fails_deterministically()
+    {
+        var root = ParseFixtureNode();
+        root["crews"]!.AsArray()[0]!["status"] = "assigned";
+
+        var exception = Assert.ThrowsExactly<InitialStateValidationException>(() =>
+            InitialStateLoader.LoadFromJson(root.ToJsonString()));
+
+        Assert.AreEqual("crew crew_aster_repair_02 status is invalid.", exception.Message);
+    }
+
+    [TestMethod]
+    public void Empty_crew_system_refs_fail_deterministically()
+    {
+        var root = ParseFixtureNode();
+        root["crews"]!.AsArray()[0]!["systemRefs"] = new System.Text.Json.Nodes.JsonArray();
+
+        var exception = Assert.ThrowsExactly<InitialStateValidationException>(() =>
+            InitialStateLoader.LoadFromJson(root.ToJsonString()));
+
+        Assert.AreEqual(
+            "crew crew_aster_repair_02 systemRefs must be non-empty and unique.",
+            exception.Message);
+    }
+
+    [TestMethod]
+    [DataRow(" ")]
+    [DataRow("R2")]
+    public void Blank_or_duplicate_crew_system_refs_fail_deterministically(string duplicateOrBlank)
+    {
+        var root = ParseFixtureNode();
+        var refs = root["crews"]!.AsArray()[0]!["systemRefs"]!.AsArray();
+        refs.Add(duplicateOrBlank);
+
+        var exception = Assert.ThrowsExactly<InitialStateValidationException>(() =>
+            InitialStateLoader.LoadFromJson(root.ToJsonString()));
+
+        Assert.AreEqual(
+            "crew crew_aster_repair_02 systemRefs must be non-empty and unique.",
+            exception.Message);
+    }
+
+    [TestMethod]
+    public void Unknown_crew_system_ref_fails_deterministically()
+    {
+        var root = ParseFixtureNode();
+        root["crews"]!.AsArray()[0]!["systemRefs"]!.AsArray()[0] = "UNKNOWN-SYSTEM";
+
+        var exception = Assert.ThrowsExactly<InitialStateValidationException>(() =>
+            InitialStateLoader.LoadFromJson(root.ToJsonString()));
+
+        Assert.AreEqual(
+            "crew crew_aster_repair_02 references unknown system UNKNOWN-SYSTEM.",
+            exception.Message);
+    }
+
+    [TestMethod]
+    public void Loads_exact_canonical_tools_in_source_order()
+    {
+        var state = InitialStateLoader.LoadFromJson(ReadFixture("aster-minimal-world-state.json"));
+
+        Assert.HasCount(2, state.Tools);
+        AssertTool(
+            state.Tools[0],
+            "local_grid_panel",
+            "Local grid panel",
+            "available",
+            ["R2", "R5"],
+            ["query_branch_load", "query_heat_alarm", "dry_run_reroute"]);
+        AssertTool(
+            state.Tools[1],
+            "maintenance_console",
+            "Maintenance console",
+            "available",
+            ["R2", "R5"],
+            ["query_asset_status", "query_backlog", "dry_run_patch"]);
+    }
+
+    [TestMethod]
+    [DataRow("available")]
+    [DataRow("unavailable")]
+    public void Bounded_tool_statuses_are_accepted(string status)
+    {
+        var root = ParseFixtureNode();
+        root["tools"]!.AsArray()[0]!["status"] = status;
+
+        var state = InitialStateLoader.LoadFromJson(root.ToJsonString());
+
+        Assert.AreEqual(status, state.Tools[0].Status);
+    }
+
+    [TestMethod]
+    public void Missing_tools_fails_at_deserialization_boundary()
+    {
+        var root = ParseFixtureNode();
+        root.Remove("tools");
+
+        var exception = Assert.ThrowsExactly<InitialStateValidationException>(() =>
+            InitialStateLoader.LoadFromJson(root.ToJsonString()));
+
+        Assert.AreEqual("WorldState JSON is invalid.", exception.Message);
+        Assert.IsNotNull(exception.InnerException);
+    }
+
+    [TestMethod]
+    public void Null_tools_fails_loader_validation()
+    {
+        var root = ParseFixtureNode();
+        root["tools"] = null;
+
+        var exception = Assert.ThrowsExactly<InitialStateValidationException>(() =>
+            InitialStateLoader.LoadFromJson(root.ToJsonString()));
+
+        Assert.AreEqual("tools is required.", exception.Message);
+    }
+
+    [TestMethod]
+    public void Empty_tools_fails_with_first_required_tool()
+    {
+        var root = ParseFixtureNode();
+        root["tools"] = new System.Text.Json.Nodes.JsonArray();
+
+        var exception = Assert.ThrowsExactly<InitialStateValidationException>(() =>
+            InitialStateLoader.LoadFromJson(root.ToJsonString()));
+
+        Assert.AreEqual("tool local_grid_panel is required.", exception.Message);
+    }
+
+    [TestMethod]
+    public void Null_tool_entry_fails_deterministically()
+    {
+        var root = ParseFixtureNode();
+        root["tools"]!.AsArray()[0] = null;
+
+        var exception = Assert.ThrowsExactly<InitialStateValidationException>(() =>
+            InitialStateLoader.LoadFromJson(root.ToJsonString()));
+
+        Assert.AreEqual("tool entry is required.", exception.Message);
+    }
+
+    [TestMethod]
+    [DataRow("toolId", " ", "tool id is required.")]
+    [DataRow("displayName", " ", "tool local_grid_panel displayName is required.")]
+    [DataRow("status", " ", "tool local_grid_panel status is required.")]
+    public void Blank_tool_scalar_fields_fail_deterministically(
+        string propertyName,
+        string value,
+        string expectedMessage)
+    {
+        var root = ParseFixtureNode();
+        root["tools"]!.AsArray()[0]![propertyName] = value;
+
+        var exception = Assert.ThrowsExactly<InitialStateValidationException>(() =>
+            InitialStateLoader.LoadFromJson(root.ToJsonString()));
+
+        Assert.AreEqual(expectedMessage, exception.Message);
+    }
+
+    [TestMethod]
+    public void Unsupported_tool_status_fails_deterministically()
+    {
+        var root = ParseFixtureNode();
+        root["tools"]!.AsArray()[0]!["status"] = "executing";
+
+        var exception = Assert.ThrowsExactly<InitialStateValidationException>(() =>
+            InitialStateLoader.LoadFromJson(root.ToJsonString()));
+
+        Assert.AreEqual("tool local_grid_panel status is invalid.", exception.Message);
+    }
+
+    [TestMethod]
+    [DataRow("systemRefs", "tool local_grid_panel systemRefs are required.")]
+    [DataRow("supportedActions", "tool local_grid_panel supportedActions are required.")]
+    public void Null_tool_collections_fail_deterministically(string propertyName, string expectedMessage)
+    {
+        var root = ParseFixtureNode();
+        root["tools"]!.AsArray()[0]![propertyName] = null;
+
+        var exception = Assert.ThrowsExactly<InitialStateValidationException>(() =>
+            InitialStateLoader.LoadFromJson(root.ToJsonString()));
+
+        Assert.AreEqual(expectedMessage, exception.Message);
+    }
+
+    [TestMethod]
+    [DataRow("systemRefs", "empty")]
+    [DataRow("systemRefs", "blank")]
+    [DataRow("systemRefs", "duplicate")]
+    [DataRow("supportedActions", "empty")]
+    [DataRow("supportedActions", "blank")]
+    [DataRow("supportedActions", "duplicate")]
+    public void Invalid_tool_list_contents_fail_deterministically(string propertyName, string mutation)
+    {
+        var root = ParseFixtureNode();
+        var values = root["tools"]!.AsArray()[0]![propertyName]!.AsArray();
+        if (mutation == "empty")
+        {
+            values.Clear();
+        }
+        else if (mutation == "blank")
+        {
+            values[0] = " ";
+        }
+        else
+        {
+            values.Add(values[0]!.GetValue<string>());
+        }
+
+        var exception = Assert.ThrowsExactly<InitialStateValidationException>(() =>
+            InitialStateLoader.LoadFromJson(root.ToJsonString()));
+
+        Assert.AreEqual(
+            propertyName == "systemRefs"
+                ? "tool local_grid_panel systemRefs must be non-empty and unique."
+                : "tool local_grid_panel supportedActions must be non-empty and unique.",
+            exception.Message);
+    }
+
+    [TestMethod]
+    public void Unknown_tool_system_ref_fails_deterministically()
+    {
+        var root = ParseFixtureNode();
+        root["tools"]!.AsArray()[0]!["systemRefs"]!.AsArray()[0] = "UNKNOWN-SYSTEM";
+
+        var exception = Assert.ThrowsExactly<InitialStateValidationException>(() =>
+            InitialStateLoader.LoadFromJson(root.ToJsonString()));
+
+        Assert.AreEqual(
+            "tool local_grid_panel references unknown system UNKNOWN-SYSTEM.",
+            exception.Message);
+    }
+
+    [TestMethod]
+    public void Duplicate_tool_ids_fail_deterministically()
+    {
+        var root = ParseFixtureNode();
+        root["tools"]!.AsArray()[1]!["toolId"] = "local_grid_panel";
+
+        var exception = Assert.ThrowsExactly<InitialStateValidationException>(() =>
+            InitialStateLoader.LoadFromJson(root.ToJsonString()));
+
+        Assert.AreEqual("tool ids must be unique.", exception.Message);
+    }
+
+    [TestMethod]
+    [DataRow("local_grid_panel")]
+    [DataRow("maintenance_console")]
+    public void Missing_required_tool_fails_deterministically(string toolId)
+    {
+        var root = ParseFixtureNode();
+        var tools = root["tools"]!.AsArray();
+        var tool = tools.Single(candidate => candidate!["toolId"]!.GetValue<string>() == toolId);
+        tools.Remove(tool);
+
+        var exception = Assert.ThrowsExactly<InitialStateValidationException>(() =>
+            InitialStateLoader.LoadFromJson(root.ToJsonString()));
+
+        Assert.AreEqual($"tool {toolId} is required.", exception.Message);
+    }
+
+    [TestMethod]
+    public void Unknown_actor_tool_ref_fails_deterministically()
+    {
+        var root = ParseFixtureNode();
+        root["actors"]!.AsArray()[0]!["toolRefs"]!.AsArray()[0] = "unknown_tool";
+
+        var exception = Assert.ThrowsExactly<InitialStateValidationException>(() =>
+            InitialStateLoader.LoadFromJson(root.ToJsonString()));
+
+        Assert.AreEqual("actor A1 references unknown tool unknown_tool.", exception.Message);
     }
 
     [TestMethod]
@@ -664,7 +968,8 @@ public sealed class InitialStateLoaderTests
           "simulationSeed": 42,
           "sectors": null,
           "actors": [],
-          "crews": []
+          "crews": [],
+          "tools": []
         }
         """;
 
@@ -686,7 +991,8 @@ public sealed class InitialStateLoaderTests
             { "sectorId": "Aster", "displayName": "Aster", "systems": null }
           ],
           "actors": [],
-          "crews": []
+          "crews": [],
+          "tools": []
         }
         """;
 
@@ -748,6 +1054,21 @@ public sealed class InitialStateLoaderTests
     private static string ReadFixture(string fileName)
     {
         return File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Fixtures", fileName));
+    }
+
+    private static void AssertTool(
+        ToolState tool,
+        string toolId,
+        string displayName,
+        string status,
+        string[] systemRefs,
+        string[] supportedActions)
+    {
+        Assert.AreEqual(toolId, tool.ToolId);
+        Assert.AreEqual(displayName, tool.DisplayName);
+        Assert.AreEqual(status, tool.Status);
+        CollectionAssert.AreEqual(systemRefs, tool.SystemRefs.ToArray());
+        CollectionAssert.AreEqual(supportedActions, tool.SupportedActions.ToArray());
     }
 
     private static string ReplaceA1SourceRef(string json, string sourceRef)

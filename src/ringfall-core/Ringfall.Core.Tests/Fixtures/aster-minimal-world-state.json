@@ -114,5 +114,21 @@
       "assignedActorId": "A1",
       "systemRefs": ["R2", "R5", "R6"]
     }
+  ],
+  "tools": [
+    {
+      "toolId": "local_grid_panel",
+      "displayName": "Local grid panel",
+      "status": "available",
+      "systemRefs": ["R2", "R5"],
+      "supportedActions": ["query_branch_load", "query_heat_alarm", "dry_run_reroute"]
+    },
+    {
+      "toolId": "maintenance_console",
+      "displayName": "Maintenance console",
+      "status": "available",
+      "systemRefs": ["R2", "R5"],
+      "supportedActions": ["query_asset_status", "query_backlog", "dry_run_patch"]
+    }
   ]
 }

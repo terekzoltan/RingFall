@@ -8,4 +8,5 @@ public sealed record WorldState
     public required IReadOnlyList<SectorState> Sectors { get; init; }
     public required IReadOnlyList<ActorState> Actors { get; init; }
     public required IReadOnlyList<CrewState> Crews { get; init; }
+    public required IReadOnlyList<ToolState> Tools { get; init; }
 }

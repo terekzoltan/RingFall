@@ -72,6 +72,26 @@ public sealed class T0TickRunnerTests
     }
 
     [TestMethod]
+    public void Run_preserves_tools_field_by_field_in_source_order()
+    {
+        var initialState = LoadFixture();
+
+        var finalState = T0TickRunner.Run(initialState).FinalState;
+
+        Assert.HasCount(initialState.Tools.Count, finalState.Tools);
+        for (var index = 0; index < initialState.Tools.Count; index++)
+        {
+            var expected = initialState.Tools[index];
+            var actual = finalState.Tools[index];
+            Assert.AreEqual(expected.ToolId, actual.ToolId);
+            Assert.AreEqual(expected.DisplayName, actual.DisplayName);
+            Assert.AreEqual(expected.Status, actual.Status);
+            CollectionAssert.AreEqual(expected.SystemRefs.ToArray(), actual.SystemRefs.ToArray());
+            CollectionAssert.AreEqual(expected.SupportedActions.ToArray(), actual.SupportedActions.ToArray());
+        }
+    }
+
+    [TestMethod]
     public void Run_is_deterministic_for_same_input()
     {
         var first = T0TickRunner.Run(LoadFixture());
