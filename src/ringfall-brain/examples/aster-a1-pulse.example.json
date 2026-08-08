@@ -1,0 +1,49 @@
+{
+  "packet_id": "pulse_A1_t000",
+  "packet_type": "AvatarPulsePacket",
+  "schema_version": "0.1",
+  "issuer_id": "A1",
+  "issuer_layer": "L1",
+  "issued_at_tick": 0,
+  "source_context_id": "ctx_A1_aster_heat_t000",
+  "rationale": "The local R2 heat alarm is source-bound evidence for inspection; its cause is not established.",
+  "confidence": 0.74,
+  "evidence_refs": [
+    "obs-a1-t000-aster-r2-heat-alarm",
+    "event:event-t000-aster-r2-heat-alarm"
+  ],
+  "visibility_intent": "internal",
+  "urgency": "high",
+  "actor_id": "A1",
+  "observed": [
+    "Local R2 heat alarm is active."
+  ],
+  "belief_updates": [
+    {
+      "claim": "The alarm may require local inspection before its cause is known.",
+      "confidence": 0.62,
+      "source_refs": [
+        "obs-a1-t000-aster-r2-heat-alarm",
+        "event:event-t000-aster-r2-heat-alarm"
+      ]
+    }
+  ],
+  "intent": "request bounded local inspection without claiming execution or broader authority",
+  "requested_packets": [
+    {
+      "packet_type": "SceneActionPacket",
+      "draft_ref": "draft_A1_scene_heat_alarm"
+    },
+    {
+      "packet_type": "ToolActionRequest",
+      "draft_ref": "draft_A1_tool_heat_alarm_check"
+    },
+    {
+      "packet_type": "WorkOrderRequest",
+      "draft_ref": "draft_A1_work_order_heat_alarm_inspection"
+    }
+  ],
+  "risk_flags": [
+    "local_heat_alarm"
+  ]
+}
