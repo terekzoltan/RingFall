@@ -1,0 +1,77 @@
+name: Runtime CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  core-dotnet-ci:
+    name: Core .NET CI
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dev requirements
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Run Core solution tests
+        run: dotnet test src/ringfall-core/Ringfall.Core.sln
+
+      - name: Run Core artifact smoke tests
+        run: python tools/core_artifact_smoke_tests.py
+
+      - name: Validate tracked Core artifact bundle
+        run: python tools/core_artifact_smoke.py tools/fixtures/k2h-core-artifact-bundle
+
+  brain-python-ci:
+    name: Brain Python CI
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONPATH: src/ringfall-brain
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dev requirements
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Run Brain unit tests
+        run: python -m unittest discover -s src/ringfall-brain/tests -p "test*.py"
+
+      - name: Run Brain artifact smoke tests
+        run: python tools/brain_artifact_smoke_tests.py
+
+      - name: Generate and validate dev mock Brain artifacts
+        shell: bash
+        run: |
+          artifact_dir="$(mktemp -d "$RUNNER_TEMP/ringfall-brain-artifacts.XXXXXX")"
+          trap 'rm -rf "$artifact_dir"' EXIT
+          python -m ringfall_brain.cli mock cognition \
+            --packet-schema src/ringfall-contracts/schemas/packets/avatar-pulse-packet.schema.json \
+            --cognition-schema src/ringfall-contracts/schemas/traces/cognition-trace.schema.json \
+            --cost-schema src/ringfall-contracts/schemas/traces/cost-event.schema.json \
+            --output-dir "$artifact_dir"
+          python tools/brain_artifact_smoke.py "$artifact_dir"
