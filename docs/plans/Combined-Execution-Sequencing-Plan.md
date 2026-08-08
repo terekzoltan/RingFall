@@ -4,9 +4,11 @@
 **Owner:** Meta Coordinator  
 **Scope:** Track-level execution ordering for Ringfall FP1 — Aster/Vireo/Black Seam Slice  
 **Intent:** turn the Ringfall design canon into an actually executable Meta + Track wave plan  
-**Status:** active planning document / v04 controlled-parallelism + formal-intervention-gate revision
+**Status:** active planning document / v05 controlled runtime-CI activation revision
 **Baseline source:** `Ringfall-Implementation-Wave-Plan-v01.md`  
 **Expected location:** `docs/plans/Combined-Execution-Sequencing-Plan.md`  
+
+**v05 revision note:** This version preserves the accepted CI15-D slot map and records the Owner-authorized, post-closeout activation of only `core-dotnet-ci` and `brain-python-ci` as the separate Track E `CI15-G` lifecycle. Contract CI remains intact; Unity, scenario/replay, provider, coverage-threshold, formal-solver, OpenCode/FAL, secret, and artifact-upload scope stays closed.
 
 **v04 revision note:** This version preserves the v03 controlled side-lane structure and integrates the approved Refinery direction as bounded formal intervention gates. Refinery is not a full-world model and is not part of Wave 1.5 contract CI; it becomes a family-by-family safety gate starting with Aster L1 tool/work-order proposals.
 
@@ -141,6 +143,11 @@ Execution tables are the chronological contract for Meta and Track sessions. The
 Execution rules:
 
 - one execution-table row equals one concrete session assignment; that assignment may cover one or more epics, or one named gate;
+- unless a row is explicitly labeled `planning-only`, `docs-only`, `review-only`, or a named gate, an epic row represents the epic's complete governed workflow lifecycle: Track `/seq-next` -> one Meta `/terv-review` -> Track `/terv-review-utan` -> Track `/implement` -> Meta `/step-review` -> selected external review -> Meta final synthesis -> Track `/step-review-utan` -> bounded review-fix cycles -> accepted closeout;
+- planning, implementation, review, and review-fix are lifecycle phases inside that epic row, not separate execution rows by default;
+- an epic row changes from `⬜` to `🔄` when its `/seq-next` lifecycle starts and becomes `✅` only after its required final acceptance and closeout gates pass; a completed plan alone does not complete the row;
+- Meta review and external review remain independently owned gates inside the lifecycle; including them in the row's completion contract does not transfer Meta or reviewer ownership to the Track session;
+- do not append `planning` or `implementation` to an epic ID in the `Epic(s)` cell merely to describe its current lifecycle phase; record the current phase in `Notes` or the operational state/evidence surface instead;
 - multiple epic IDs may share one `Epic(s)` cell when one session can complete them as a coherent assignment;
 - a closeout, review fan-in, or wave-gate decision is also a single row, not bundled with implementation epics;
 - a numbered step is a chronological barrier: all rows in step N must be startable from the same accepted prerequisite frontier;
@@ -938,6 +945,42 @@ Wave 1.5 passes when Ringfall has a narrow contract CI workflow protecting `tool
 - coverage is introduced as a broad hard gate before runtime modules exist
 - green CI is represented as domain/FAL approval instead of mechanical evidence
 
+### Post-closeout runtime-CI activation exception
+
+Owner decision, 2026-08-08:
+
+- The accepted CI15-D slot map remains complete and is not rewritten as prior implementation work.
+- Current repository truth unblocks `core-dotnet-ci`: `src/ringfall-core/Ringfall.Core.sln` targets .NET 10, has an accepted local `dotnet test` surface, and the tracked K2-H fixture plus Core artifact smoke validator are present.
+- Current repository truth unblocks `brain-python-ci`: `src/ringfall-brain/tests` supports stdlib unittest discovery, the deterministic dev/mock cognition artifact generator is present, and the B3-H Brain artifact smoke validator is present without a provider client or network/API call.
+- `unity-client-ci` remains blocked because no accepted Unity client and local verify contract exist.
+- `scenario-replay-ci` remains blocked because no accepted scenario/replay runner and replay-evidence contract exist.
+- CI15-E remains authoritative: coverage may be reported later, but this activation adds no hard coverage threshold.
+- CI15-F remains separate and inactive: `CI15-G` adds no Refinery, solver, bridge, or formal-intervention CI.
+
+Activation Epic:
+
+- ✅ **CI15-G** Core/Brain runtime CI activation — **Owner: Track E**; **Accountable Lane / class / profile: Track E / TRACK / track-e**; accepted and closed under candidate `.github/workflows/runtime-ci.yml#d3ea9da19eac8504d788b3478c6bfbf08714ee1162e86d0860baa5a69227b994`, `GREEN`, exact `ACK_ONLY`, and implementation commit `1f6d036d2d0dd2f214f2190aec166340b14c967b`; local mechanical evidence passed; no push or remote Actions run occurred.
+
+**✅ Post-closeout Step 7 — Core/Brain runtime CI activation**
+
+| Session | Epic(s) | Prereq | Notes |
+|---|---|---|---|
+| Track E session | CI15-G | CI15-C/D/E ✅ + Wave 2 gate ✅ + Wave 3 gate ✅ + Owner activation decision 2026-08-08 | Completed, accepted, and closed under candidate `.github/workflows/runtime-ci.yml#d3ea9da19eac8504d788b3478c6bfbf08714ee1162e86d0860baa5a69227b994`, `GREEN`, exact Track E `ACK_ONLY`, and implementation commit `1f6d036d2d0dd2f214f2190aec166340b14c967b`. The separate workflow activates only `core-dotnet-ci` and `brain-python-ci`; no push or remote Actions run occurred. |
+
+CI15-G frozen acceptance/evidence contract:
+
+- Runtime CI must run `dotnet test src/ringfall-core/Ringfall.Core.sln`.
+- Runtime CI must run Brain unittest discovery with `PYTHONPATH=src/ringfall-brain python -m unittest discover -s src/ringfall-brain/tests -p "test*.py"` or the runner-OS-equivalent environment binding with identical discovery scope.
+- Runtime CI must run `python tools/core_artifact_smoke_tests.py`.
+- Runtime CI must run `python tools/core_artifact_smoke.py tools/fixtures/k2h-core-artifact-bundle` against the tracked fixture.
+- Runtime CI must run `python tools/brain_artifact_smoke_tests.py`.
+- Runtime CI must generate the deterministic dev/mock packet, cognition trace, and cost event bundle through `python -m ringfall_brain.cli mock cognition` into a fresh CI temporary directory, then run `python tools/brain_artifact_smoke.py` against that generated directory.
+- The workflow must use top-level `permissions: contents: read`; it must not reference repository/provider secrets, make provider or network/API calls, upload artifacts, enforce a coverage threshold, or invoke Unity, scenario/replay, simulation, Refinery/solver, OpenCode, or FAL runtime.
+- Generated Brain artifacts are ephemeral mechanical evidence in the CI temporary directory only. They are not uploaded, committed, treated as canonical provider evidence, or represented as domain approval.
+- Track E owns `/seq-next`, plan review follow-up, implementation, verification, review-fix, and closeout for CI15-G. Meta owns sequencing and Meta review gates only.
+- Local reconciliation evidence on 2026-08-08 passed: Core solution tests `333/333`, Brain discovery `49/49`, Core artifact smoke tests `32/32`, tracked K2-H bundle smoke, Brain artifact smoke tests `31/31`, and generated temporary dev/mock Brain bundle smoke.
+- This Owner-directed Combined update is external to the frozen A4-F/A4-J cycle-3 payload. It authorizes no A4 candidate mutation or CI work absorption. Because the prior A4 evidence hash-pinned the former Combined bytes as a read-only exclusion, that prior exclusion proof must not be silently reused after this governance update; A4 remains a separate frozen lifecycle requiring its own explicit continuity handling.
+
 ---
 
 ## Wave 2 — Deterministic core and first headless state
@@ -1292,10 +1335,10 @@ Wave 3 passes when mock cognition creates a schema-valid L1 pulse and a cognitio
 **Secondary support:** Track A may consume artifacts in parallel
 
 ### Mandatory outputs
-- ⬜ Aster actor/context data
+- ✅ Aster actor/context data
 - ⬜ A1/A2/A4/A6/A9 minimal actors
-- ⬜ crew_aster_repair_02
-- ⬜ local_grid_panel + maintenance_console minimal
+- ✅ crew_aster_repair_02
+- ✅ local_grid_panel + maintenance_console minimal
 - ⬜ WorkOrderRequest/ToolAction execution
 - ⬜ Aster F1 formal intervention gate for L1 ToolAction/WorkOrder candidate facts, report-only during integration and hard before Wave 4 closeout
 - ⬜ ExecutionResult/VisibilityPartition
@@ -1308,19 +1351,19 @@ Wave 3 passes when mock cognition creates a schema-valid L1 pulse and a cognitio
 **Owner priority:** Track B + Track C
 
 Epics:
-- ⬜ **A4-A** Aster actor records and local observations — **Owner: Track C/B**
-- ⬜ **A4-B** crew_aster_repair_02 and crew state — **Owner: Track B**
-- ⬜ **A4-C** local_grid_panel / maintenance_console minimal contracts — **Owner: Track B**
+- ✅ **A4-A** Aster actor records and local observations — **Owner: Track C/B**; accepted and operationally closed under manifest `F7573FBDBC17F3B54314C1489C9DE5AEA5C869684139AA7F89C1F8E756701A14` and commit `e08ede472e192169968ac60aa572e49797e0628a`
+- ✅ **A4-B** crew_aster_repair_02 and crew state — **Owner: Track B**; accepted and operationally closed under manifest `1FA8D0819505633D25405DB8DBFE4C194E8EA48A210F9C6EB861F7AA5C20696C` and commit `8bc8707a52cabc7403f2376a47635faa269660d4`
+- ✅ **A4-C** local_grid_panel / maintenance_console minimal contracts — **Owner: Track B**; accepted and operationally closed in the same bundled assignment under manifest `1FA8D0819505633D25405DB8DBFE4C194E8EA48A210F9C6EB861F7AA5C20696C` and commit `8bc8707a52cabc7403f2376a47635faa269660d4`
 
 #### Sprint W4-S2 — L1 scene cognition and action validation
 
 **Owner priority:** Track C + Track D + Track B
 
 Epics:
-- ⬜ **A4-D** A1 pulse/scene prompt and context — **Owner: Track C**
+- ✅ **A4-D** A1 pulse/scene prompt and context — **Owner: Track C**; accepted and operationally closed under manifest `0DB1C3811D12B83F863BB78CE3F856612C7904564250B6AB3DB270DADB80CB2E` and commit `f192a2d0fbdc56289ab8b812df714bfc72ab0883`
 - ⬜ **A4-E** Brain emits ToolAction/WorkOrder packets — **Owner: Track D**
-- ⬜ **A4-F** Core validates authority/tool/crew packets — **Owner: Track B**
-- ⬜ **A4-J** Aster F1 formal intervention gate — **Owner: Track B/E**
+- ✅ **A4-F** Core validates authority/tool/crew packets — **Owner: Track B**; accepted and operationally closed with the report-only A4-J draft under manifest `2A95C26DC8D7D1B9D671D5245DB78998423AE5AC5DE4AC320670E5BD916AE9` and commit `6db0be11ff526196b81963fee72f01380e923b59`
+- 🔄 **A4-J** Aster F1 formal intervention gate — **Owner: Track B/E**; Track B report-only draft accepted and committed with A4-F at `6db0be11ff526196b81963fee72f01380e923b59`; Track E differential evidence remains in Step 5
 
 #### Sprint W4-S3 — End-to-end Aster Heat Alarm
 
@@ -1333,19 +1376,30 @@ Epics:
 
 ### Execution Steps
 
-**⬜ Step 1**
+**✅ Step 1**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Track C session | A4-A planning | Wave 2/3 ✅ | Prepare its own A4-A scope/visibility plan using `docs/plans/Wave-4-Step-1-Track-Planning-Preparation.md` as non-binding input; no implementation starts until Meta review accepts the plan. |
-| Track B session | A4-B, A4-C planning | Wave 2 ✅ | Prepare its own scoped plan; use `docs/plans/Wave-4-Step-1-Track-Planning-Preparation.md` to choose and justify bundled or split execution. No implementation starts until Meta review accepts the plan. |
+| Track C session | A4-A | Wave 2/3 ✅ | Full lifecycle assignment accepted and operationally closed under manifest `F7573FBDBC17F3B54314C1489C9DE5AEA5C869684139AA7F89C1F8E756701A14` and commit `e08ede472e192169968ac60aa572e49797e0628a`. The mandatory complete deep review is `GREEN`, its closeout disposition is `ALLOWED`, and Track C returned exact `ACK_ONLY`. The internal pre-release `WorldState 0.1` fixtures and snapshots migrated atomically; no backward-loader compatibility shim is required. |
+| Track B session | A4-B, A4-C | A4-A ✅ + Meta sequencing update ✅ | Full lifecycle assignment accepted and operationally closed under manifest `1FA8D0819505633D25405DB8DBFE4C194E8EA48A210F9C6EB861F7AA5C20696C` and commit `8bc8707a52cabc7403f2376a47635faa269660d4`. The accepted-state preflight passed against A4-A commit `e08ede472e192169968ac60aa572e49797e0628a`; implementation preserved A4-B crew state -> A4-C tool surfaces -> shared verification. The mandatory complete deep review is `GREEN`, its closeout disposition is `ALLOWED`, and Track B returned exact `ACK_ONLY`. |
 
-**⬜ Step 2**
+Step 1 lifecycle note:
+- both rows were independently startable for planning/review from the accepted Wave 2/3 frontier;
+- Track B planning/review completed before A4-A acceptance, and the Meta sequencing update was satisfied before implementation;
+- the accepted-state preflight found no material A4-A drift, and the bundled A4-B/A4-C implementation, shared verification, deep review, exact `ACK_ONLY`, and lifecycle commit are complete;
+- Step 1 is `✅`; its two assignments are accepted and operationally closed, so the independent Step 2 rows may start.
+
+**✅ Step 2**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Track C session | A4-D | A4-A ✅ | Write L1 prompt/context rules. |
-| Track B session | A4-F, A4-J draft | A4-B/C ✅ | Implement authority/tool/crew validation and the Aster F1 formal intervention family in report-only mode; reject invalid L1 macro actions through Core regardless of solver status. |
+| Track C session | A4-D | A4-A ✅ | Full lifecycle assignment accepted and operationally closed under manifest `0DB1C3811D12B83F863BB78CE3F856612C7904564250B6AB3DB270DADB80CB2E` and commit `f192a2d0fbdc56289ab8b812df714bfc72ab0883`. The final standard review is `GREEN`, its closeout disposition is `ALLOWED`, and Track C returned exact `ACK_ONLY`. |
+| Track B session | A4-F, A4-J draft | A4-B/C ✅ | Full lifecycle assignment accepted and operationally closed under post-CI manifest `2A95C26DC8D7D1B9D671D5245DB78998423AE5AC5DE4AC320670E5BD916AE9` and commit `6db0be11ff526196b81963fee72f01380e923b59`. The standard review is `GREEN`, its closeout disposition is `ALLOWED`, and Track B returned exact `ACK_ONLY`. A4-F authority validation is complete; A4-J remains open only for later Track E differential evidence. |
+
+Step 2 lifecycle note:
+- A4-D and A4-F/A4-J draft remained independent throughout planning, implementation, review, fix, and closeout;
+- both candidates preserved their cross-lane exclusions and were committed through separate exact-path closeouts with no push;
+- Step 2 is `✅`; A4-E is the next sequential implementation assignment, while A4-J Track E evidence remains correctly sequenced in Step 5.
 
 **⬜ Step 3**
 
@@ -2407,7 +2461,7 @@ Ringfall must first produce stable artifacts independently.
 
 ## Current frontier
 
-The project is post-Wave-3 closeout. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, Wave 1 contract/artifact spine is accepted through W1-S7/C1-K, and Wave 1.5 contract CI readiness is accepted through CI15-A/B/C/D/E/F with no recorded CI-debt exception. Wave 2 is accepted through K2-A/B/C/D/E/F/G/H and the Meta closeout gate: the C# core/headless runner can load the first FP1 state subset, execute deterministic Aster T0 heat-alarm behavior, write the accepted core artifact tree, and pass Track E artifact smoke validation. Wave 3 is accepted through B3-A/B/C/D/E/F/G/H and its Meta closeout gate: the Python brain scaffold can emit a deterministic schema-valid L1 packet plus dev/mock cognition trace and cost event, and Track E can validate the evidence bundle without any brain-to-Core mutation path. No real provider/API call path, Unity project, Refinery/solver runtime, runtime coverage gate, prompt runtime loader, model-policy OpenRouter lane, or LLM-driven sim-truth mutation has started yet. Wave 4 Step 1 sequence planning for A4-A/A4-B/A4-C is the next immediate frontier; Meta must offer optional split and bundled execution forms, but legacy bundled rows do not require normalization solely because they contain multiple epics. Wave 4 implementation has not started.
+The project is post-Wave-3 closeout. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, Wave 1 contract/artifact spine is accepted through W1-S7/C1-K, and Wave 1.5 contract CI readiness is accepted through CI15-A/B/C/D/E/F plus closed CI15-G Core/Brain runtime-CI activation. Wave 2 and Wave 3 are accepted through their Meta closeout gates. Wave 4 Step 1 and Step 2 are accepted and operationally closed: A4-A at `e08ede472e192169968ac60aa572e49797e0628a`, A4-B/A4-C at `8bc8707a52cabc7403f2376a47635faa269660d4`, A4-F/A4-J report-only draft at `6db0be11ff526196b81963fee72f01380e923b59`, and A4-D at `f192a2d0fbdc56289ab8b812df714bfc72ab0883`. A4-E is the next sequential Wave 4 assignment. A4-J remains open only for the later Track E differential-evidence gate in Step 5. CI15-G is closed under `.github/workflows/runtime-ci.yml#d3ea9da19eac8504d788b3478c6bfbf08714ee1162e86d0860baa5a69227b994`, `GREEN`, exact `ACK_ONLY`, and implementation commit `1f6d036d2d0dd2f214f2190aec166340b14c967b`. `unity-client-ci` and `scenario-replay-ci` remain blocked. No push or remote Actions run occurred, and CI15-G did not absorb A4 candidate ownership.
 
 The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-01` aligned post-Wave-0 status/frontier docs, and `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary with the Risk Register G1-G10 list. The separate Wave 1 planning brief is present at `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md`; W1-S1 through W1-S7 are accepted, and `docs/plans/W1-S7-C1-K-Contract-Handoff-Review-Packet.md` is the shared Wave 1 handoff/gate artifact for the transition into Wave 1.5 and later Wave 2 planning.
 
@@ -2430,18 +2484,23 @@ The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-0
 15. Wave 3 `B3-E` / `B3-G` is accepted: shell-only OpenRouter env validation and deterministic dev/mock cognition trace + cost event artifacts exist without real provider/API calls, raw credential output, `.env` loading, schema changes, prompt runtime loader, model-policy OpenRouter lane, Core mutation, CI activation, or default generated run artifacts.
 16. Wave 3 `B3-H` is accepted: Track E validates the deterministic dev/mock packet, cognition trace, and cost event bundle against public schemas plus bounded semantic, evidence-integrity, hidden-truth, direct-mutation, and L1 smoke rules without changing runtime or contract ownership.
 17. The Wave 3 Meta closeout gate is accepted: the cognition path emits strict packet/trace/cost evidence only, cannot mutate Core state, and preserves all provider, schema, prompt-runtime, CI, Unity/client, Refinery, and canonical-evidence deferrals.
-18. Treat `docs/design/Formal-Intervention-Gates-Refinery.md` as the approved formal-gate design direction, but do not implement Refinery tooling until the named Wave 4 Aster F1 family gate opens under its accepted step.
+18. Wave 4 `A4-A` is accepted and operationally closed at commit `e08ede472e192169968ac60aa572e49797e0628a`.
+19. Wave 4 `A4-B` / `A4-C` is accepted and operationally closed at commit `8bc8707a52cabc7403f2376a47635faa269660d4`; Wave 4 Step 1 is complete and the independent Step 2 Track C A4-D and Track B A4-F/A4-J draft rows may start.
+20. Wave 4 `A4-D` is accepted and operationally closed at commit `f192a2d0fbdc56289ab8b812df714bfc72ab0883`.
+21. Wave 4 `A4-F` and the report-only `A4-J` draft are accepted and operationally closed at commit `6db0be11ff526196b81963fee72f01380e923b59`; A4-J Track E differential evidence remains sequenced in Step 5.
+22. Treat `docs/design/Formal-Intervention-Gates-Refinery.md` as the approved formal-gate design direction; the accepted A4-J report-only draft does not yet satisfy the later hard differential-evidence gate.
+23. Owner decision 2026-08-08 opened the separate Track E `CI15-G` lifecycle; it is accepted and closed under candidate `.github/workflows/runtime-ci.yml#d3ea9da19eac8504d788b3478c6bfbf08714ee1162e86d0860baa5a69227b994`, `GREEN`, exact `ACK_ONLY`, and implementation commit `1f6d036d2d0dd2f214f2190aec166340b14c967b`. `unity-client-ci` and `scenario-replay-ci` remain blocked. This sequencing exception does not reopen CI15-D, alter the Wave 1.5 gate, or join any A4 candidate.
 
 ## First actionable step
 
 ```text
-Wave 4 Step 1 sequence planning — review the A4-A/A4-B/A4-C execution rows and offer both bundled and split forms before implementation.
+Wave 4 Step 3 — invoke `/seq-next` for RingFall Epic `A4-E` under `Track D / TRACK / track-d`. Consume the accepted A4-D prompt/context contract and Wave 3 Brain boundary; emit strict ToolAction/WorkOrder packets without opening Core execution, provider calls, A4-G state diffs, or Track E A4-J differential evidence.
 ```
 
-Expected Wave 4 planning brief:
+Expected Wave 4 Step 3 lifecycle brief:
 
 ```text
-Plan Wave 4 Step 1 without starting implementation. Review the bundled Track B `A4-B, A4-C` row, state its internal order and acceptance boundary, and always offer separate-row execution as an optional clarity or risk-reduction alternative without requiring that split. Retain Track C A4-A only where it is independently startable from the accepted Wave 3 frontier. Preserve hidden-truth separation, Core authority, and the rule that no schema change or production prompt work begins without its accepted Track plan.
+Start Track D A4-E through its own `/seq-next` lifecycle. Its plan must consume the accepted A4-D context/prompt surfaces and existing Wave 3 Brain packet boundary, preserve Core as the sole execution authority, and leave A4-G execution/state-diff work plus A4-J Track E differential evidence in their later numbered steps.
 ```
 
 W1-S1 closeout note, 2026-06-14:
