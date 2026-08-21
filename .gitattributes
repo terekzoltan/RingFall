@@ -1,1 +1,3 @@
 src/ringfall-brain/examples/aster-a1-context.example.json text eol=lf
+ops/stage-sources/** text eol=lf
+docs/plans/Combined-Execution-Sequencing-Plan.md text eol=lf

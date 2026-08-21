@@ -1,0 +1,22 @@
+{
+  "schema_version": "stage-source-manifest.v1",
+  "target_id": "ringfall",
+  "epic": "A4-E",
+  "candidate_identity": "ringfall-a4-e-seq-next-085c499",
+  "entries": [
+    {
+      "stage": "SEQ_NEXT",
+      "plan_class": "EPIC_PLAN",
+      "sources": [
+        {
+          "path": "ops/stage-sources/A4-E-SEQ-NEXT.md",
+          "source_class": "PLANNING_CONTEXT",
+          "logical_identity": "ringfall-a4-e-seq-next-context-v1",
+          "producer": "ringfall-meta-coordinator",
+          "sha256": "b9e4e43c0ba0edccb5c9f268f721c5fe6b4a7ac037ab68cf25211af109e65621",
+          "order": 0
+        }
+      ]
+    }
+  ]
+}
