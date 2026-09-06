@@ -7,8 +7,9 @@ and the current Combined frontier first. Canon `tooling/opencode` owns shared
 definitions; FAL Router V2 is the sole sender. AWC5 replaces legacy explicit-stage,
 Compact Lite, exact terminal-line and per-stage capability mechanics below.
 Domain/Core, visibility, scope and independent review gates remain unchanged.
-The imported A4-E implementation is unresolved: inspect existing evidence, never
-resend implementation. Only Owner interrupts sessions or compacts orchestrators.
+The A4-E implementation is recovered: inspect retained results and perform the
+finding-bound Meta recheck, never resend implementation. Only Owner interrupts
+sessions or compacts orchestrators.
 
 ## Combined Plan Sequencing Protocol
 

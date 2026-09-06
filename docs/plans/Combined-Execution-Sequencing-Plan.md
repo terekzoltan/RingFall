@@ -2,11 +2,11 @@
 
 ## Current AWC5 frontier (2026-09-06)
 
-A4-E / Track D / review cycle1 is at IMPLEMENT_RECOVERY, not planning start.
-Accepted fix-plan review and revised plan are retained; the existing following
-implementation attempt is unresolved. `ops/PROJECT_STATE.md` owns the exact
-read-only recovery action and V2 references. No resend, replacement run, recheck
-or closeout is inferred from migration. Older rows retain sequence/domain history.
+A4-E / Track D / review cycle1 is at FIX_RECHECK. Accepted fix-plan review,
+revised plan and the recovered existing implementation are retained. All six
+reported candidate file hashes match current files. `ops/PROJECT_STATE.md` owns
+Meta /step-review with the four accepted finding IDs. No implementation resend,
+replacement work or closeout is inferred; independent recheck remains required.
 
 **Project:** Ringfall  
 **Owner:** Meta Coordinator  

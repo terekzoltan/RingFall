@@ -7,7 +7,7 @@ Wave: `4`; Epic: `A4-E`; Accountable Lane: `Track D`.
 Role profile: `ringfall.track-d`; review cycle: `1`.
 Candidate identity: `ringfall-a4-e-seq-next-085c499`.
 Final plan identity: `ringfall-a4-e-fix-rfr-te-final-v2`.
-Workflow phase: `IMPLEMENT_RECOVERY`; Epic status: `ACTIVE`.
+Workflow phase: `FIX_RECHECK`; Epic status: `ACTIVE`.
 Sequence authority: `docs/plans/Combined-Execution-Sequencing-Plan.md`.
 V2 work: `ringfall-a4e-fix-cycle-1`.
 
@@ -16,27 +16,28 @@ V2 work: `ringfall-a4e-fix-cycle-1`.
 Continue only the accepted A4-E four-finding repair: A4E-RFR-001,
 A4E-RFR-002, A4E-TE-001, A4E-TE-002. Old planning-start projection is stale.
 Meta fix-plan review and Track D revised plan were accepted and imported.
-The following IMPLEMENT attempt remains uncertain; it must not be resent.
+The following IMPLEMENT was recovered GET-only by its exact original argument
+and command-body hashes plus parent/response correlation; never resend it.
 
-- IMPLEMENT: `op-a6b6bc8e-5ab7-4c96-b484-e0b4f515ebab`, POSSIBLE/PENDING;
-  original `op-8a3dfbbe-fd30-47df-a05f-b3bdd8b564de`. GET-only recovery
-  covered the old baseline but established no exact terminal result.
+- IMPLEMENT: `op-a6b6bc8e-5ab7-4c96-b484-e0b4f515ebab`, DELIVERED/COMPLETED;
+  original `op-8a3dfbbe-fd30-47df-a05f-b3bdd8b564de`. All six file hashes in the
+  recovered Track D result match the current files. This is not Meta acceptance.
 - Plan revision: `op-f740e064-420e-4cea-accf-aa9360c58c40`, COMPLETED.
 - Meta plan review: `op-94252e64-f46c-4905-9c47-413a785e8058`, COMPLETED.
 
 ## Exact next action
 
-Next actor: Orchestrator, read-only incident recovery.
-Inspect/read/reconcile the SAME V2 work and IMPLEMENT operation; compare
-attributable Track D evidence with the working tree and reviewed plan.
-No implementation/seq-next resend, replacement work, recheck or closeout send
-until uncertainty is resolved. Idle or missing receipt is not proof of no send.
+Next actor: Meta, through Orchestrator using the SAME V2 work.
+Next command: `/step-review` in FIX_RECHECK mode, bound to the four accepted
+finding IDs above and the retained revised plan/IMPLEMENT results. Do not repeat
+implementation, seq-next or plan revision, or create replacement work. Preserve
+independent acceptance; continue only the bounded cycle and stop before closeout.
 
 ## Pause and scope
 
 Owner authorized V2 rollout/project unfreeze on 2026-09-06. Rollout-only pause
-may lift after loaded-tool checks; historical uncertainty still blocks dependent
-mutation. This is not a new P0B gate. Preserve the prior stop before closeout.
+is lifted after16/16 loaded-command checks and exact recovery. This grants no
+scope expansion or automatic send. Preserve the prior stop before closeout.
 No acceptance or Delivery ACK is invented. Preserve all dirty product/governance
 files, accepted A4-D/A4-F, Core/hidden-truth boundaries and A4-J scope.
 
