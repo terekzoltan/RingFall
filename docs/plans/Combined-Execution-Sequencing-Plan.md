@@ -1,5 +1,13 @@
 # Combined Execution Sequencing Plan
 
+## Current AWC5 frontier (2026-09-06)
+
+A4-E / Track D / review cycle1 is at IMPLEMENT_RECOVERY, not planning start.
+Accepted fix-plan review and revised plan are retained; the existing following
+implementation attempt is unresolved. `ops/PROJECT_STATE.md` owns the exact
+read-only recovery action and V2 references. No resend, replacement run, recheck
+or closeout is inferred from migration. Older rows retain sequence/domain history.
+
 **Project:** Ringfall  
 **Owner:** Meta Coordinator  
 **Scope:** Track-level execution ordering for Ringfall FP1 — Aster/Vireo/Black Seam Slice  
