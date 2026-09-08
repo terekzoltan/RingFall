@@ -10,6 +10,12 @@ from pathlib import Path
 from typing import Sequence
 
 from ringfall_brain import __version__
+from ringfall_brain.cognition.aster_action_emitter import (
+    TOOL_ACTION_KEY,
+    WORK_ORDER_KEY,
+    build_aster_action_candidates,
+    write_aster_action_candidates,
+)
 from ringfall_brain.config.model_policy_loader import (
     SUPPORTED_STEP_ONE_RUN_MODES,
     ModelPolicyError,
@@ -40,6 +46,17 @@ def build_parser() -> argparse.ArgumentParser:
     cognition_parser.add_argument("--cognition-schema", required=True, help="Path to the CognitionTrace JSON Schema file.")
     cognition_parser.add_argument("--cost-schema", required=True, help="Path to the CostEvent JSON Schema file.")
     cognition_parser.add_argument("--output-dir", help="Optional directory for explicit dev/mock artifact output.")
+
+    aster_actions_parser = mock_subparsers.add_parser(
+        "aster-actions",
+        help="Emit strict deterministic Aster ToolAction and WorkOrder candidates.",
+    )
+    aster_actions_parser.add_argument("--context", required=True, help="Path to the accepted A4-D Aster context JSON.")
+    aster_actions_parser.add_argument("--pulse", required=True, help="Path to the accepted A4-D Aster pulse JSON.")
+    aster_actions_parser.add_argument("--pulse-schema", required=True, help="Path to the AvatarPulsePacket JSON Schema.")
+    aster_actions_parser.add_argument("--tool-schema", required=True, help="Path to the ToolActionRequest JSON Schema.")
+    aster_actions_parser.add_argument("--work-order-schema", required=True, help="Path to the WorkOrderRequest JSON Schema.")
+    aster_actions_parser.add_argument("--output-dir", required=True, help="New or existing directory for candidate output.")
 
     provider_parser = subparsers.add_parser("provider", help="Provider shell commands.")
     provider_subparsers = provider_parser.add_subparsers(dest="provider_command")
@@ -110,8 +127,43 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(json.dumps(summary, sort_keys=True, separators=(",", ":")))
         return 0
 
+    if args.command == "mock" and args.mock_command == "aster-actions":
+        try:
+            candidates = build_aster_action_candidates(
+                _load_json_object(Path(args.context), "A4-D context"),
+                _load_json_object(Path(args.pulse), "A4-D pulse"),
+                Path(args.pulse_schema),
+                Path(args.tool_schema),
+                Path(args.work_order_schema),
+            )
+            written = write_aster_action_candidates(
+                candidates,
+                Path(args.output_dir),
+                Path(args.tool_schema),
+                Path(args.work_order_schema),
+            )
+        except UnicodeDecodeError:
+            print("Mock Aster actions failed: input file is not valid UTF-8", file=sys.stderr)
+            return 2
+        except (BrainValidationError, OSError) as exc:
+            print(f"Mock Aster actions failed: {exc}", file=sys.stderr)
+            return 2
+
+        summary = {
+            "candidate_only": True,
+            "packet_ids": {
+                TOOL_ACTION_KEY: candidates[TOOL_ACTION_KEY]["packet_id"],
+                WORK_ORDER_KEY: candidates[WORK_ORDER_KEY]["packet_id"],
+            },
+            "schema_valid": True,
+            "status": "ok",
+            "written_files": [path.name for path in written],
+        }
+        print(json.dumps(summary, sort_keys=True, separators=(",", ":")))
+        return 0
+
     if args.command == "mock":
-        print("mock subcommand required: choose pulse or cognition", file=sys.stderr)
+        print("mock subcommand required: choose pulse, cognition, or aster-actions", file=sys.stderr)
         return 2
 
     if args.command == "provider" and args.provider_command == "openrouter" and args.openrouter_command == "check-env":
@@ -149,6 +201,34 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     parser.print_help()
     return 0
+
+
+def _load_json_object(path: Path, label: str) -> dict[str, object]:
+    def reject_duplicate_names(pairs: list[tuple[str, object]]) -> dict[str, object]:
+        result: dict[str, object] = {}
+        for name, value in pairs:
+            if name in result:
+                raise BrainValidationError(f"{label} JSON objects must not contain duplicate names")
+            result[name] = value
+        return result
+
+    try:
+        raw_value = path.read_text(encoding="utf-8")
+        value = json.loads(raw_value, object_pairs_hook=reject_duplicate_names)
+    except FileNotFoundError as exc:
+        raise BrainValidationError(f"{label} file not found: {path}") from exc
+    except UnicodeDecodeError as exc:
+        raise BrainValidationError(f"{label} file is not valid UTF-8") from exc
+    except json.JSONDecodeError as exc:
+        raise BrainValidationError(
+            f"{label} JSON is invalid at line {exc.lineno}, column {exc.colno}"
+        ) from exc
+    except OSError as exc:
+        raise BrainValidationError(f"{label} file cannot be read: {path}") from exc
+
+    if not isinstance(value, dict):
+        raise BrainValidationError(f"{label} must be a JSON object")
+    return value
 
 
 if __name__ == "__main__":
