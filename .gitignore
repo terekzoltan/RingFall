@@ -6,6 +6,7 @@
 .opencode-router/
 .swarm/
 kontext/
+ops/temp/
 
 # Source package/archive; live canon is markdown under docs/
 ringfall-canonical-docs-clean.zip

@@ -6,7 +6,7 @@
 
 This document helps Track B and Track C prepare their own Wave 4 Step 1 plans for `A4-A`, `A4-B`, and `A4-C`. It does not choose their implementation design, reserve files, approve a schema change, or mark any epic complete.
 
-Track B and Track C must each produce their own scoped plan from the accepted Wave 3 frontier. Meta Coordinator reviews those plans before either track starts implementation.
+Track B and Track C each produce their own scoped plan inside their full epic lifecycle row. Planning is a `/seq-next` phase, not a separate Combined execution assignment. Meta Coordinator reviews each plan before the corresponding track starts implementation; one lane's planning or review does not block the other lane from starting its own lifecycle.
 
 ## Accepted Starting Point
 
@@ -66,7 +66,7 @@ The Track B plan must additionally answer:
 
 ## Meta Review Gate
 
-Meta Coordinator reviews the Track B and Track C plans together before implementation. The review accepts a plan only when it:
+Meta Coordinator reviews each Track plan against the shared Wave 4 boundaries before that Track implements. Meta may compare the plans for cross-boundary consistency, but both plans do not need to be ready at the same time. The review accepts a plan only when it:
 
 - names exact epic ownership, file scope, prerequisites, and acceptance evidence;
 - makes every A4-A visibility boundary explicit and preserves Core authority;
@@ -76,7 +76,7 @@ Meta Coordinator reviews the Track B and Track C plans together before implement
 - defines checks proportionate to the proposed change; and
 - does not claim that Step 1 has implemented or accepted any Wave 4 epic.
 
-Meta may approve both plans, request revision, or accept one while holding the other. Only an explicit Meta approval opens the corresponding implementation assignment.
+Meta may approve both plans, request revision, or accept one while holding the other. Only an explicit Meta approval opens the corresponding implementation phase inside that epic row.
 
 ## Suggested Handoff Shape
 

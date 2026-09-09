@@ -1,12 +1,21 @@
 # Combined Execution Sequencing Plan
 
-## Current AWC5 frontier (2026-09-06)
+## Current AWC5 frontier (2026-09-09)
 
-A4-E / Track D / review cycle1 is at FIX_RECHECK. Accepted fix-plan review,
-revised plan and the recovered existing implementation are retained. All six
-reported candidate file hashes match current files. `ops/PROJECT_STATE.md` owns
-Meta /step-review with the four accepted finding IDs. No implementation resend,
-replacement work or closeout is inferred; independent recheck remains required.
+A4-E / Track D is accepted and operationally closed at commit
+`9a90c4ed6ccebb88c82c02ffb2e66875f59245e9` after finding-bound Meta
+FIX_RECHECK `GREEN`, verification `PASS`, and exact Track D `ACK_ONLY`. Wave 4
+Step 4 is the current parallel planning frontier: Track B `A4-G` and Track D
+`A4-H cognition side` are target-ready for `/seq-next`. The current private V2
+mapping admits Track D but still requires a verified Track B participant before
+an A4-G dispatch. No stage auto-advances and no push is inferred.
+
+Publication update: CI repair `74523251c5f2d9e801deb6c93230667b2eead394`
+was pushed with A4-E in its ancestry. Runtime CI `34380127987` and Contract CI
+`34380128198` passed on that commit. No-push statements in earlier closeout
+notes describe those closeout operations only. Owner approved governance
+reconciliation and main integration before opening the separate A4-H Epic
+branch; verify main CI and the branch/base identity before dispatch.
 
 **Project:** Ringfall  
 **Owner:** Meta Coordinator  
@@ -1369,7 +1378,7 @@ Epics:
 
 Epics:
 - ✅ **A4-D** A1 pulse/scene prompt and context — **Owner: Track C**; accepted and operationally closed under manifest `0DB1C3811D12B83F863BB78CE3F856612C7904564250B6AB3DB270DADB80CB2E` and commit `f192a2d0fbdc56289ab8b812df714bfc72ab0883`
-- ⬜ **A4-E** Brain emits ToolAction/WorkOrder packets — **Owner: Track D**
+- ✅ **A4-E** Brain emits ToolAction/WorkOrder packets — **Owner: Track D**; accepted and operationally closed after finding-bound FIX_RECHECK `GREEN`, verification `PASS`, exact `ACK_ONLY`, and commit `9a90c4ed6ccebb88c82c02ffb2e66875f59245e9`
 - ✅ **A4-F** Core validates authority/tool/crew packets — **Owner: Track B**; accepted and operationally closed with the report-only A4-J draft under manifest `2A95C26DC8D7D1B9D671D5245DB78998423AE5AC5DE4AC320670E5BD916AE9` and commit `6db0be11ff526196b81963fee72f01380e923b59`
 - 🔄 **A4-J** Aster F1 formal intervention gate — **Owner: Track B/E**; Track B report-only draft accepted and committed with A4-F at `6db0be11ff526196b81963fee72f01380e923b59`; Track E differential evidence remains in Step 5
 
@@ -1407,20 +1416,25 @@ Step 1 lifecycle note:
 Step 2 lifecycle note:
 - A4-D and A4-F/A4-J draft remained independent throughout planning, implementation, review, fix, and closeout;
 - both candidates preserved their cross-lane exclusions and were committed through separate exact-path closeouts with no push;
-- Step 2 is `✅`; A4-E is the next sequential implementation assignment, while A4-J Track E evidence remains correctly sequenced in Step 5.
+- Step 2 is `✅`; it opened A4-E as the then-next sequential assignment, and A4-E is now closed while A4-J Track E evidence remains correctly sequenced in Step 5.
 
-**⬜ Step 3**
-
-| Session | Epic(s) | Prereq | Notes |
-|---|---|---|---|
-| Track D session | A4-E | A4-D ✅ and Wave 3 ✅ | Emit strict ToolAction/WorkOrder packets through brain. |
-
-**⬜ Step 4**
+**✅ Step 3**
 
 | Session | Epic(s) | Prereq | Notes |
 |---|---|---|---|
-| Track B session | A4-G | A4-E/F ✅ | Execute limited reroute/work order and generate state diff. |
-| Track D session | A4-H cognition side | A4-E ✅ | Ensure model/cost traces complete. |
+| Track D session | A4-E | A4-D ✅ and Wave 3 ✅ | Full lifecycle assignment accepted and operationally closed at commit `9a90c4ed6ccebb88c82c02ffb2e66875f59245e9`. The finding-bound Meta FIX_RECHECK is `GREEN`, all four accepted findings are resolved, verification is `PASS`, and Track D returned exact `ACK_ONLY`. No push was performed. |
+
+Step 3 lifecycle note:
+- A4-E preserved strict candidate-only ToolAction/WorkOrder emission and left Core authority/execution to A4-F/A4-G;
+- the recovered implementation was not resent, and the review-fix cycle closed findings `A4E-RFR-001`, `A4E-RFR-002`, `A4E-TE-001`, and `A4E-TE-002`;
+- Step 3 is `✅`, so both independent Step 4 planning rows are target-ready.
+
+**⬜ Step 4 — READY**
+
+| Session | Epic(s) | Prereq | Notes |
+|---|---|---|---|
+| Track B session | A4-G | A4-E/F ✅ | `/seq-next` target-ready: plan limited reroute/work-order execution and state diff. Actual V2 dispatch waits for a verified private `Track B` participant mapping; do not substitute another role. |
+| Track D session | A4-H cognition side | A4-E ✅ | `/seq-next` target- and routing-ready: plan the bounded cognition/action/cost artifact slice without absorbing A4-G execution or Step 5 eval/formal-gate evidence. |
 
 **⬜ Step 5**
 
@@ -2469,7 +2483,12 @@ Ringfall must first produce stable artifacts independently.
 
 ## Current frontier
 
-The project is post-Wave-3 closeout. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, Wave 1 contract/artifact spine is accepted through W1-S7/C1-K, and Wave 1.5 contract CI readiness is accepted through CI15-A/B/C/D/E/F plus closed CI15-G Core/Brain runtime-CI activation. Wave 2 and Wave 3 are accepted through their Meta closeout gates. Wave 4 Step 1 and Step 2 are accepted and operationally closed: A4-A at `e08ede472e192169968ac60aa572e49797e0628a`, A4-B/A4-C at `8bc8707a52cabc7403f2376a47635faa269660d4`, A4-F/A4-J report-only draft at `6db0be11ff526196b81963fee72f01380e923b59`, and A4-D at `f192a2d0fbdc56289ab8b812df714bfc72ab0883`. A4-E is the next sequential Wave 4 assignment. A4-J remains open only for the later Track E differential-evidence gate in Step 5. CI15-G is closed under `.github/workflows/runtime-ci.yml#d3ea9da19eac8504d788b3478c6bfbf08714ee1162e86d0860baa5a69227b994`, `GREEN`, exact `ACK_ONLY`, and implementation commit `1f6d036d2d0dd2f214f2190aec166340b14c967b`. `unity-client-ci` and `scenario-replay-ci` remain blocked. No push or remote Actions run occurred, and CI15-G did not absorb A4 candidate ownership.
+Historical scope of the recap below: its final "No push or remote Actions run
+occurred" statement refers only to the CI15-G local closeout, as do the
+CI15-G entries earlier in this document. Subsequent repair publication and
+successful remote CI are recorded in the publication update at the top.
+
+The project is post-Wave-3 closeout. Wave 0 repo/docs bootstrap is closed with a 2026-06-14 **PASS** gate, Wave 1 contract/artifact spine is accepted through W1-S7/C1-K, and Wave 1.5 contract CI readiness is accepted through CI15-A/B/C/D/E/F plus closed CI15-G Core/Brain runtime-CI activation. Wave 2 and Wave 3 are accepted through their Meta closeout gates. Wave 4 Steps 1-3 are accepted and operationally closed: A4-A at `e08ede472e192169968ac60aa572e49797e0628a`, A4-B/A4-C at `8bc8707a52cabc7403f2376a47635faa269660d4`, A4-F/A4-J report-only draft at `6db0be11ff526196b81963fee72f01380e923b59`, A4-D at `f192a2d0fbdc56289ab8b812df714bfc72ab0883`, and A4-E at `9a90c4ed6ccebb88c82c02ffb2e66875f59245e9`. Wave 4 Step 4 is now the parallel `/seq-next` frontier for A4-G and A4-H cognition side. A4-J remains open only for the later Track E differential-evidence gate in Step 5. CI15-G is closed under `.github/workflows/runtime-ci.yml#d3ea9da19eac8504d788b3478c6bfbf08714ee1162e86d0860baa5a69227b994`, `GREEN`, exact `ACK_ONLY`, and implementation commit `1f6d036d2d0dd2f214f2190aec166340b14c967b`. `unity-client-ci` and `scenario-replay-ci` remain blocked. No push or remote Actions run occurred, and CI15-G did not absorb A4 candidate ownership.
 
 The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-01` aligned post-Wave-0 status/frontier docs, and `RF-GUARDRAIL-SYNC-01` aligned the Design Canon guardrail summary with the Risk Register G1-G10 list. The separate Wave 1 planning brief is present at `docs/plans/Ringfall-Wave1-Planning-Brief-v01.md`; W1-S1 through W1-S7 are accepted, and `docs/plans/W1-S7-C1-K-Contract-Handoff-Review-Packet.md` is the shared Wave 1 handoff/gate artifact for the transition into Wave 1.5 and later Wave 2 planning.
 
@@ -2498,17 +2517,18 @@ The target-side MetaOps source-of-truth sync lane is complete. `RF-STATUS-SYNC-0
 21. Wave 4 `A4-F` and the report-only `A4-J` draft are accepted and operationally closed at commit `6db0be11ff526196b81963fee72f01380e923b59`; A4-J Track E differential evidence remains sequenced in Step 5.
 22. Treat `docs/design/Formal-Intervention-Gates-Refinery.md` as the approved formal-gate design direction; the accepted A4-J report-only draft does not yet satisfy the later hard differential-evidence gate.
 23. Owner decision 2026-08-08 opened the separate Track E `CI15-G` lifecycle; it is accepted and closed under candidate `.github/workflows/runtime-ci.yml#d3ea9da19eac8504d788b3478c6bfbf08714ee1162e86d0860baa5a69227b994`, `GREEN`, exact `ACK_ONLY`, and implementation commit `1f6d036d2d0dd2f214f2190aec166340b14c967b`. `unity-client-ci` and `scenario-replay-ci` remain blocked. This sequencing exception does not reopen CI15-D, alter the Wave 1.5 gate, or join any A4 candidate.
+24. Wave 4 `A4-E` is accepted and operationally closed at commit `9a90c4ed6ccebb88c82c02ffb2e66875f59245e9`; its four-finding repair recheck is `GREEN`/`PASS` with exact `ACK_ONLY`, so Step 4 planning may begin.
 
 ## First actionable step
 
 ```text
-Wave 4 Step 3 — invoke `/seq-next` for RingFall Epic `A4-E` under `Track D / TRACK / track-d`. Consume the accepted A4-D prompt/context contract and Wave 3 Brain boundary; emit strict ToolAction/WorkOrder packets without opening Core execution, provider calls, A4-G state diffs, or Track E A4-J differential evidence.
+Wave 4 Step 4 — open independent `/seq-next` planning for Track B `A4-G` and Track D `A4-H cognition side`. A4-H is target- and V2-routing-ready. A4-G is target-ready but its V2 send waits for a verified private `Track B` participant mapping. Do not merge the two plans or consume one row's unreviewed output in the other.
 ```
 
-Expected Wave 4 Step 3 lifecycle brief:
+Expected Wave 4 Step 4 lifecycle brief:
 
 ```text
-Start Track D A4-E through its own `/seq-next` lifecycle. Its plan must consume the accepted A4-D context/prompt surfaces and existing Wave 3 Brain packet boundary, preserve Core as the sole execution authority, and leave A4-G execution/state-diff work plus A4-J Track E differential evidence in their later numbered steps.
+Start each selected Step 4 Epic in its own Owner-scoped V2 work. A4-G planning must preserve Core as the sole execution/state-diff authority and consume accepted A4-E/A4-F boundaries. A4-H cognition-side planning must preserve the accepted A4-E candidate interface while limiting itself to cognition/action/cost artifact completeness. Both leave A4-I/A4-J evidence and Wave 4 closeout in later steps.
 ```
 
 W1-S1 closeout note, 2026-06-14:
