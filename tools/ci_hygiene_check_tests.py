@@ -29,15 +29,18 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
           python-version: "3.12"
 
       - name: Install dev requirements
         run: python -m pip install -r requirements-dev.txt
+
+      - name: Run CI hygiene proof cases
+        run: python tools/ci_hygiene_check_tests.py
 
       - name: Run CI hygiene guard
         run: python tools/ci_hygiene_check.py
@@ -62,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 """
 
 
@@ -92,6 +95,7 @@ jobs:
       - name: fake scalar
         env: {indicator}
           run: python -m pip install -r requirements-dev.txt
+          run: python tools/ci_hygiene_check_tests.py
           run: python tools/ci_hygiene_check.py
           run: python tools/schema_check.py
 """
@@ -107,6 +111,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: python -m pip install -r requirements-dev.txt
+      - run: python tools/ci_hygiene_check_tests.py
       - run: python tools/ci_hygiene_check.py
       - run: python tools/schema_check.py
 """,
@@ -117,6 +122,7 @@ jobs:
     secrets: inherit
     steps:
       - run: python -m pip install -r requirements-dev.txt
+      - run: python tools/ci_hygiene_check_tests.py
       - run: python tools/ci_hygiene_check.py
       - run: python tools/schema_check.py
 """,
@@ -129,6 +135,7 @@ jobs:
         secrets:
           name: value
       - run: python -m pip install -r requirements-dev.txt
+      - run: python tools/ci_hygiene_check_tests.py
       - run: python tools/ci_hygiene_check.py
       - run: python tools/schema_check.py
 """,
@@ -138,6 +145,7 @@ jobs:
         "top_level_steps": HEADER + """
 steps:
   - run: python -m pip install -r requirements-dev.txt
+  - run: python tools/ci_hygiene_check_tests.py
   - run: python tools/ci_hygiene_check.py
   - run: python tools/schema_check.py
 
@@ -146,7 +154,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 """,
         "nested_with_run": HEADER + """
 jobs:
@@ -156,6 +164,9 @@ jobs:
       - name: fake install
         with:
           run: python -m pip install -r requirements-dev.txt
+      - name: fake proof cases
+        with:
+          run: python tools/ci_hygiene_check_tests.py
       - name: fake guard
         with:
           run: python tools/ci_hygiene_check.py
@@ -171,6 +182,9 @@ jobs:
       - name: fake install
         env:
           run: python -m pip install -r requirements-dev.txt
+      - name: fake proof cases
+        env:
+          run: python tools/ci_hygiene_check_tests.py
       - name: fake guard
         env:
           run: python tools/ci_hygiene_check.py
@@ -187,6 +201,10 @@ jobs:
         with:
           nested:
             run: python -m pip install -r requirements-dev.txt
+      - name: fake proof cases
+        with:
+          nested:
+            run: python tools/ci_hygiene_check_tests.py
       - name: fake guard
         with:
           nested:
@@ -216,11 +234,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
   second-job:
     runs-on: ubuntu-latest
     steps:
       - run: python -m pip install -r requirements-dev.txt
+      - run: python tools/ci_hygiene_check_tests.py
       - run: python tools/ci_hygiene_check.py
       - run: python tools/schema_check.py
 """,

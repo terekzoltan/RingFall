@@ -12,13 +12,14 @@ GITIGNORE_PATH = ROOT / ".gitignore"
 
 REQUIRED_RUN_ORDER = [
     "python -m pip install -r requirements-dev.txt",
+    "python tools/ci_hygiene_check_tests.py",
     "python tools/ci_hygiene_check.py",
     "python tools/schema_check.py",
 ]
 
 ALLOWED_USES = {
-    "actions/checkout@v4",
-    "actions/setup-python@v5",
+    "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+    "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
 }
 
 HARD_BAN_TERMS = {

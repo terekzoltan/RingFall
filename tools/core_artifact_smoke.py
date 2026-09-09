@@ -8,7 +8,7 @@ import json
 import re
 import sys
 from datetime import datetime
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 from typing import Any
 
 try:
@@ -150,8 +150,12 @@ def validate_manifest_refs(bundle_root: Path, manifest_path: Path) -> None:
         if not isinstance(uri, str) or not uri:
             raise SmokeError(f"{manifest_path}: artifact_ref {ref_type} requires artifact_uri")
         uri_path = Path(uri)
-        if uri_path.is_absolute():
+        if PurePosixPath(uri).is_absolute() or PureWindowsPath(uri).is_absolute():
             raise SmokeError(f"{manifest_path}: artifact_uri must be relative: {uri}")
+        if "\\" in uri:
+            raise SmokeError(
+                f"{manifest_path}: artifact_ref {ref_type} must point to {expected_uri}, found {uri}"
+            )
         resolved_uri = (bundle_root / uri_path).resolve()
         try:
             resolved_uri.relative_to(resolved_bundle_root)
