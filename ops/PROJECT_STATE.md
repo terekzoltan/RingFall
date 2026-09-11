@@ -1,5 +1,13 @@
 # RingFall Project State
 
+The human phase/next-action fields below are the last Meta-reconciled baseline,
+not a claim of current session execution. Compare the observed block and retained
+results before continuing; stale baseline prose never authorizes a resend.
+
+<!-- FAL-OBSERVED-PROGRESS:BEGIN -->
+Observed progress awaiting explicit operator enrollment/refresh. No new authority.
+<!-- FAL-OBSERVED-PROGRESS:END -->
+
 Updated: 2026-09-09 by Owner-authorized governance and CI reconciliation.
 Adopted Canon: `5.0.0`; transport: FAL Router V2.
 State revision: `ringfall-wave4-step4-seq-next-ready-v2`.
@@ -33,7 +41,7 @@ send. Meta FIX_RECHECK `op-97b4a512-4410-4a6a-89a9-a94c1b0794b1` returned
   This records permission only, not completion. These are not additional A4-E
   candidate changes.
 
-## Exact next action
+## Last reconciled next action (baseline)
 
 Wave 4 Step 4 contains two independent planning assignments:
 
