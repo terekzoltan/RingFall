@@ -24,7 +24,16 @@ from ringfall_brain.config.model_policy_loader import (
 from ringfall_brain.providers.mock_provider import build_avatar_pulse_packet, build_avatar_pulse_packet_json
 from ringfall_brain.providers.openrouter_provider import OpenRouterConfigError, load_openrouter_config
 from ringfall_brain.schemas.validator import BrainValidationError, validate_packet_json
-from ringfall_brain.traces.artifacts import build_mock_cognition_artifacts, write_mock_cognition_artifacts
+from ringfall_brain.traces.artifacts import (
+    TOOL_COGNITION_TRACE_KEY,
+    TOOL_COST_EVENT_KEY,
+    WORK_ORDER_COGNITION_TRACE_KEY,
+    WORK_ORDER_COST_EVENT_KEY,
+    build_aster_cognition_artifacts,
+    build_mock_cognition_artifacts,
+    write_aster_cognition_artifacts,
+    write_mock_cognition_artifacts,
+)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -57,6 +66,19 @@ def build_parser() -> argparse.ArgumentParser:
     aster_actions_parser.add_argument("--tool-schema", required=True, help="Path to the ToolActionRequest JSON Schema.")
     aster_actions_parser.add_argument("--work-order-schema", required=True, help="Path to the WorkOrderRequest JSON Schema.")
     aster_actions_parser.add_argument("--output-dir", required=True, help="New or existing directory for candidate output.")
+
+    aster_artifacts_parser = mock_subparsers.add_parser(
+        "aster-artifacts",
+        help="Write deterministic Aster proposal, cognition, and cost artifacts.",
+    )
+    aster_artifacts_parser.add_argument("--context", required=True, help="Path to the accepted A4-D Aster context JSON.")
+    aster_artifacts_parser.add_argument("--pulse", required=True, help="Path to the accepted A4-D Aster pulse JSON.")
+    aster_artifacts_parser.add_argument("--pulse-schema", required=True, help="Path to the AvatarPulsePacket JSON Schema.")
+    aster_artifacts_parser.add_argument("--tool-schema", required=True, help="Path to the ToolActionRequest JSON Schema.")
+    aster_artifacts_parser.add_argument("--work-order-schema", required=True, help="Path to the WorkOrderRequest JSON Schema.")
+    aster_artifacts_parser.add_argument("--cognition-schema", required=True, help="Path to the CognitionTrace JSON Schema.")
+    aster_artifacts_parser.add_argument("--cost-schema", required=True, help="Path to the CostEvent JSON Schema.")
+    aster_artifacts_parser.add_argument("--output-dir", required=True, help="New or existing directory for artifact output.")
 
     provider_parser = subparsers.add_parser("provider", help="Provider shell commands.")
     provider_subparsers = provider_parser.add_subparsers(dest="provider_command")
@@ -162,8 +184,58 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(json.dumps(summary, sort_keys=True, separators=(",", ":")))
         return 0
 
+    if args.command == "mock" and args.mock_command == "aster-artifacts":
+        try:
+            candidates = build_aster_action_candidates(
+                _load_json_object(Path(args.context), "A4-D context"),
+                _load_json_object(Path(args.pulse), "A4-D pulse"),
+                Path(args.pulse_schema),
+                Path(args.tool_schema),
+                Path(args.work_order_schema),
+            )
+            artifacts = build_aster_cognition_artifacts(
+                candidates,
+                Path(args.tool_schema),
+                Path(args.work_order_schema),
+                Path(args.cognition_schema),
+                Path(args.cost_schema),
+            )
+            written = write_aster_cognition_artifacts(
+                artifacts,
+                Path(args.output_dir),
+                Path(args.tool_schema),
+                Path(args.work_order_schema),
+                Path(args.cognition_schema),
+                Path(args.cost_schema),
+            )
+        except (BrainValidationError, OSError) as exc:
+            print(f"Mock Aster artifacts failed: {exc}", file=sys.stderr)
+            return 2
+
+        summary = {
+            "candidate_only": True,
+            "cognition_ids": {
+                TOOL_COGNITION_TRACE_KEY: artifacts[TOOL_COGNITION_TRACE_KEY]["cognition_id"],
+                WORK_ORDER_COGNITION_TRACE_KEY: artifacts[WORK_ORDER_COGNITION_TRACE_KEY]["cognition_id"],
+            },
+            "cost_event_ids": {
+                TOOL_COST_EVENT_KEY: artifacts[TOOL_COST_EVENT_KEY]["cost_event_id"],
+                WORK_ORDER_COST_EVENT_KEY: artifacts[WORK_ORDER_COST_EVENT_KEY]["cost_event_id"],
+            },
+            "packet_ids": {
+                TOOL_ACTION_KEY: artifacts[TOOL_ACTION_KEY]["packet_id"],
+                WORK_ORDER_KEY: artifacts[WORK_ORDER_KEY]["packet_id"],
+            },
+            "run_mode": "dev",
+            "schema_valid": True,
+            "status": "ok",
+            "written_files": [path.name for path in written],
+        }
+        print(json.dumps(summary, sort_keys=True, separators=(",", ":")))
+        return 0
+
     if args.command == "mock":
-        print("mock subcommand required: choose pulse, cognition, or aster-actions", file=sys.stderr)
+        print("mock subcommand required: choose pulse, cognition, aster-actions, or aster-artifacts", file=sys.stderr)
         return 2
 
     if args.command == "provider" and args.provider_command == "openrouter" and args.openrouter_command == "check-env":
