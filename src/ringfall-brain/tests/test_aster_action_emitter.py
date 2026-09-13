@@ -17,6 +17,7 @@ REPO_ROOT = ROOT.parents[1]
 sys.path.insert(0, str(ROOT))
 
 from ringfall_brain.cognition import aster_action_emitter as emitter
+from ringfall_brain import artifact_transaction as transaction
 from ringfall_brain.schemas.validator import BrainValidationError, validate_packet_json
 
 
@@ -48,12 +49,12 @@ class AsterActionEmitterTests(unittest.TestCase):
         path: Path,
         payload: bytes,
         descriptor: int | None = None,
-    ) -> emitter._OwnedOutput:
+    ) -> transaction._OwnedOutput:
         digest = sha256(payload).hexdigest()
-        return emitter._OwnedOutput(
+        return transaction._OwnedOutput(
             path=path,
             descriptor=descriptor,
-            identity=emitter._identity_from_stat(path.lstat(), path.name),
+            identity=transaction._identity_from_stat(path.lstat(), path.name),
             expected_length=len(payload),
             expected_digest=digest,
             owned_length=len(payload),
@@ -243,7 +244,7 @@ class AsterActionEmitterTests(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as temp_dir:
             output_dir = Path(temp_dir) / "artifacts"
-            with patch.object(emitter.os, "write", side_effect=short_write):
+            with patch.object(transaction.os, "write", side_effect=short_write):
                 written = emitter.write_aster_action_candidates(
                     candidates,
                     output_dir,
@@ -265,7 +266,7 @@ class AsterActionEmitterTests(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as temp_dir:
             output_dir = Path(temp_dir) / "artifacts"
-            with patch.object(emitter.os, "write", return_value=0):
+            with patch.object(transaction.os, "write", return_value=0):
                 with self.assertRaisesRegex(OSError, "made no progress"):
                     emitter.write_aster_action_candidates(
                         candidates,
@@ -288,8 +289,8 @@ class AsterActionEmitterTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp_dir:
             output_dir = Path(temp_dir) / "artifacts"
             with (
-                patch.object(emitter, "_entry_exists", return_value=False),
-                patch.object(emitter.os, "open", side_effect=collide_on_second_reservation),
+                patch.object(transaction, "_entry_exists", return_value=False),
+                patch.object(transaction.os, "open", side_effect=collide_on_second_reservation),
             ):
                 with self.assertRaisesRegex(BrainValidationError, "already exists"):
                     emitter.write_aster_action_candidates(
@@ -305,14 +306,29 @@ class AsterActionEmitterTests(unittest.TestCase):
         missing_inode = SimpleNamespace(st_dev=1, st_ino=0)
 
         with self.assertRaisesRegex(OSError, "identity is unavailable"):
-            emitter._identity_from_stat(missing_inode, "test entry")  # type: ignore[arg-type]
+            transaction._identity_from_stat(missing_inode, "test entry")  # type: ignore[arg-type]
+
+    def test_transaction_rejects_duplicate_and_non_leaf_filenames_before_output(self) -> None:
+        cases = (
+            ([("same.json", b"one"), ("same.json", b"two")], "unique"),
+            ([("nested/output.json", b"one")], "leaf name"),
+            ([("nested\\output.json", b"one")], "leaf name"),
+        )
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            for index, (payloads, message) in enumerate(cases):
+                with self.subTest(message=message):
+                    output_dir = root / f"artifacts-{index}"
+                    with self.assertRaisesRegex(BrainValidationError, message):
+                        transaction.write_verified_artifacts(payloads, output_dir, "Test artifact")
+                    self.assertFalse(output_dir.exists())
 
     def test_writer_second_payload_failure_rolls_back_verified_owned_bytes(self) -> None:
         candidates = self.build_candidates()
-        real_write = emitter._write_owned_payload
+        real_write = transaction._write_owned_payload
         call_count = 0
 
-        def fail_second_write(record: emitter._OwnedOutput, payload: bytes) -> None:
+        def fail_second_write(record: transaction._OwnedOutput, payload: bytes) -> None:
             nonlocal call_count
             call_count += 1
             if call_count == 2:
@@ -325,7 +341,7 @@ class AsterActionEmitterTests(unittest.TestCase):
             unrelated = output_dir / "unrelated.txt"
             unrelated.write_bytes(b"preserve-me\n")
 
-            with patch.object(emitter, "_write_owned_payload", side_effect=fail_second_write):
+            with patch.object(transaction, "_write_owned_payload", side_effect=fail_second_write):
                 with self.assertRaisesRegex(OSError, "injected second payload failure"):
                     emitter.write_aster_action_candidates(
                         candidates,
@@ -337,6 +353,82 @@ class AsterActionEmitterTests(unittest.TestCase):
             self.assertEqual([unrelated], list(output_dir.iterdir()))
             self.assertEqual(b"preserve-me\n", unrelated.read_bytes())
 
+    def test_terminal_close_failure_cleans_proven_owned_outputs_A4H_SR_002(self) -> None:
+        candidates = self.build_candidates()
+        for preexisting_directory in (False, True):
+            with self.subTest(preexisting_directory=preexisting_directory), tempfile.TemporaryDirectory() as temp_dir:
+                output_dir = Path(temp_dir) / "artifacts"
+                unrelated = output_dir / "unrelated.txt"
+                if preexisting_directory:
+                    output_dir.mkdir()
+                    unrelated.write_bytes(b"preserve-me\n")
+
+                real_close = transaction._close_owned_descriptors
+
+                def close_then_report(records: list[transaction._OwnedOutput]) -> list[str]:
+                    errors = real_close(records)
+                    self.assertEqual([], errors)
+                    self.assertTrue(all(record.descriptor is None for record in records))
+                    return ["cannot close injected.json: injected terminal close failure"]
+
+                # Prior code reported terminal close failure after leaving proven owned outputs in place.
+                with patch.object(transaction, "_close_owned_descriptors", side_effect=close_then_report):
+                    with self.assertRaisesRegex(OSError, "injected terminal close failure") as raised:
+                        emitter.write_aster_action_candidates(
+                            candidates,
+                            output_dir,
+                            TOOL_SCHEMA,
+                            WORK_ORDER_SCHEMA,
+                        )
+
+                self.assertIn("output close failed", str(raised.exception))
+                if preexisting_directory:
+                    self.assertEqual([unrelated], list(output_dir.iterdir()))
+                    self.assertEqual(b"preserve-me\n", unrelated.read_bytes())
+                else:
+                    self.assertFalse(output_dir.exists())
+
+    def test_terminal_close_cleanup_preserves_external_replacement_A4H_SR_002(self) -> None:
+        candidates = self.build_candidates()
+        replacement = b"external replacement must survive\n"
+        with tempfile.TemporaryDirectory() as temp_dir:
+            output_dir = Path(temp_dir) / "artifacts"
+            output_dir.mkdir()
+            unrelated = output_dir / "unrelated.txt"
+            unrelated.write_bytes(b"preserve-me\n")
+            replacement_path = output_dir / emitter.TOOL_ACTION_FILENAME
+            real_close = transaction._close_owned_descriptors
+
+            def close_replace_then_report(records: list[transaction._OwnedOutput]) -> list[str]:
+                errors = real_close(records)
+                self.assertEqual([], errors)
+                self.assertTrue(all(record.descriptor is None for record in records))
+                replacement_path.unlink()
+                replacement_path.write_bytes(replacement)
+                return ["cannot close injected.json: injected terminal close failure"]
+
+            with patch.object(
+                transaction,
+                "_close_owned_descriptors",
+                side_effect=close_replace_then_report,
+            ):
+                with self.assertRaisesRegex(OSError, "injected terminal close failure") as raised:
+                    emitter.write_aster_action_candidates(
+                        candidates,
+                        output_dir,
+                        TOOL_SCHEMA,
+                        WORK_ORDER_SCHEMA,
+                    )
+
+            self.assertIn("output close failed", str(raised.exception))
+            self.assertIn("untrusted", str(raised.exception))
+            self.assertEqual(replacement, replacement_path.read_bytes())
+            self.assertEqual(b"preserve-me\n", unrelated.read_bytes())
+            self.assertEqual(
+                {emitter.TOOL_ACTION_FILENAME, unrelated.name},
+                {path.name for path in output_dir.iterdir()},
+            )
+
     def test_descriptor_reader_handles_short_reads_and_rejects_wrong_length_A4E_RFR_002(self) -> None:
         payload = b"descriptor-held-payload"
         real_read = os.read
@@ -347,29 +439,29 @@ class AsterActionEmitterTests(unittest.TestCase):
             descriptor = os.open(path, os.O_RDONLY | getattr(os, "O_BINARY", 0))
             try:
                 with patch.object(
-                    emitter.os,
+                    transaction.os,
                     "read",
                     side_effect=lambda fd, length: real_read(fd, min(length, 3)),
                 ):
-                    self.assertEqual(payload, emitter._read_descriptor_payload(descriptor, len(payload)))
+                    self.assertEqual(payload, transaction._read_descriptor_payload(descriptor, len(payload)))
 
                 os.lseek(descriptor, 0, os.SEEK_SET)
                 with self.assertRaisesRegex(OSError, "length changed"):
-                    emitter._read_descriptor_payload(descriptor, len(payload) - 1)
+                    transaction._read_descriptor_payload(descriptor, len(payload) - 1)
 
                 path.write_bytes(payload[:-1])
                 os.lseek(descriptor, 0, os.SEEK_SET)
                 with self.assertRaisesRegex(OSError, "length changed"):
-                    emitter._read_descriptor_payload(descriptor, len(payload))
+                    transaction._read_descriptor_payload(descriptor, len(payload))
             finally:
                 os.close(descriptor)
 
     def test_writer_detects_same_descriptor_digest_mismatch_without_success_A4E_RFR_002(self) -> None:
         candidates = self.build_candidates()
-        real_write = emitter._write_owned_payload
+        real_write = transaction._write_owned_payload
         changed = False
 
-        def mutate_after_write(record: emitter._OwnedOutput, payload: bytes) -> None:
+        def mutate_after_write(record: transaction._OwnedOutput, payload: bytes) -> None:
             nonlocal changed
             real_write(record, payload)
             if not changed:
@@ -381,7 +473,7 @@ class AsterActionEmitterTests(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as temp_dir:
             output_dir = Path(temp_dir) / "artifacts"
-            with patch.object(emitter, "_write_owned_payload", side_effect=mutate_after_write):
+            with patch.object(transaction, "_write_owned_payload", side_effect=mutate_after_write):
                 with self.assertRaisesRegex(OSError, "untrusted"):
                     emitter.write_aster_action_candidates(
                         candidates,
@@ -402,11 +494,11 @@ class AsterActionEmitterTests(unittest.TestCase):
             output_path = output_dir / emitter.TOOL_ACTION_FILENAME
             output_path.write_bytes(original)
             record = self.owned_record(output_path, original)
-            directory_identity = emitter._identity_from_stat(output_dir.lstat(), "output directory")
+            directory_identity = transaction._identity_from_stat(output_dir.lstat(), "output directory")
 
             output_path.unlink()
             output_path.write_bytes(replacement)
-            errors = emitter._cleanup_owned_entries(
+            errors = transaction._cleanup_owned_entries(
                 [record], output_dir, directory_identity, created_output_dir=False
             )
 
@@ -423,11 +515,11 @@ class AsterActionEmitterTests(unittest.TestCase):
             output_path = output_dir / emitter.TOOL_ACTION_FILENAME
             output_path.write_bytes(original)
             record = self.owned_record(output_path, original)
-            directory_identity = emitter._identity_from_stat(output_dir.lstat(), "output directory")
+            directory_identity = transaction._identity_from_stat(output_dir.lstat(), "output directory")
 
             output_path.write_bytes(mutation)
-            self.assertEqual(record.identity, emitter._identity_from_stat(output_path.lstat(), output_path.name))
-            errors = emitter._cleanup_owned_entries(
+            self.assertEqual(record.identity, transaction._identity_from_stat(output_path.lstat(), output_path.name))
+            errors = transaction._cleanup_owned_entries(
                 [record], output_dir, directory_identity, created_output_dir=False
             )
 
@@ -445,13 +537,13 @@ class AsterActionEmitterTests(unittest.TestCase):
             output_path = output_dir / emitter.TOOL_ACTION_FILENAME
             output_path.write_bytes(original)
             record = self.owned_record(output_path, original)
-            directory_identity = emitter._identity_from_stat(output_dir.lstat(), "output directory")
+            directory_identity = transaction._identity_from_stat(output_dir.lstat(), "output directory")
 
             output_dir.rename(displaced_dir)
             output_dir.mkdir()
             replacement_path = output_dir / emitter.TOOL_ACTION_FILENAME
             replacement_path.write_bytes(replacement)
-            errors = emitter._cleanup_owned_entries(
+            errors = transaction._cleanup_owned_entries(
                 [record], output_dir, directory_identity, created_output_dir=True
             )
 
@@ -476,12 +568,12 @@ class AsterActionEmitterTests(unittest.TestCase):
 
             try:
                 record = self.owned_record(output_path, payload, descriptor)
-                directory_identity = emitter._identity_from_stat(output_dir.lstat(), "output directory")
+                directory_identity = transaction._identity_from_stat(output_dir.lstat(), "output directory")
                 real_lstat = Path.lstat
                 other_stat = other_path.lstat()
                 with patch.object(Path, "lstat", mismatched_lstat):
                     with self.assertRaisesRegex(OSError, "identity changed"):
-                        emitter._verify_owned_output(record, output_dir, directory_identity)
+                        transaction._verify_owned_output(record, output_dir, directory_identity)
             finally:
                 os.close(descriptor)
 

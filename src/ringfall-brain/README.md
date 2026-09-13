@@ -38,4 +38,33 @@ On a handled failure, cleanup deletes an invocation-owned entry only while the r
 
 These files are deterministic dev/mock proposals. Schema validity does not mean that Core authorized or executed either request. A4-F/Core remains the authority-validation boundary, and A4-G owns later execution and state-diff behavior. This command makes no provider or network call and writes no trace, cost, result, or state artifact.
 
+Wave 4 A4-H deterministic Aster proposal artifact smoke:
+
+```powershell
+$env:PYTHONPATH="src/ringfall-brain"
+$outputDir = Join-Path $env:TEMP "ringfall-a4h-artifacts"
+python -m ringfall_brain.cli mock aster-artifacts --context "src/ringfall-brain/examples/aster-a1-context.example.json" --pulse "src/ringfall-brain/examples/aster-a1-pulse.example.json" --pulse-schema "src/ringfall-contracts/schemas/packets/avatar-pulse-packet.schema.json" --tool-schema "src/ringfall-contracts/schemas/packets/tool-action-request.schema.json" --work-order-schema "src/ringfall-contracts/schemas/packets/work-order-request.schema.json" --cognition-schema "src/ringfall-contracts/schemas/traces/cognition-trace.schema.json" --cost-schema "src/ringfall-contracts/schemas/traces/cost-event.schema.json" --output-dir $outputDir
+```
+
+The command reuses the accepted A4-E candidate builder and writes exactly these files in this order:
+
+1. `tool-action-request.json`
+2. `work-order-request.json`
+3. `tool-action-cognition-trace.json`
+4. `work-order-cognition-trace.json`
+5. `tool-action-cost-event.json`
+6. `work-order-cost-event.json`
+
+Each request has one CognitionTrace and one CostEvent. The common context ref is `ctx_A1_aster_heat_t000` / `context` / `fixtures://contexts/aster-a1-context.example.json`. The common prompt ref is `prompt-l1-pulse-template` / `prompt` / `fixtures://prompts/l1_pulse_context_template.md`.
+
+The tool trace uses `cog_A1_t000_tool_heat_alarm_check`; its raw ref is `raw_draft_A1_tool_heat_alarm_check` / `raw_output` / `fixtures://aster-a4-h/tool-action-request.json`, its parsed ref is `draft_A1_tool_heat_alarm_check` / `packet` / the same URI, and its cost ref is `cost_A1_t000_tool_heat_alarm_check` / `cost_event` / `fixtures://aster-a4-h/tool-action-cost-event.json`. The matching CostEvent points back through `draft_A1_tool_heat_alarm_check` / `packet` / `fixtures://aster-a4-h/tool-action-request.json` and `cog_A1_t000_tool_heat_alarm_check` / `cognition_trace` / `fixtures://aster-a4-h/tool-action-cognition-trace.json`.
+
+The work-order trace uses `cog_A1_t000_work_order_heat_alarm_inspection`; its raw ref is `raw_draft_A1_work_order_heat_alarm_inspection` / `raw_output` / `fixtures://aster-a4-h/work-order-request.json`, its parsed ref is `draft_A1_work_order_heat_alarm_inspection` / `packet` / the same URI, and its cost ref is `cost_A1_t000_work_order_heat_alarm_inspection` / `cost_event` / `fixtures://aster-a4-h/work-order-cost-event.json`. The matching CostEvent points back through `draft_A1_work_order_heat_alarm_inspection` / `packet` / `fixtures://aster-a4-h/work-order-request.json` and `cog_A1_t000_work_order_heat_alarm_inspection` / `cognition_trace` / `fixtures://aster-a4-h/work-order-cognition-trace.json`.
+
+The distinct raw and parsed ref ids/types intentionally identify two interpretations of one physical deterministic candidate file. There is no separate provider response. `deterministic_fixture` and `fixture/aster-a4-e` are synthetic dev/mock provenance labels only. They do not identify a provider invocation, provider response, model call, canonical candidate, canonical evidence, replay result, authority result, execution result, or billable cost. Both records use `run_mode: dev`; tokens, estimated cost, latency, retry count, and fallback count are zero.
+
+All six payloads pass the existing request/trace/cost schemas before one no-clobber descriptor-held transaction reserves or writes output. The command returns success only after all six files pass complete-write, `fsync`, same-descriptor read-back, length, digest, and identity verification. The A4-E collision, observed-interference, cleanup, crash, and successful-return limitations above apply to this bundle too.
+
+This candidate-only bundle contains no `ActionTrace`, `ExecutionResult`, `StateDiff`, event, memory update, visibility result, or world-state mutation. A4-G independently owns Core validation, execution, action traces, and state diffs. A4-I/A4-J later own schema, authority, hidden-leak, and formal differential evidence. A successful A4-H command is deterministic proposal evidence only; it is not Step 5 or Wave 4 acceptance.
+
 This package does not provide an installed console script, package install contract, CI lane, real provider/API call path, prompt runtime, Core mutation path, Unity/client integration, Refinery/solver runtime, or committed generated runtime artifacts.

@@ -15,7 +15,9 @@ REPO_ROOT = ROOT.parents[1]
 sys.path.insert(0, str(ROOT))
 
 from ringfall_brain.cli import main
+from ringfall_brain import artifact_transaction as transaction
 from ringfall_brain.cognition import aster_action_emitter as emitter
+from ringfall_brain.traces import artifacts as trace_artifacts
 
 
 SAMPLE_POLICY = ROOT / "examples" / "model-policy.example.json"
@@ -62,6 +64,39 @@ class CliTests(unittest.TestCase):
             str(tool_schema),
             "--work-order-schema",
             str(work_order_schema),
+            "--output-dir",
+            str(output_dir),
+        )
+
+    def aster_artifact_args(
+        self,
+        output_dir: Path,
+        *,
+        context: Path = ASTER_CONTEXT,
+        pulse: Path = ASTER_PULSE,
+        pulse_schema: Path = AVATAR_PULSE_SCHEMA,
+        tool_schema: Path = TOOL_ACTION_SCHEMA,
+        work_order_schema: Path = WORK_ORDER_SCHEMA,
+        cognition_schema: Path = COGNITION_TRACE_SCHEMA,
+        cost_schema: Path = COST_EVENT_SCHEMA,
+    ) -> tuple[str, ...]:
+        return (
+            "mock",
+            "aster-artifacts",
+            "--context",
+            str(context),
+            "--pulse",
+            str(pulse),
+            "--pulse-schema",
+            str(pulse_schema),
+            "--tool-schema",
+            str(tool_schema),
+            "--work-order-schema",
+            str(work_order_schema),
+            "--cognition-schema",
+            str(cognition_schema),
+            "--cost-schema",
+            str(cost_schema),
             "--output-dir",
             str(output_dir),
         )
@@ -304,6 +339,139 @@ class CliTests(unittest.TestCase):
             summary,
         )
 
+    def test_mock_aster_artifacts_writes_exact_bundle_and_summary(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            output_dir = Path(temp_dir) / "artifacts"
+            code, stdout, stderr = self.run_cli(*self.aster_artifact_args(output_dir))
+            files = sorted(path.name for path in output_dir.iterdir())
+
+        self.assertEqual(0, code)
+        self.assertEqual("", stderr)
+        self.assertEqual(sorted(trace_artifacts.ASTER_ARTIFACT_FILENAMES), files)
+        self.assertEqual(
+            {
+                "candidate_only": True,
+                "cognition_ids": {
+                    trace_artifacts.TOOL_COGNITION_TRACE_KEY: "cog_A1_t000_tool_heat_alarm_check",
+                    trace_artifacts.WORK_ORDER_COGNITION_TRACE_KEY: "cog_A1_t000_work_order_heat_alarm_inspection",
+                },
+                "cost_event_ids": {
+                    trace_artifacts.TOOL_COST_EVENT_KEY: "cost_A1_t000_tool_heat_alarm_check",
+                    trace_artifacts.WORK_ORDER_COST_EVENT_KEY: "cost_A1_t000_work_order_heat_alarm_inspection",
+                },
+                "packet_ids": {
+                    emitter.TOOL_ACTION_KEY: "draft_A1_tool_heat_alarm_check",
+                    emitter.WORK_ORDER_KEY: "draft_A1_work_order_heat_alarm_inspection",
+                },
+                "run_mode": "dev",
+                "schema_valid": True,
+                "status": "ok",
+                "written_files": list(trace_artifacts.ASTER_ARTIFACT_FILENAMES),
+            },
+            json.loads(stdout),
+        )
+
+    def test_mock_aster_artifacts_calls_no_provider_model_policy_or_core_escape_hatch(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            output_dir = Path(temp_dir) / "artifacts"
+            with (
+                patch("ringfall_brain.cli.build_avatar_pulse_packet") as build_packet,
+                patch("ringfall_brain.cli.build_avatar_pulse_packet_json") as build_packet_json,
+                patch("ringfall_brain.cli.load_openrouter_config") as load_openrouter,
+                patch("ringfall_brain.cli.load_model_policy") as load_policy,
+                patch("ringfall_brain.cli.os.system") as os_system,
+            ):
+                code, _stdout, stderr = self.run_cli(*self.aster_artifact_args(output_dir))
+
+            build_packet.assert_not_called()
+            build_packet_json.assert_not_called()
+            load_openrouter.assert_not_called()
+            load_policy.assert_not_called()
+            os_system.assert_not_called()
+
+        self.assertEqual(0, code)
+        self.assertEqual("", stderr)
+        cli_source = (ROOT / "ringfall_brain" / "cli.py").read_text(encoding="utf-8").casefold()
+        for forbidden_import in (
+            "ringfall_core",
+            "ringfall.core",
+            "import subprocess",
+            "import ctypes",
+            "import socket",
+            "import requests",
+            "import httpx",
+        ):
+            self.assertNotIn(forbidden_import, cli_source)
+
+    def test_mock_aster_artifacts_collision_preserves_existing_content(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            output_dir = Path(temp_dir) / "artifacts"
+            output_dir.mkdir()
+            existing = output_dir / trace_artifacts.TOOL_COGNITION_TRACE_FILENAME
+            existing.write_bytes(b"preserve-existing\n")
+
+            code, stdout, stderr = self.run_cli(*self.aster_artifact_args(output_dir))
+
+            self.assertEqual(b"preserve-existing\n", existing.read_bytes())
+            self.assertEqual([existing], list(output_dir.iterdir()))
+
+        self.assertEqual(2, code)
+        self.assertEqual("", stdout)
+        self.assertIn("already exists", stderr)
+        self.assertNotIn("Traceback", stderr)
+
+    def test_mock_aster_artifacts_terminal_close_failure_is_bounded_A4H_SR_002(self) -> None:
+        real_close = transaction._close_owned_descriptors
+
+        def close_then_report(records: list[transaction._OwnedOutput]) -> list[str]:
+            errors = real_close(records)
+            self.assertEqual([], errors)
+            self.assertTrue(all(record.descriptor is None for record in records))
+            return ["cannot close injected.json: injected terminal close failure"]
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            output_dir = Path(temp_dir) / "artifacts"
+            with patch.object(transaction, "_close_owned_descriptors", side_effect=close_then_report):
+                code, stdout, stderr = self.run_cli(*self.aster_artifact_args(output_dir))
+
+            self.assertFalse(output_dir.exists())
+
+        self.assertEqual(2, code)
+        self.assertEqual("", stdout)
+        self.assertIn("output close failed", stderr)
+        self.assertIn("injected terminal close failure", stderr)
+        self.assertNotIn("Traceback", stderr)
+
+    def test_mock_aster_artifacts_bounds_invalid_utf8_for_every_input(self) -> None:
+        cases = (
+            ("context", "A4-D context"),
+            ("pulse", "A4-D pulse"),
+            ("pulse_schema", "pulse schema"),
+            ("tool_schema", "tool action schema"),
+            ("work_order_schema", "work order schema"),
+            ("cognition_schema", "cognition trace schema"),
+            ("cost_schema", "cost event schema"),
+        )
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            for argument, expected_label in cases:
+                with self.subTest(argument=argument):
+                    invalid_path = temp_path / f"invalid-{argument}.json"
+                    invalid_path.write_bytes(b'{"invalid":"\xff"}')
+                    output_dir = temp_path / f"{argument}-artifacts"
+
+                    code, stdout, stderr = self.run_cli(
+                        *self.aster_artifact_args(output_dir, **{argument: invalid_path})  # type: ignore[arg-type]
+                    )
+
+                    self.assertEqual(2, code)
+                    self.assertEqual("", stdout)
+                    self.assertIn(expected_label.casefold(), stderr.casefold())
+                    self.assertIn("utf-8", stderr.casefold())
+                    self.assertNotIn("Traceback", stderr)
+                    self.assertFalse(output_dir.exists())
+
     def test_cli_preexisting_target_collision_preserves_content(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             output_dir = Path(temp_dir) / "artifacts"
@@ -332,7 +500,7 @@ class CliTests(unittest.TestCase):
             unrelated.write_bytes(b"preserve-me\n")
 
             with patch.object(
-                emitter,
+                transaction,
                 "_verify_owned_output",
                 side_effect=OSError("injected descriptor verification failure"),
             ):
@@ -351,9 +519,9 @@ class CliTests(unittest.TestCase):
             root = Path(temp_dir)
             output_dir = root / "artifacts"
             displaced_dir = root / "displaced-artifacts"
-            real_close = emitter._close_owned_descriptors
+            real_close = transaction._close_owned_descriptors
 
-            def close_then_replace(records: list[emitter._OwnedOutput]) -> list[str]:
+            def close_then_replace(records: list[transaction._OwnedOutput]) -> list[str]:
                 errors = real_close(records)
                 output_dir.rename(displaced_dir)
                 output_dir.mkdir()
@@ -362,11 +530,11 @@ class CliTests(unittest.TestCase):
 
             with (
                 patch.object(
-                    emitter,
+                    transaction,
                     "_verify_owned_output",
                     side_effect=OSError("injected descriptor verification failure"),
                 ),
-                patch.object(emitter, "_close_owned_descriptors", side_effect=close_then_replace),
+                patch.object(transaction, "_close_owned_descriptors", side_effect=close_then_replace),
             ):
                 code, stdout, stderr = self.run_cli(*self.aster_action_args(output_dir))
 

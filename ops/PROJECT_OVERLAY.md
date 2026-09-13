@@ -38,6 +38,12 @@ the accepted Epic artifact, then the adopted Canon and selected role runbook.
 
 ## Router V2 adoption
 
+Under explicit Owner enrollment, FAL may update only the marked observed-progress
+block in PROJECT_STATE.md. Scope, accepted decisions, gates and next-dispatch
+authority remain outside it. Read the dated Meta baseline together with fresh
+operation evidence; no lifecycle replay from stale prose. Prefer stage-sized
+sections/frozen references instead of copying the entire Combined.
+
 Shared tooling source is Canon `tooling/opencode`; installed copies are outputs.
 Use FAL `Invoke-OCRouter.ps1 -Action` with one private V2 mapping/store. Old stage
 manifests are retained history, not fresh-send gates. No per-stage P0B, parser
