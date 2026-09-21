@@ -1461,6 +1461,21 @@ Wave 4 is the first real vertical, so parallelism must stay conservative.
   - output: hidden leak / authority / tool misuse fixture notes
   - can be absorbed into Step 5
 
+**Owner-approved prospective clarification (2026-09-21):** OSL-W4-B may run
+as preparation-only Track E work in parallel with A4-G's independent lifecycle.
+Its inputs must be frozen to the accepted A4-F boundary, the selected versioned
+packet/trace/cost contracts, and the exact A4-H artifact shape that Meta admits
+for preparation. A4-G and OSL-W4-B must each have a freshly verified target and
+separately authorized worktree/write set; changing existing work metadata is not
+proof that its directory binding changed. The side-lane may produce fixture
+inventory, expected reject cases, an artifact/evidence matrix, and a verification
+plan, but no production evidence verdict and no A4-I/A4-J completion claim may be
+issued until the required producer outputs are accepted and frozen. Meta owns
+fan-in and must prove the side-lane against one exact assembled candidate,
+recording local checks, remote CI on its exact integrated SHA, and acceptance as
+distinct facts. This clarification changes no current row status, lifecycle send,
+schema, or product scope.
+
 - **OSL-W4-C — Track A event timeline fixture prep**
   - prereq: event/state diff examples
   - output: UI assumptions only
