@@ -128,10 +128,14 @@ public sealed class RunArtifactWriterTests
         Assert.AreEqual(42, root.GetProperty("deterministic_seed").GetInt32());
         Assert.HasCount(2, changes);
         Assert.AreEqual(T0TickRunner.GridLoadPath, changes[0].GetProperty("path").GetString());
+        Assert.AreEqual(JsonValueKind.Number, changes[0].GetProperty("old").ValueKind);
+        Assert.AreEqual(JsonValueKind.Number, changes[0].GetProperty("new").ValueKind);
         Assert.AreEqual(0.68, changes[0].GetProperty("old").GetDouble());
         Assert.AreEqual(0.73, changes[0].GetProperty("new").GetDouble());
         Assert.AreEqual("public_observable", changes[0].GetProperty("visibility").GetString());
         Assert.AreEqual(T0TickRunner.ThermalDebtPath, changes[1].GetProperty("path").GetString());
+        Assert.AreEqual(JsonValueKind.Number, changes[1].GetProperty("old").ValueKind);
+        Assert.AreEqual(JsonValueKind.Number, changes[1].GetProperty("new").ValueKind);
         Assert.AreEqual(0.41, changes[1].GetProperty("old").GetDouble());
         Assert.AreEqual(0.46, changes[1].GetProperty("new").GetDouble());
         Assert.AreEqual("hidden", changes[1].GetProperty("visibility").GetString());
