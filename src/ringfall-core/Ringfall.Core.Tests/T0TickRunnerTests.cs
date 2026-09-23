@@ -182,8 +182,10 @@ public sealed class T0TickRunnerTests
         string visibility)
     {
         Assert.AreEqual(path, change.Path);
-        Assert.AreEqual(oldValue, change.Old);
-        Assert.AreEqual(newValue, change.New);
+        Assert.AreEqual(Core.Artifacts.StateDiffValueKind.Number, change.Old.Kind);
+        Assert.AreEqual(Core.Artifacts.StateDiffValueKind.Number, change.New.Kind);
+        Assert.AreEqual(oldValue, change.Old.Number);
+        Assert.AreEqual(newValue, change.New.Number);
         Assert.AreEqual(visibility, change.Visibility);
     }
 }
