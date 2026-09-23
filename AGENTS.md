@@ -40,19 +40,20 @@ Only Meta `/terv-review` emits `GREEN / YELLOW / RED`. Track `/terv-review-utan`
 
 ## Project Git Delivery
 
-Owner decision: use one short-lived branch per Epic, based on the accepted
-`main` baseline. A bounded repair may use a separate repair branch. This is a
-project Git convention, not adoption of the proposed AWC `GITHUB_PR` lifecycle.
-Existing planning, independent review, ACK and closeout gates remain unchanged.
+Owner-approved convention: follow the adopted Canon's
+`canon/GIT-DELIVERY-AND-INTEGRATION.md`. Integration target is `main`, verified
+again before publication. Each independently integrable Epic/workflow-fix uses
+a short-lived branch + PR; repairs stay on that branch. Independent concurrent
+writers use authorized worktrees; stages/reviewers do not each need a PR or session.
 
-- `main` contains integrated, accepted work; do not implement Epics directly on it.
-- Record the base SHA and Epic branch before dispatch; verify root/branch again on resume.
-- Commit, push and merge require explicit Owner authority, which may cover one bounded sequence.
-- PRs are optional unless repository rules or the Owner require them; CI and review are not optional.
-- Prefer fast-forward integration when possible, preserving accepted commit identities.
-- Divergence requires integration review and tests; never silently squash, rebase or force-push accepted evidence.
-- Do not switch a shared checkout beneath active writers. Parallel writers require separately authorized worktrees or serialized execution.
-- Reconcile shared governance files serially; verify default-branch CI before starting dependent work.
+The existing orchestrator may coordinate or execute the explicitly authorized
+post-closeout Git sequence; Meta `/closeout-commit` remains local and never pushes.
+One bounded Owner grant may cover push, PR, checks, merge and target verification.
+No grant is inferred from this convention. Preserve accepted commit identity where
+possible, serialize shared integration/governance and verify actual composition.
+Existing work branches, local acceptance and narrower stops remain valid; no
+retroactive rebranch/review replay, automatic session creation or next-Epic dispatch.
+This does not adopt a new `GITHUB_PR` product lifecycle/profile.
 
 ## Combined Plan Sequencing Protocol
 
