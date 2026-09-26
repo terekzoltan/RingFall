@@ -1,0 +1,41 @@
+% Aster F1/0.1. The mapper adds only fixed, source-bound nodes and assertions.
+% This file does not encode Core authority or world-state application.
+class F1Actor {
+    F1Tool[] toolRef
+    F1Crew[] crewRef
+    F1Sector[] actorHomeSector
+}
+class F1Tool {
+    F1Action[] supports
+    boolean toolAvailable
+}
+class F1Crew {
+    F1Actor[] assignedActor
+    F1Sector[] crewHomeSector
+    boolean crewAvailable
+}
+class F1Sector.
+class F1Action {
+    boolean requiresDryRun
+}
+class F1Location.
+class F1Request {
+    F1Actor[] issuer
+    F1Tool[] targetTool
+    F1Crew[] targetCrew
+    F1Action[] action
+    F1Location[] targetLocation
+    boolean modeExecute
+    boolean requiresDryRunFalse
+    boolean missingRequiredArgument
+    boolean fractionPresent
+    real fractionOrZero
+}
+
+error toolUnavailable(F1Request r) <-> targetTool(r, t), !toolAvailable(t).
+error crewUnavailable(F1Request r) <-> targetCrew(r, c), !crewAvailable(c).
+error toolExecuteDenied(F1Request r) <-> targetTool(r, _), modeExecute(r).
+error requiresDryRunConflict(F1Request r) <-> action(r, a), requiresDryRun(a), requiresDryRunFalse(r).
+error toolArgumentsMissing(F1Request r) <-> targetTool(r, _), missingRequiredArgument(r).
+error loadFractionNonPositive(F1Request r) <-> targetTool(r, _), fractionPresent(r), fractionOrZero(r) <= 0.0.
+error loadFractionTooHigh(F1Request r) <-> targetTool(r, _), fractionPresent(r), fractionOrZero(r) > 0.20.
