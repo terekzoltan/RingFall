@@ -5,7 +5,7 @@ namespace Ringfall.Core;
 /// </summary>
 public static class CoreInfo
 {
-    private static readonly IReadOnlyList<string> SupportedCommandValues = Array.AsReadOnly(["--help", "--version"]);
+    private static readonly IReadOnlyList<string> SupportedCommandValues = Array.AsReadOnly(["--help", "--version", "aster-f1-evidence"]);
 
     public static string ProductName => "Ringfall Headless";
     public static string Version => "0.1.0-shell";
