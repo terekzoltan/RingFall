@@ -14,10 +14,18 @@ Compact Lite, exact terminal-line and per-stage capability mechanics below.
 Domain/Core, visibility, scope and independent review gates remain unchanged.
 A4-E is accepted and closed at commit
 `9a90c4ed6ccebb88c82c02ffb2e66875f59245e9`; never resend its lifecycle.
-The current frontier is Wave 4 Step 4: Track D `A4-H cognition side` is target-
-and V2-routing-ready for `/seq-next`, while Track B `A4-G` is target-ready but
-requires a verified private RingFall `Track B` mapping before dispatch. Only
-Owner interrupts sessions or compacts orchestrators.
+The current frontier is post-closeout delivery for Wave 4 Steps 5–7. A4-G/H
+are integrated at `cc067ece4f3b699abbec8f7293daabd75a4ec545`. Track B P1
+is locally closed at `435fc126013e4b3c02a0925b4ea23e9bc19efcbc`, P2 at
+`59e2a42c0fbf84e9e1b311f299908e964803cf8a`, and bundled Track E A4-I/A4-J
+Step 7 at `dc4f8fd57514dd6e48c1d871857812532ffe465f`. These commits are
+not yet published or integrated into `main`; integrated-SHA CI is pending. The
+former Track E INITIAL plan remains historically RED/IMPLEMENT_BLOCKED, not a
+current dispatch. Meta reconciles the three governance files and performs the
+second read-only check; the existing orchestrator makes the separately
+Owner-authorized three-file local governance commit, then handles the branch
+PR, checks, merge commit and target verification. Step 8 and the Wave 4 gate
+remain unopened. Only Owner interrupts sessions or compacts orchestrators.
 
 Agent Workflow Canon root: `../Agent-Workflow-Canon`
 Adoption contract: `../Agent-Workflow-Canon/ADOPTION.md`
