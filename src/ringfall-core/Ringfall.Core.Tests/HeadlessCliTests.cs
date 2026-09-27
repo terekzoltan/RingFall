@@ -8,6 +8,6 @@ public sealed class HeadlessCliTests
     [TestMethod]
     public void Shell_exposes_only_the_approved_commands()
     {
-        CollectionAssert.AreEqual(new[] { "--help", "--version" }, CoreInfo.SupportedCommands.ToArray());
+        CollectionAssert.AreEqual(new[] { "--help", "--version", "aster-f1-evidence" }, CoreInfo.SupportedCommands.ToArray());
     }
 }

@@ -1,0 +1,16 @@
+{
+  "suite_version": "aster-f1-step7-0.1",
+  "cases": [
+    {"name": "tool-query", "kind": "tool", "change": "none", "stage": "differential", "verdict": "valid", "core_status": "allowed", "issues": [], "disposition": "deferred"},
+    {"name": "work-order", "kind": "work", "change": "none", "stage": "differential", "verdict": "valid", "core_status": "allowed", "issues": [], "disposition": "succeeded"},
+    {"name": "tool-unavailable", "kind": "tool", "change": "tool-unavailable", "stage": "differential", "verdict": "invalid", "core_status": "denied", "issues": ["tool_unavailable"], "disposition": "rejected"},
+    {"name": "crew-unavailable", "kind": "work", "change": "crew-unavailable", "stage": "differential", "verdict": "invalid", "core_status": "denied", "issues": ["crew_unavailable"], "disposition": "rejected"},
+    {"name": "tool-execute", "kind": "tool", "change": "execute", "stage": "differential", "verdict": "invalid", "core_status": "denied", "issues": ["tool_execute_denied"], "disposition": "rejected"},
+    {"name": "reroute-zero", "kind": "tool", "change": "reroute-zero", "stage": "differential", "verdict": "invalid", "core_status": "invalid", "issues": ["tool_argument_value_invalid"], "disposition": "rejected"},
+    {"name": "tool-unreferenced", "kind": "tool", "change": "tool-unreferenced", "stage": "differential", "verdict": "unsupported", "core_status": "denied", "issues": ["tool_not_referenced"], "disposition": "rejected"},
+    {"name": "unknown-argument", "kind": "tool", "change": "unknown-argument", "stage": "differential", "verdict": "unsupported", "core_status": "unsupported", "issues": ["tool_argument_unknown"], "disposition": "rejected"},
+    {"name": "missing-mode", "kind": "tool", "change": "missing-mode", "stage": "schema", "verdict": "blocked"},
+    {"name": "context-mismatch", "kind": "tool", "change": "context-mismatch", "stage": "input", "verdict": "blocked", "error": "context_mismatch"},
+    {"name": "actor-hidden-leak", "kind": "tool", "change": "hidden-leak", "stage": "visibility", "verdict": "blocked"}
+  ]
+}

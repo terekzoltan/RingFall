@@ -1,0 +1,44 @@
+{
+  "tool_request": {
+    "packet_id": "draft_A1_tool_heat_alarm_check",
+    "packet_type": "ToolActionRequest",
+    "schema_version": "0.1",
+    "issuer_id": "A1",
+    "issuer_layer": "L1",
+    "issued_at_tick": 0,
+    "source_context_id": "ctx_A1_aster_heat_t000",
+    "evidence_refs": ["obs-a1-t000-aster-r2-heat-alarm", "event:event-t000-aster-r2-heat-alarm"],
+    "tool_id": "local_grid_panel",
+    "action": "query_heat_alarm",
+    "mode": "dry_run"
+  },
+  "work_request": {
+    "packet_id": "draft_A1_work_order_heat_alarm_inspection",
+    "packet_type": "WorkOrderRequest",
+    "schema_version": "0.1",
+    "issuer_id": "A1",
+    "issuer_layer": "L1",
+    "issued_at_tick": 0,
+    "source_context_id": "ctx_A1_aster_heat_t000",
+    "evidence_refs": ["obs-a1-t000-aster-r2-heat-alarm", "event:event-t000-aster-r2-heat-alarm"],
+    "target_crew_id": "crew_aster_repair_02",
+    "target_location": "Aster/Grid-Spine-03",
+    "task_type": "inspect_and_patch",
+    "priority": "high"
+  },
+  "cases": [
+    {"name": "tool-query-valid", "kind": "tool", "change": "none", "verdict": "valid", "issue": null},
+    {"name": "tool-reroute-valid", "kind": "tool", "change": "reroute", "verdict": "valid", "issue": null},
+    {"name": "work-order-valid", "kind": "work", "change": "none", "verdict": "valid", "issue": null},
+    {"name": "tool-unavailable", "kind": "tool", "change": "tool-unavailable", "verdict": "invalid", "issue": "tool_unavailable"},
+    {"name": "crew-unavailable", "kind": "work", "change": "crew-unavailable", "verdict": "invalid", "issue": "crew_unavailable"},
+    {"name": "tool-execute", "kind": "tool", "change": "execute", "verdict": "invalid", "issue": "tool_execute_denied"},
+    {"name": "reroute-no-dry-run", "kind": "tool", "change": "no-dry-run", "verdict": "invalid", "issue": "tool_requires_dry_run_conflict"},
+    {"name": "reroute-missing-fraction", "kind": "tool", "change": "missing-fraction", "verdict": "invalid", "issue": "tool_arguments_missing"},
+    {"name": "reroute-zero", "kind": "tool", "change": "fraction-zero", "verdict": "invalid", "issue": "tool_argument_value_invalid"},
+    {"name": "reroute-negative", "kind": "tool", "change": "fraction-negative", "verdict": "invalid", "issue": "tool_argument_value_invalid"},
+    {"name": "reroute-over-bound", "kind": "tool", "change": "fraction-high", "verdict": "invalid", "issue": "tool_macro_surface_denied"},
+    {"name": "tool-unreferenced", "kind": "tool", "change": "tool-unreferenced", "verdict": "unsupported", "issue": "tool_not_referenced"},
+    {"name": "unknown-argument", "kind": "tool", "change": "unknown-argument", "verdict": "unsupported", "issue": "tool_argument_unknown"}
+  ]
+}
