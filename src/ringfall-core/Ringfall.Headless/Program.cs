@@ -20,6 +20,9 @@ if (args is ["--version"])
     return 0;
 }
 
+if (args.Length > 0 && args[0] == "aster-f1-gated-execute")
+    return AsterF1GatedCommand.Run(args);
+
 if (args.Length > 0 && args[0] == "aster-f1-evidence")
 {
     static int Fail(string code, int exit)
