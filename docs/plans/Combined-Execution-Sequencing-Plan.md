@@ -1489,6 +1489,22 @@ Step 6-to-7 barrier note:
 Step 7-to-8 delivery note:
 - Meta's three-file governance reconciliation and second read-only check precede the existing orchestrator's separately Owner-authorized scoped local governance commit. The orchestrator then verifies remote `main` and the complete branch diff, pushes the branch, obtains PR and required composition CI, merges with a merge commit and verifies exact `main` target CI. This delivery sequence does not dispatch or close the Step 8 Wave 4 gate.
 
+**2026-10-02 scoped B/D delivery addendum — AUTHORIZED / PENDING publication.**
+Earlier Steps 5–7 delivery rows remain historical; PR #5 integrated those
+ancestors at `cdce3bda4a75445e423c8ddd09b7f910b2afdaee`. B is accepted and
+locally CLOSED at `a1a0982e874179ae2c1eab7cb22f3d521d21363d`; D at
+`8c4caf674ddac6a053912f09ee83ce606ad3a2da`, parent B. The routine local base
+merge `7bbf32785b1ca74570af43473448da5d50b23a7e` preserves accepted D's tree.
+The [public-safe B/D delivery note](Wave4-PreStep8-BD-Delivery-20261002.md)
+pins accepted trees/candidates, review/ACK/closeout references, offline checks and
+limits. Owner permits one targeted Meta documentation commit; Meta then stops.
+The existing orchestrator alone handles authorized `feat/a4-i-j-evidence` push,
+PR, candidate/composition CI, merge commit into `terekzoltan/RingFall` `main`
+and exact-target CI. Publication/integration/check results remain pending.
+All five unchecked outputs and five holds remain open; Step 8 is NOT_READY and
+unopened. No lifecycle replay, product change, private evidence import, gate
+acceptance, dependent unlock or Wave 5 dispatch is authorized by this addendum.
+
 **⬜ Step 8 — WAVE 4 GATE UNOPENED**
 
 | Session | Epic(s) | Prereq | Notes |

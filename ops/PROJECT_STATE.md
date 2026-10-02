@@ -112,15 +112,33 @@ All three closeouts proposed governance delta NONE and claimed no remote CI.
 
 ## Current next action
 
-Meta supplies and read-only verifies this exact three-file governance
-reconciliation. The existing orchestrator applies only that delta and returns
-it for Meta's second read-only check, then makes the separately Owner-authorized
-local governance commit. As named integration executor it freshly verifies the
-remote/source/base, pushes `feat/a4-i-j-evidence`, opens or resumes its PR,
-verifies required PR/composition CI, makes a merge commit into
-`terekzoltan/RingFall` `main`, and verifies that exact target and its CI.
-Publication and integrated-SHA CI are pending. No OSL-W4-B artifact entered
-fan-in. Step 8/Wave 4 closeout and the next Epic remain unopened.
+**2026-10-02 current delivery: B/D locally accepted and CLOSED;
+publication/integration AUTHORIZED / PENDING.** B is
+`a1a0982e874179ae2c1eab7cb22f3d521d21363d`; D is
+`8c4caf674ddac6a053912f09ee83ce606ad3a2da`, parent B. The clean local
+base-synchronized candidate `7bbf32785b1ca74570af43473448da5d50b23a7e`
+includes the earlier PR #5 `main` integration at
+`cdce3bda4a75445e423c8ddd09b7f910b2afdaee`; its tree is accepted D's tree.
+Earlier Steps 5–7 publication-pending prose above is historical, not a replay
+instruction. Accepted trees, candidate/source pins, review/ACK/closeout pointers,
+offline checks and limitations are in the
+[public-safe B/D delivery note](../docs/plans/Wave4-PreStep8-BD-Delivery-20261002.md).
+
+Owner permits Meta only the targeted three-path documentation reconciliation
+and one `docs(governance): record scoped B/D delivery` commit. Meta stops after
+that commit and reports the actual hash/tree/path scope to the existing
+orchestrator, the sole Git integration owner. No prior uncommitted governance
+is imported; B/D local closeouts remain completed and paused.
+
+**Next actor/action:** the existing orchestrator freshly verifies canonical
+`terekzoltan/RingFall` remote/source/base and full publication composition,
+pushes `feat/a4-i-j-evidence`, creates or resumes its PR, verifies required
+candidate CI, merges with a merge commit into `main`, and verifies exact target
+commit/tree and Runtime `core-dotnet-ci` / `brain-python-ci` plus Contract
+`schema-check` (Schema checker). These remote results remain pending, not PASS.
+All five unchecked outputs and five holds remain open; Step 8 is
+**NOT_READY/unopened**. No product edits, live/paid calls, deployment, Wave 4
+gate acceptance, Wave 5 dispatch or dependent unlock follows from this sync.
 
 ## Historical Step 4 next-action baseline (2026-09-09; superseded)
 
