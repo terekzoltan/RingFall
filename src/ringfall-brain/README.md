@@ -67,4 +67,70 @@ All six payloads pass the existing request/trace/cost schemas before one no-clob
 
 This candidate-only bundle contains no `ActionTrace`, `ExecutionResult`, `StateDiff`, event, memory update, visibility result, or world-state mutation. A4-G independently owns Core validation, execution, action traces, and state diffs. A4-I/A4-J later own schema, authority, hidden-leak, and formal differential evidence. A successful A4-H command is deterministic proposal evidence only; it is not Step 5 or Wave 4 acceptance.
 
-This package does not provide an installed console script, package install contract, CI lane, real provider/API call path, prompt runtime, Core mutation path, Unity/client integration, Refinery/solver runtime, or committed generated runtime artifacts.
+The accepted A4-H command does not provide an installed console script, package install contract, CI lane, real provider/API call path, prompt runtime, Core mutation path, Unity/client integration, Refinery/solver runtime, or committed generated runtime artifacts.
+
+### Pre-Step-8 offline A1 request trial client
+
+`ringfall_brain.providers.aster_trial` is a transport-injected, **offline-only**
+request builder and fake-response verifier. It has no HTTP adapter, CLI command,
+credential reader, endpoint discovery, or real-call entry point. A cooperative
+deadline-enforcing fake, an independently controlled offline attestation harness,
+and caller-attested endpoint proof exercise the exact three A1 tasks. The full
+A4-D context and pulse must match pinned example-file bytes (including every
+free-text pulse field) before a smaller allowlisted actor-visible projection is
+rendered; caller-forged cases and self-computed hashes cannot authorize dispatch.
+The task-consuming mock matches the **entire** rendered message and task against
+the pinned A1-visible projection, including tool refs, before deriving each
+baseline; A4-E packets remain context-only reference outputs. The client retains
+independent inert message and baseline snapshots. It builds the fake request from
+those snapshots and rejects a callback-mutated prepared case **before reservation
+or send**, even when the outgoing request bytes remain canonical. Mutation first
+observed during dispatch leaves that attempt unresolved, never completed.
+Only the two locally bounded request candidates or the exact trial-local
+`{"decision":"no_candidate"}` refusal are recognized; refusals are not public
+request packets and schema validity does not authorize a Core effect.
+
+The fake client requires one endpoint, an explicitly supported model/effort,
+JSON mode and completion limit; it builds a non-streaming Chat Completions
+request with fallback disabled and required parameters enabled. The
+caller-provided proof, harness and fake response **do not certify live OpenRouter
+capability**. The complete serialized request is conservatively bounded by
+its UTF-8 byte count plus 128 fixed and 16-per-message framing allowance;
+the offline assumption is at most one token per byte plus that slack. A caller
+token-count callback cannot understate this bound. It is **not** a verified
+tokenizer or framing guarantee for any live endpoint; that requires a new gate.
+Each pre-send check reserves at most 2,000 input and 512 total
+completion tokens, $0.001 estimated per attempt and $0.003 for the run; at
+most three ordered single attempts and a cooperative 30-second deadline apply,
+with the 120-second wall cap rechecked after resolving injectable send/harness
+accessors and before reservation or send. The in-memory ledger
+owns a non-reentrant guard across clients sharing it.
+Only an exact inert ledger, built-in attempts list, plain attempt fields and
+actual lock are accepted. The client releases the originally acquired guard
+even if a callback swaps the ledger's guard; a swapped list or guard refuses
+before reservation or send. The final clock and case checks are followed only
+by built-in reservation on that same shared list before the captured fake send.
+After dispatch, the client checks the original shared ledger, prior entries and
+actual reserved attempt after injectable callbacks and immediately before
+completion. If fake-provider code erases or changes that accounting, the client
+restores the original shared list and reserved attempt, marks it unresolved and
+stops the run; another call through a client sharing the ledger cannot send.
+
+Offline harness-controlled, attempt/request-bound observations (separate from
+raw response fields) are
+required for offline route/effort completion; each dispatch gets a fresh
+non-reusable in-process identity so an earlier observation cannot complete a
+fresh-ledger attempt with the same run ID. Absent, replayed or mismatched evidence
+stops the run. Proof fields must be exact inert values, and callback errors,
+including callback-raised trial errors, are reported with fixed non-echoing text.
+
+Unknown usage, routing, effort, billing or transport outcomes stop the
+in-memory metadata ledger with its reservation intact. CostEvent-shaped
+estimates are dev trial evidence; actual billed amounts and reasoning details
+belong only in restricted ledger metadata. A future live run would need a
+separate Owner grant, fresh capability/price evidence and durable private
+reconciliation; this offline module alone is not a production network client.
+
+The isolated-world Phase 2 still needs accepted Track B integration, a new
+reviewed plan and distinct Owner approval. This work adds no Core, solver,
+contract, CI or world-mutation path.
