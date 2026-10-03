@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
+from contextlib import ExitStack
 from dataclasses import replace
 from decimal import Decimal
 from pathlib import Path
 import sys
+import tempfile
 import threading
 import unittest
 from unittest.mock import patch
@@ -17,6 +20,7 @@ from ringfall_brain.providers.aster_trial import (
     EndpointProof, HarnessAttestation, OfflineTrialClient, TrialConfig, TrialError, TrialLedger,
     _digest, _request_bound, prepare_aster_cases,
 )
+from ringfall_brain.providers import aster_trial
 from ringfall_brain.schemas.validator import validate_packet_json
 
 REPO = ROOT.parents[1]
@@ -73,6 +77,185 @@ class FakeTransport:
         if isinstance(self.reply, Exception):
             raise self.reply
         return copy.deepcopy(self.reply)
+
+
+class AsterSourcePortabilityTests(unittest.TestCase):
+    """Real copied inputs: no source-reader mocks or replacement runtime pins."""
+
+    SOURCES = (
+        (ROOT / "examples" / "aster-a1-context.example.json",
+         "4797a7deeef596352795fcad95b9de61c1a1f49438431a37196bfb033a9094cc"),
+        (ROOT / "examples" / "aster-a1-pulse.example.json",
+         "eed67e719697de57527d643af738c3517aabb8bfe0d5c139c74c5cbd8e940970"),
+        (SCHEMAS / "packets" / "avatar-pulse-packet.schema.json",
+         "55ded4589b228b8ad9ede5b5213b9bcb2f4f33f3a9292f7a36748268ad93d7d0"),
+        (SCHEMAS / "packets" / "tool-action-request.schema.json",
+         "50c4d66000ddb7ed01f6ad15a87c20e9975dd4fdf2daa3dd71b99264bd23b10f"),
+        (SCHEMAS / "packets" / "work-order-request.schema.json",
+         "58fcf506778301afb6c8cc64d741a7179b16a75bdd02e2ccaa314cfbc7c4fdec"),
+    )
+    MUTATIONS = ("content", "whitespace", "duplicate_key", "string_escape",
+                 "standalone_cr", "control", "bom", "final_newline")
+
+    def setUp(self):
+        stack = ExitStack()
+        self.addCleanup(stack.close)
+        directory = Path(stack.enter_context(tempfile.TemporaryDirectory(prefix="aster-source-")))
+        self.paths = tuple(directory / source.name for source, _ in self.SOURCES)
+        self.raw = tuple(source.read_bytes().replace(b"\r\n", b"\n") for source, _ in self.SOURCES)
+        for raw, (_, expected) in zip(self.raw, self.SOURCES):
+            self.assertNotIn(b"\r", raw)
+            self.assertEqual(expected, hashlib.sha256(raw).hexdigest())
+        self.write_representations(("lf",) * 5)
+        # Only redirect paths to isolated real files. Readers, validators and pins
+        # remain production code; full clean-export checks do not even redirect paths.
+        stack.enter_context(patch.object(aster_trial, "_CONTEXT_FILE", self.paths[0]))
+        stack.enter_context(patch.object(aster_trial, "_PULSE_FILE", self.paths[1]))
+        stack.enter_context(patch.object(aster_trial, "_SCHEMAS", directory))
+        self.context, self.pulse = (json.loads(raw) for raw in self.raw[:2])
+
+    def write_representations(self, forms):
+        for path, raw, form in zip(self.paths, self.raw, forms):
+            if form == "crlf":
+                raw = raw.replace(b"\n", b"\r\n")
+            elif form == "mixed":
+                raw = b"".join(line.replace(b"\n", b"\r\n") if index % 2 else line
+                               for index, line in enumerate(raw.splitlines(keepends=True)))
+                self.assertIn(b"\r\n", raw)
+                self.assertIn(b"\n", raw.replace(b"\r\n", b""))
+            self.assertEqual(raw.replace(b"\r\n", b"\n"), self.raw[self.paths.index(path)])
+            path.write_bytes(raw)
+
+    def prepare(self):
+        return prepare_aster_cases(self.context, self.pulse, pulse_schema=self.paths[2],
+                                   tool_schema=self.paths[3], work_order_schema=self.paths[4],
+                                   prompt_version="a4-d-v1", profile_version="a1-v1")
+
+    def client(self, cases, ledger, harness, transport):
+        proof = EndpointProof("openai/gpt-6-luna", "openai/default", frozenset({"low"}), True, True,
+                              Decimal("0.10"), Decimal("0.50"), "offline-proof-v1")
+        return OfflineTrialClient(TrialConfig(proof.model_id, "low", "portable_run"), cases,
+                                  transport=transport, proof_for_call=lambda: proof,
+                                  count_input_tokens=lambda _: 2000, harness=harness,
+                                  ledger=ledger, clock=lambda: 0.0)
+
+    def assert_portable_dispatch(self, forms, expected):
+        self.write_representations(forms)
+        cases = self.prepare()
+        self.assertEqual(expected, cases)
+        self.assertEqual(self.SOURCES[4][1], cases[0].schema_hash)
+        self.assertEqual(self.SOURCES[3][1], cases[1].schema_hash)
+        self.assertIsNone(cases[2].schema_hash)
+        ledger, harness = TrialLedger(), FakeHarness()
+        fake = FakeTransport(None, harness)
+        client = self.client(cases, ledger, harness, fake)
+        for case in cases:
+            fake.reply = {
+                "id": "portable_" + case.case_id,
+                "model": client.config.model_id,
+                "usage": {"prompt_tokens": 100, "completion_tokens": 80, "cost": 0.00005,
+                          "completion_tokens_details": {"reasoning_tokens": 20}},
+                "choices": [{"finish_reason": "stop", "message": {"content": json.dumps(case.baseline)}}],
+            }
+            result = client.run_case(case.case_id)
+            self.assertEqual((), result.differences)
+            self.assertEqual(case.baseline if case.schema_path else None, result.candidate)
+            self.assertEqual(case.messages, tuple(fake.calls[-1][0]["messages"]))
+        self.assertEqual(3, len(fake.calls))
+        self.assertEqual(["completed"] * 3, [attempt.status for attempt in ledger.attempts])
+        return tuple(_digest(request) for request, _ in fake.calls)
+
+    def test_global_lf_crlf_mixed_preserve_preparation_and_ordered_dispatch(self):
+        # Regression W4-PRE8-D-PORTABILITY: raw CRLF-only pins rejected Git-LF inputs.
+        expected = self.prepare()
+        requests = self.assert_portable_dispatch(("lf",) * 5, expected)
+        for form in ("crlf", "mixed"):
+            with self.subTest(form=form):
+                self.assertEqual(requests, self.assert_portable_dispatch((form,) * 5, expected))
+
+    def test_each_input_can_change_only_line_endings_after_preparation(self):
+        expected = self.prepare()
+        for index in range(5):
+            for form in ("crlf", "mixed"):
+                with self.subTest(input=self.paths[index].name, form=form):
+                    self.write_representations(("lf",) * 5)
+                    ledger, harness = TrialLedger(), FakeHarness()
+                    fake = FakeTransport(None, harness)
+                    client = self.client(expected, ledger, harness, fake)
+                    forms = ["lf"] * 5
+                    forms[index] = form
+                    self.write_representations(forms)
+                    # Revalidation must accept a permitted representation change,
+                    # not merely cases initially prepared from that representation.
+                    fake.reply = {"id": "portable_input", "model": client.config.model_id,
+                                  "usage": {"prompt_tokens": 100,
+                                  "completion_tokens": 80, "cost": 0.00005},
+                                  "choices": [{"finish_reason": "stop", "message": {
+                                      "content": json.dumps(expected[0].baseline)}}]}
+                    self.assertEqual(expected[0].baseline, client.run_case("work_order").candidate)
+                    self.assertEqual(expected, self.prepare())
+                    self.assertEqual(1, len(fake.calls))
+                    self.assertEqual(["completed"], [attempt.status for attempt in ledger.attempts])
+
+    def mutate(self, index, kind):
+        raw = self.raw[index]
+        if kind == "content":
+            changed = raw.replace(b"{", b'{"portability_tamper":"sentinel",', 1)
+        elif kind == "whitespace":
+            changed = b" " + raw
+        elif kind == "duplicate_key":
+            value = json.loads(raw)
+            key = next(iter(value))
+            member = json.dumps({key: value[key]}, ensure_ascii=True)[1:-1].encode("utf-8")
+            changed = raw.replace(b"{", b"{" + member + b",", 1)
+        elif kind == "string_escape":
+            # Escape one ASCII key character: identical parsed object, different bytes.
+            position = raw.index(b'"') + 1
+            changed = raw[:position] + ("\\u%04x" % raw[position]).encode("ascii") + raw[position + 1:]
+        elif kind == "standalone_cr":
+            changed = raw.replace(b"\n", b"\r", 1)
+        elif kind == "control":
+            changed = b"\x00" + raw
+        elif kind == "bom":
+            changed = b"\xef\xbb\xbf" + raw
+        else:
+            self.assertEqual("final_newline", kind)
+            changed = raw[:-1] if raw.endswith(b"\n") else raw + b"\n"
+        self.assertNotEqual(raw, changed)
+        self.assertNotEqual(raw, changed.replace(b"\r\n", b"\n"))
+        if kind in ("whitespace", "duplicate_key", "string_escape", "standalone_cr", "bom", "final_newline"):
+            self.assertEqual(json.loads(raw), json.loads(changed))
+        self.paths[index].write_bytes(changed)
+
+    def assert_tamper_matrix(self, after_preparation):
+        for index in range(5):
+            for kind in self.MUTATIONS:
+                with self.subTest(input=self.paths[index].name, mutation=kind,
+                                  after_preparation=after_preparation):
+                    self.write_representations(("lf",) * 5)
+                    ledger, harness = TrialLedger(), FakeHarness()
+                    fake = FakeTransport(None, harness)
+                    if after_preparation:
+                        client = self.client(self.prepare(), ledger, harness, fake)
+                    self.mutate(index, kind)
+                    with self.assertRaises(TrialError) as caught:
+                        if after_preparation:
+                            client.run_case("work_order")
+                        else:
+                            self.client(self.prepare(), ledger, harness, fake)
+                    self.assertIn(str(caught.exception), ("accepted A1 fixture is unavailable",
+                                                        "prepared case provenance is unverified"))
+                    self.assertNotIn("sentinel", str(caught.exception))
+                    self.assertEqual([], ledger.attempts)
+                    self.assertEqual([], fake.calls)
+                    self.assertIsNone(harness.expected)
+                    self.assertIsNone(ledger.started)
+
+    def test_each_input_eight_tampers_rejected_during_preparation(self):
+        self.assert_tamper_matrix(after_preparation=False)
+
+    def test_each_input_eight_tampers_rejected_after_preparation_before_reservation(self):
+        self.assert_tamper_matrix(after_preparation=True)
 
 
 class AsterTrialTests(unittest.TestCase):

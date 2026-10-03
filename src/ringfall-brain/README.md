@@ -79,6 +79,14 @@ and caller-attested endpoint proof exercise the exact three A1 tasks. The full
 A4-D context and pulse must match pinned example-file bytes (including every
 free-text pulse field) before a smaller allowlisted actor-visible projection is
 rendered; caller-forged cases and self-computed hashes cannot authorize dispatch.
+The two fixture and three candidate-schema source pins use fixed accepted LF
+bytes: raw reads replace only CRLF with LF, reject any remaining standalone CR,
+then hash every resulting byte. LF, CRLF and mixed LF/CRLF are interchangeable
+only under that exact transformation; `PreparedCase.schema_hash` uses the same
+rule. All other content remains pinned, including whitespace, key order, string
+escapes and final-newline presence. No JSON/Unicode canonicalization or runtime
+Git lookup is used. Inputs are revalidated after preparation and before attempt
+reservation; true source edits at that boundary refuse with no reservation/send.
 The task-consuming mock matches the **entire** rendered message and task against
 the pinned A1-visible projection, including tool refs, before deriving each
 baseline; A4-E packets remain context-only reference outputs. The client retains
