@@ -42,14 +42,14 @@ _CONTEXT_FILE = _BRAIN_ROOT / "examples" / "aster-a1-context.example.json"
 _PULSE_FILE = _BRAIN_ROOT / "examples" / "aster-a1-pulse.example.json"
 _FIXTURE_HASHES = (
     "4797a7deeef596352795fcad95b9de61c1a1f49438431a37196bfb033a9094cc",
-    "b04313d788a99a43b9e22bb5f4bb013f4898031052f746237b6d7ac56f5a8bf7",
+    "eed67e719697de57527d643af738c3517aabb8bfe0d5c139c74c5cbd8e940970",
 )
 _SCHEMA_NAMES = ("avatar-pulse-packet.schema.json", "tool-action-request.schema.json",
                  "work-order-request.schema.json")
 _SCHEMA_HASHES = (
-    "c297831d0b6e71408822cf229276a21c3ffe17e260bdf1b9a296c1818e2aeb1d",
-    "323abf06415f36445a8e406ca3ecf9af8294a2facdade047f23440f7d128627e",
-    "a48bc9c8d14d5e3ee0117c37bd6d6517aa991944d6e96bff03355e8068187f9b",
+    "55ded4589b228b8ad9ede5b5213b9bcb2f4f33f3a9292f7a36748268ad93d7d0",
+    "50c4d66000ddb7ed01f6ad15a87c20e9975dd4fdf2daa3dd71b99264bd23b10f",
+    "58fcf506778301afb6c8cc64d741a7179b16a75bdd02e2ccaa314cfbc7c4fdec",
 )
 _PROMPT_VERSION = "a4-d-v1"
 _PROFILE_VERSION = "a1-v1"
@@ -118,6 +118,14 @@ def _digest(value: object) -> str:
     return hashlib.sha256(_json(value).encode("utf-8")).hexdigest()
 
 
+def _source_digest(raw: bytes) -> str:
+    """Hash exact accepted LF bytes; tolerate only CRLF representation changes."""
+    portable = raw.replace(b"\r\n", b"\n")
+    if b"\r" in portable:
+        raise TrialError("accepted source line endings are invalid")
+    return hashlib.sha256(portable).hexdigest()
+
+
 def _amount(value: object) -> Decimal:
     if isinstance(value, bool) or not isinstance(value, (str, int, float, Decimal)):
         raise TrialError("provider cost evidence is unavailable")
@@ -141,14 +149,14 @@ def _accepted_sources(context: object, pulse: object, schemas: tuple[Path, ...])
         accepted = []
         for source, digest in zip((_CONTEXT_FILE, _PULSE_FILE), _FIXTURE_HASHES):
             raw = source.read_bytes()
-            if hashlib.sha256(raw).hexdigest() != digest:
+            if _source_digest(raw) != digest:
                 raise TrialError("accepted A1 fixture changed")
             accepted.append(json.loads(raw))
         if (context != accepted[0] or pulse != accepted[1]
                 or tuple(path.resolve() for path in schemas)
                 != tuple((_SCHEMAS / name).resolve() for name in _SCHEMA_NAMES)):
             raise TrialError("A1 actor-local input is not the accepted fixture")
-        if any(hashlib.sha256(path.read_bytes()).hexdigest() != pinned
+        if any(_source_digest(path.read_bytes()) != pinned
                for path, pinned in zip(schemas, _SCHEMA_HASHES)):
             raise TrialError("accepted candidate schema changed")
     except (OSError, ValueError, TypeError):
@@ -366,8 +374,8 @@ def prepare_aster_cases(
         except (KeyError, IndexError, TypeError, ValueError, BrainValidationError):
             raise TrialError("matched mock input is invalid") from None
         try:
-            schema_hash = hashlib.sha256(schema.read_bytes()).hexdigest() if schema else None
-        except OSError:
+            schema_hash = _source_digest(schema.read_bytes()) if schema else None
+        except (OSError, TrialError):
             raise TrialError("candidate schema is unavailable") from None
         results.append(PreparedCase(
             case_id, messages, json.loads(_json(baseline)), _digest(messages), _digest(baseline),
