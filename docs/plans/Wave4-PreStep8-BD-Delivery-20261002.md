@@ -6,17 +6,19 @@
 PENDING.** Owner authorized the existing orchestrator as sole Git integration
 owner for `terekzoltan/RingFall`, source `feat/a4-i-j-evidence`, target `main`,
 using a merge commit and verification of the actual candidate and exact target.
-No push, PR, remote checks, merge or target verification is claimed by this note.
+No push, PR, remote checks, remote merge or target verification is claimed by
+this note. The current local delivery candidate includes the separately accepted
+D portability repair described below.
 
 Meta's current authorization covers only this public-safe note, the current
 next-action section of `ops/PROJECT_STATE.md`, a narrow active Combined addendum,
-and one exact-path documentation commit:
+and one new exact-path documentation reconciliation commit:
 `docs(governance): record scoped B/D delivery`. This is integration documentation,
 not another product closeout. Prior uncommitted governance, private evidence and
 session data are excluded. No product edits, deployment, live/paid calls, keys,
 gate acceptance or next-Wave authority is added.
 
-## Accepted candidates and retained decisions
+## Original accepted candidates and retained decisions — historical
 
 | Identity | Track B — gated A1/F1/Core integration | Track D — offline provider client |
 |---|---|---|
@@ -34,10 +36,14 @@ gate acceptance or next-Wave authority is added.
 These checks are reported accepted local evidence, not tests rerun for this
 documentation change or remote composition/target CI. Both product works remain
 locally CLOSED and paused; none of their lifecycle stages is replayed.
+The original D checks describe its original offline closeout, not clean-LF
+portability or the current repaired source pins. Its separate repair is also
+closed locally, with its own review, acknowledgement and commit below.
 
-## Source pins and actual local composition
+## Original delivery composition and source pins — historical
 
-The clean local candidate before the documentation commit is
+The original clean local candidate before documentation commit
+`5388edfdf73448c1be4be2267bb7d44a504e1844` was
 `7bbf32785b1ca74570af43473448da5d50b23a7e`, parents accepted D and
 `cdce3bda4a75445e423c8ddd09b7f910b2afdaee`. The latter is the PR #5 integration
 of the earlier Steps 5–7, with tree equivalent to B's original prerequisite
@@ -55,7 +61,9 @@ Historical P1 `6bf530a8e1efda55703de8563b0435f1487baaa0fe8b0697c759aefca8f85fbc`
 and P2 `652f8abfe1bb140af7dd76ad9660024c964d6e77dfae879207b6fd690815dd45`
 aggregates retain their separate identities; they are not passing successor proof.
 
-All three D committed raw blobs match accepted D:
+The following three D raw blobs match the original accepted D and original
+documentation candidate `5388edfdf73448c1be4be2267bb7d44a504e1844` only. This
+historical table is superseded for current delivery by the repair table below:
 
 | Path | SHA-256 |
 |---|---|
@@ -66,6 +74,74 @@ All three D committed raw blobs match accepted D:
 D's aggregate uses these ordered `path=hash` lines with a final LF. Raw committed
 bytes, including accepted line endings, are authoritative; normalized text diffs
 alone do not establish candidate equality.
+
+## Separate accepted D portability repair
+
+The unchanged original provider's CRLF-specific source pins caused a genuine
+clean-LF failure: **134 tests ran / 42 errors**. That publication block is
+historical; the separately reviewed repair is now closed locally. The original
+B/D closeouts remain closed and are not replayed.
+
+- **Repair commit:** `53e28060f443d72b28d43ee0941eb70a975aa3f9`.
+- **Repair tree:** `1fc4f4d476fb36ca1c3dddea39c941b826d55fe0`.
+- **Sole parent:** `fdd28a51de7a73afe98417a128b3af32b8f1a1cf`.
+- **Final Meta review:** `op-dbded5e5-516c-48c5-980d-ebf8db32e0c0`,
+  **GREEN / PASS / ALLOWED**, no findings.
+- **Exact Track D ACK_ONLY:** `op-a8f4c8c5-ebda-4992-9260-3e05d214e66a`.
+- **Local closeout:** completed with exactly the three product paths below;
+  governance delta **NONE**. No plan, private evidence or unrelated work entered
+  the repair commit.
+
+These are the current committed raw source pins, verified against both the
+accepted repair and current local delivery candidate:
+
+| Path | SHA-256 |
+|---|---|
+| `src/ringfall-brain/README.md` | `8972bbea277f499accf265199a564509b1a7a1181ed818d17e3b795215458222` |
+| `src/ringfall-brain/ringfall_brain/providers/aster_trial.py` | `15bc5d0559916fa1f44a29c2c5b45f1c22b0ea95a4902439907f70631ccca092` |
+| `src/ringfall-brain/tests/test_aster_trial.py` | `2ffcaf79d823c313b0ba11852911fbf64666a9e13187003e7477cd3d344c3196` |
+
+Their ordered UTF-8 `path=hash` records, LF-separated with a final LF, reproduce
+reviewed aggregate
+`9bffad6d3ae455d7f0e5d4c3adf9b2fa993cd8219e105cbec8ebea844d36e19f`.
+The committed repair diff reproduces SHA-256
+`d93094f2369bfef971822fe7401b3187c555a7e5c58a43ce7306218c011c9250`.
+
+Accepted fixture/schema source content is unchanged. Only CRLF-to-LF byte
+replacement is permitted before hashing; residual standalone CR and true content
+changes still fail closed. Retained independent repair proof covers LF and CRLF
+exports, each **46/46 focused**, **138/138 full Brain** and CLI help PASS, plus
+**80 negative subcases** across five inputs, eight mutations and two timing
+boundaries. This does not weaken provenance or authorize live work.
+
+## Current local delivery candidate and checks — 2026-10-03
+
+Before this documentation reconciliation, the existing local integration
+candidate is `2290e417530cafbd5b05948098a3d954ae018fa0`, tree
+`22d98c8e9a0b7ef56476e6f7fc891f74ce9d406c`. It conflict-freely merges original
+documentation candidate `5388edfdf73448c1be4be2267bb7d44a504e1844` with the
+accepted repair. Original B/D and repair commit identities are preserved in
+ancestry. All 23 B source pins and the successor inventory remain unchanged;
+the three current D pins equal the accepted repair. Its product tree equals
+the repair's product tree; differences are confined to the three delivery docs.
+
+The orchestrator reports these actual local composition checks on that candidate:
+
+| Check | Result |
+|---|---|
+| Core tests | **362/362 PASS** |
+| Brain tests | **138/138 PASS** |
+| Core artifact smoke | **32/32 PASS** |
+| Brain artifact smoke | **31/31 PASS** |
+| Generated mock Brain artifacts | **PASS** |
+| Hygiene proof/guard checks | **PASS** |
+| Schema checker | **16 metaschemas / 41 fixtures PASS** |
+| Diff hygiene | **PASS** |
+
+Meta independently reverified committed source identities for this docs-only
+transaction; these runtime results are the orchestrator's reported runs, not
+tests rerun by Meta or remote CI. This documentation commit changes no product
+bytes. Candidate/main CI and exact-main admission remain separate obligations.
 
 ## Limits preserved
 
@@ -78,6 +154,13 @@ alone do not establish candidate equality.
   no live HTTP adapter or live model/provider trial. Fake route/effort outcomes
   do not certify live capability, tokenizer behavior, durable billing or network
   cancellation. Production/live/billing certification requires separate scope.
+- **R0:** Owner accepted five valid named records with bounded own contexts:
+  materialized A1 and four permitted empty contexts with identity, scenario-load,
+  projection and visibility evidence. Local R0 proof includes **153/153** filtered
+  Core tests and five verified bounded contexts; it does not mean five actively
+  deciding actors. Status is **R0_LOCAL_PASS / EXACT_MAIN_ADMISSION_PENDING**.
+  This summary imports no raw assessment and does not mark a mandatory output
+  complete or replace later exact-main evaluation.
 - **Wave:** all five unchecked mandatory outputs and five holds remain open for
   assessment; Step 8 is **NOT_READY/unopened**. No Wave 4 gate verdict, output
   completion, Wave 5 dispatch or dependent prerequisite waiver is inferred from
@@ -87,12 +170,17 @@ alone do not establish candidate equality.
 
 The existing orchestrator resumes the authorized Git delivery sequence: freshly
 verify canonical remote/source/base and the complete publication diff, preserve
-accepted B/D ancestry, push the authorized source, create or resume its PR,
+accepted B/D/repair ancestry, push the authorized source, create or resume its PR,
 verify required candidate/composition checks, merge with a merge commit, then
 verify exact `main` commit/tree and required target checks. Required jobs are
 Runtime CI `core-dotnet-ci` and `brain-python-ci`, and Contract CI `schema-check`
 (display name **Schema checker**). Missing/skipped/pending checks are not PASS;
 earlier base CI is not current-candidate or exact-target evidence.
+The last supplied verified `main` is
+`cdce3bda4a75445e423c8ddd09b7f910b2afdaee`; the orchestrator must reverify it
+before the actual send. After exact-main delivery, Meta's separately authorized
+final R0/state assessment returns to the original execution context. Neither
+this note nor local composition proof performs that assessment.
 
 Meta stops after the authorized three-path documentation commit and reports its
 hash/tree/path scope. Publication remains **AUTHORIZED / PENDING** until the

@@ -1489,18 +1489,38 @@ Step 6-to-7 barrier note:
 Step 7-to-8 delivery note:
 - Meta's three-file governance reconciliation and second read-only check precede the existing orchestrator's separately Owner-authorized scoped local governance commit. The orchestrator then verifies remote `main` and the complete branch diff, pushes the branch, obtains PR and required composition CI, merges with a merge commit and verifies exact `main` target CI. This delivery sequence does not dispatch or close the Step 8 Wave 4 gate.
 
-**2026-10-02 scoped B/D delivery addendum — AUTHORIZED / PENDING publication.**
+**2026-10-03 scoped B/D delivery addendum — repair CLOSED LOCALLY;
+AUTHORIZED / PENDING publication.**
 Earlier Steps 5–7 delivery rows remain historical; PR #5 integrated those
 ancestors at `cdce3bda4a75445e423c8ddd09b7f910b2afdaee`. B is accepted and
 locally CLOSED at `a1a0982e874179ae2c1eab7cb22f3d521d21363d`; D at
-`8c4caf674ddac6a053912f09ee83ce606ad3a2da`, parent B. The routine local base
-merge `7bbf32785b1ca74570af43473448da5d50b23a7e` preserves accepted D's tree.
+`8c4caf674ddac6a053912f09ee83ce606ad3a2da`, parent B. Their closeouts stay closed.
+The separate D portability repair is accepted and locally CLOSED at
+`53e28060f443d72b28d43ee0941eb70a975aa3f9`, tree
+`1fc4f4d476fb36ca1c3dddea39c941b826d55fe0`, following GREEN/PASS/ALLOWED and
+exact ACK_ONLY. Its genuine original clean-LF failure and original unchanged-D
+source table are historical; current D pins are the reviewed repaired bytes.
+The existing local delivery candidate before this documentation reconciliation is
+`2290e417530cafbd5b05948098a3d954ae018fa0`, tree
+`22d98c8e9a0b7ef56476e6f7fc891f74ce9d406c`, preserving all accepted ancestry.
+All 23 B pins remain unchanged; three-path D aggregate is
+`9bffad6d3ae455d7f0e5d4c3adf9b2fa993cd8219e105cbec8ebea844d36e19f`.
 The [public-safe B/D delivery note](Wave4-PreStep8-BD-Delivery-20261002.md)
-pins accepted trees/candidates, review/ACK/closeout references, offline checks and
-limits. Owner permits one targeted Meta documentation commit; Meta then stops.
+pins historical/current candidates, review/ACK/closeout references, retained
+LF/CRLF proof and orchestrator-reported actual local composition PASS, with
+historical B proof limitations and D's offline-only boundary preserved.
+Owner permits one new targeted three-path Meta documentation commit; Meta stops
+after its commit/tree/source verification handoff. No other dirty work is imported.
 The existing orchestrator alone handles authorized `feat/a4-i-j-evidence` push,
 PR, candidate/composition CI, merge commit into `terekzoltan/RingFall` `main`
-and exact-target CI. Publication/integration/check results remain pending.
+and exact-target CI, freshly rechecking the last supplied `main` `cdce3bda…`
+before publication. Local composition PASS is not remote CI or target proof;
+publication/integration/remote checks remain pending.
+Owner's five-valid-record/bounded-own-context R0 criterion is accepted and locally
+passed, including 153/153 filtered tests and four permitted empty contexts with
+identity/load/projection/visibility evidence, not five actively deciding actors.
+R0 exact-main admission and later Meta state assessment remain pending; no raw
+assessment is imported or linked from this addendum.
 All five unchecked outputs and five holds remain open; Step 8 is NOT_READY and
 unopened. No lifecycle replay, product change, private evidence import, gate
 acceptance, dependent unlock or Wave 5 dispatch is authorized by this addendum.
