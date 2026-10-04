@@ -112,15 +112,49 @@ All three closeouts proposed governance delta NONE and claimed no remote CI.
 
 ## Current next action
 
-Meta supplies and read-only verifies this exact three-file governance
-reconciliation. The existing orchestrator applies only that delta and returns
-it for Meta's second read-only check, then makes the separately Owner-authorized
-local governance commit. As named integration executor it freshly verifies the
-remote/source/base, pushes `feat/a4-i-j-evidence`, opens or resumes its PR,
-verifies required PR/composition CI, makes a merge commit into
-`terekzoltan/RingFall` `main`, and verifies that exact target and its CI.
-Publication and integrated-SHA CI are pending. No OSL-W4-B artifact entered
-fan-in. Step 8/Wave 4 closeout and the next Epic remain unopened.
+**2026-10-03 current delivery: original B/D and separate D portability repair
+locally accepted and CLOSED; publication/integration AUTHORIZED / PENDING.**
+B is `a1a0982e874179ae2c1eab7cb22f3d521d21363d`; original D is
+`8c4caf674ddac6a053912f09ee83ce606ad3a2da`. The separate repair is
+`53e28060f443d72b28d43ee0941eb70a975aa3f9`, tree
+`1fc4f4d476fb36ca1c3dddea39c941b826d55fe0`, after GREEN/PASS/ALLOWED review
+and exact Track D ACK_ONLY. No lifecycle or product closeout is replayed.
+The current local integration candidate before this documentation update is
+`2290e417530cafbd5b05948098a3d954ae018fa0`, tree
+`22d98c8e9a0b7ef56476e6f7fc891f74ce9d406c`, preserving original B/D and repair
+ancestry. All 23 B source pins remain unchanged; current three-path D aggregate
+is `9bffad6d3ae455d7f0e5d4c3adf9b2fa993cd8219e105cbec8ebea844d36e19f`.
+The original clean-LF 42-error block and original delivery note's unchanged-D
+table are historical, superseded locally by the accepted repair. Earlier
+Steps 5–7 publication-pending prose is also historical. Current source pins,
+reported local composition checks, retained repair proof and limitations are in the
+[public-safe B/D delivery note](../docs/plans/Wave4-PreStep8-BD-Delivery-20261002.md).
+
+**R0_LOCAL_PASS / EXACT_MAIN_ADMISSION_PENDING:** Owner accepts five valid named
+bounded own contexts, including materialized A1 and four permitted empty contexts
+with identity/load/projection/visibility proof. Local evidence includes 153/153
+filtered Core tests; this is not five actively deciding actors or output/gate
+completion. No raw R0 assessment or private evidence is imported.
+
+Owner permits Meta only the new targeted three-path documentation reconciliation
+and one `docs(governance): record scoped B/D delivery` commit. Meta stops after
+that commit and reports the actual hash/tree/path scope to the existing
+orchestrator, the sole Git integration owner. No prior uncommitted governance
+is imported; original B/D and the repair stay CLOSED. The dated baseline and
+observed-progress block outside this section are preserved, not fresh dispatches.
+
+**Next actor/action:** the existing orchestrator freshly verifies canonical
+`terekzoltan/RingFall` remote/source/base and full publication composition;
+last supplied verified `main` is `cdce3bda4a75445e423c8ddd09b7f910b2afdaee`. It
+pushes `feat/a4-i-j-evidence`, creates or resumes its PR, verifies required
+candidate CI, merges with a merge commit into `main`, and verifies exact target
+commit/tree and Runtime `core-dotnet-ci` / `brain-python-ci` plus Contract
+`schema-check` (Schema checker). The orchestrator reports local composition PASS
+at the candidate above; these remote results remain pending, not PASS. Later
+exact-main R0/state assessment is a separate Meta action in the original context.
+All five unchecked outputs and five holds remain open; Step 8 is
+**NOT_READY/unopened**. No product edits, live/paid calls, deployment, Wave 4
+gate acceptance, Wave 5 dispatch or dependent unlock follows from this sync.
 
 ## Historical Step 4 next-action baseline (2026-09-09; superseded)
 
