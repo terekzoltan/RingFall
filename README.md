@@ -2,7 +2,15 @@
 
 Ringfall is a replayable, inspectable, LLM-heavy civilization simulation set in a fractured orbital ring. It is built around deterministic simulation boundaries, typed action/tool contracts, memory/belief/truth separation, institutional distortion, council doctrine, OpenRouter-based model orchestration, and a Unity-rendered observer client.
 
-Current phase: Wave 0 bootstrap and Wave 1 contract handoff are closed through W1-S7/C1-K. Wave 1.5 contract CI readiness is accepted through CI15-A/CI15-B/CI15-C/CI15-D/CI15-E/CI15-F with no recorded CI-debt exception. Wave 2 is closed through K2-A/K2-B/K2-C/K2-D/K2-E/K2-F/K2-G/K2-H and the Wave 2 Meta closeout gate: the no-LLM Aster seed run is deterministic and writes smoke-validated manifest/snapshot/event/state-diff artifacts. Wave 3 is closed through B3-A/B/C/D/E/F/G/H and the Wave 3 Meta closeout gate: the Python brain scaffold emits deterministic schema-valid L1 packet/trace/cost evidence without a Core mutation path, and Track E validates that bundle. The active frontier is Wave 4 Step 1 sequence planning: Meta must offer optional bundled and split execution forms, while multiple epics may remain in one session row. Wave 4 implementation has not started. This repository is not ready for public use. The detailed design canon, world bible, implementation plan, and private coordination notes are local/private until an explicit export review approves public release material.
+Current phase: Wave 0 bootstrap and Wave 1 contract handoff are closed through W1-S7/C1-K. Wave 1.5 contract CI readiness is accepted through CI15-A/CI15-B/CI15-C/CI15-D/CI15-E/CI15-F with no recorded CI-debt exception. Wave 2 is closed through K2-A/K2-B/K2-C/K2-D/K2-E/K2-F/K2-G/K2-H and the Wave 2 Meta closeout gate: the no-LLM Aster seed run is deterministic and writes smoke-validated manifest/snapshot/event/state-diff artifacts. Wave 3 is closed through B3-A/B/C/D/E/F/G/H and the Wave 3 Meta closeout gate: the Python brain scaffold emits deterministic schema-valid L1 packet/trace/cost evidence without a Core mutation path, and Track E validates that bundle. Wave 4 scoped implementation is integrated into `main`; this is not full Wave 4 acceptance. This repository is not ready for public use. The detailed design canon, world bible, implementation plan, and private coordination notes are local/private until an explicit export review approves public release material.
+
+Public status verified against `main` at [`d208c7fb9656c4dfe4f34eb30e629a59bd20c875`](https://github.com/terekzoltan/RingFall/commit/d208c7fb9656c4dfe4f34eb30e629a59bd20c875) on 2026-10-13:
+
+- **Merged and CI-verified:** [PR #6](https://github.com/terekzoltan/RingFall/pull/6), merged on 2026-10-04, integrates Track B's scoped gated A1 → F1 → Core execution, Track D's offline, transport-injected request client, and the separately reviewed CRLF/LF portability repair. Exact-merge [Runtime CI](https://github.com/terekzoltan/RingFall/actions/runs/37225765241) and [Contract CI](https://github.com/terekzoltan/RingFall/actions/runs/37225765291) succeeded; PR #6 records Core 362/362 and Brain 138/138 tests passing.
+- **R0 remains separate:** the public delivery record reports `R0_LOCAL_PASS / EXACT_MAIN_ADMISSION_PENDING`, with 153/153 selected Core tests and five bounded named contexts, including materialized A1 and four permitted empty contexts. This does not establish five actively deciding actors or final exact-main R0 admission; that assessment remains a separate Meta continuation.
+- **Limits unchanged:** Wave 4 Step 8 remains **NOT_READY/unopened**, with five unchecked mandatory outputs and five holds still open. Track B retains its `schema_validation=not_run`, reroute and limited wait-control disclosures. Track D is cooperative, offline and in-memory, without a live HTTP adapter or live model/provider/billing certification. Integration and CI do not imply Wave 4 gate acceptance, Wave 5 dispatch, live/paid calls or deployment.
+
+See the [public-safe B/D delivery note](docs/plans/Wave4-PreStep8-BD-Delivery-20261002.md) for retained scope and limitations. Dated integration-pending and next-action text in [PROJECT_STATE](ops/PROJECT_STATE.md) is historical where superseded by PR #6's verified integration; it is not a fresh execution instruction. This README summarizes public evidence only and does not reconcile inaccessible local Canon or operational state.
 
 ## First Playable Scope
 
@@ -68,14 +76,14 @@ Architectural guardrails:
 
 ## Current Non-Goals
 
-- no LLM-driven or multi-step simulation beyond the Wave 2 deterministic Aster T0 seed slice yet
-- no deterministic runtime beyond the Wave 2 C#/.NET headless core artifact slice yet
-- no Python brain provider/runtime beyond Wave 3 local mock packet output, schema validation, prompt-context draft surfaces, shell-only OpenRouter env validation, and dev/mock trace/cost artifacts yet
+- no full Wave 4 LLM society simulation or Wave 4 gate acceptance; current execution evidence is scoped to the integrated A1 → F1 → Core path
+- no completeness claim beyond the accepted deterministic Core and scoped Wave 4 integration
+- no live Python Brain provider integration; the integrated request client is offline and transport-injected
 - no production runtime schema service or generated contract bindings; current validation tooling is developer-only
-- no Refinery runtime integration or formal gate CI yet
+- no exhaustive formal-gate certification; the integrated scoped F1 path and retained local Refinery evidence do not prove all Wave 4 hard gates
 - no full formal world model
 - no Unity project yet
-- no OpenRouter/model execution yet
+- no live OpenRouter/model execution
 - no real provider credentials or local secrets
 - no FAL runtime dependency
 - no public release quality claim
